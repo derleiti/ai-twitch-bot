@@ -1,0 +1,812 @@
+#!/usr/bin/env python3
+# twitch-ollama-bot.py - Ein Twitch-Chat-Bot mit Ollama-Integration für KI-gestützte Interaktionen
+
+import socket
+import time
+import random
+import threading
+import requests
+import os
+import json
+import traceback
+import re
+from datetime import datetime
+from collections import Counter, defaultdict
+from dotenv import load_dotenv
+
+# Lade Umgebungsvariablen aus .env Datei
+load_dotenv()
+
+# Twitch IRC Konfiguration
+SERVER = "irc.chat.twitch.tv"
+PORT = 6667
+NICKNAME = os.getenv("BOT_USERNAME", "")       # Dein Bot-Benutzername
+TOKEN = os.getenv("OAUTH_TOKEN", "")           # OAuth Token: https://twitchapps.com/tmi/
+CHANNEL = os.getenv("CHANNEL", "")             # Kanal, dem der Bot beitreten soll
+BOT_NAME = os.getenv("BOT_NAME", "zephyr")     # Anzeigename des Bots im Chat
+
+# Ollama-Konfiguration
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
+MODEL = os.getenv("OLLAMA_MODEL", "zephyr")
+
+# Pfade und Dateien
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_FILE = os.path.join(BASE_DIR, "twitch-ollama-bot.log")
+GAME_STATE_FILE = os.path.join(BASE_DIR, "game_state.json")
+PID_FILE = os.path.join(BASE_DIR, "twitch-ollama-bot.pid")
+
+# Timing-Konfiguration
+AUTO_JOKE_INTERVAL = int(os.getenv("AUTO_JOKE_INTERVAL", "180"))  # Sekunden zwischen automatischen Witzen
+AUTO_COMMENT_INTERVAL = int(os.getenv("AUTO_COMMENT_INTERVAL", "240"))  # Sekunden zwischen automatischen Kommentaren
+AUTO_SCENE_COMMENT_INTERVAL = int(os.getenv("AUTO_SCENE_COMMENT_INTERVAL", "300"))  # Sekunden zwischen Kommentaren zu Szenen
+COMMAND_REMINDER_INTERVAL = int(os.getenv("COMMAND_REMINDER_INTERVAL", "600"))  # Sekunden zwischen Befehlserinnerungen
+OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "30"))  # Timeout für Ollama-Anfragen in Sekunden
+RECONNECT_DELAY = int(os.getenv("RECONNECT_DELAY", "10"))  # Sekunden zwischen Wiederverbindungsversuchen
+PING_INTERVAL = int(os.getenv("PING_INTERVAL", "30"))  # Sekunden zwischen PING-Anfragen
+SOCKET_TIMEOUT = int(os.getenv("SOCKET_TIMEOUT", "15"))  # Socket-Timeout in Sekunden
+
+# Debug-Level (0=minimal, 1=normal, 2=ausführlich)
+DEBUG_LEVEL = int(os.getenv("DEBUG_LEVEL", "1"))
+
+# Fallback-Witze, wenn die Ollama-API nicht antwortet
+WITZE = [
+    "Warum können Skelette so schlecht lügen? Man sieht ihnen durch die Rippen!",
+    "Was ist rot und schlecht für die Zähne? Ein Ziegelstein.",
+    "Wie nennt man einen Cowboy ohne Pferd? Sattelschlepper.",
+    "Warum sollte man nie Poker mit einem Zauberer spielen? Weil er Asse im Ärmel hat!",
+    "Kommt ein Pferd in die Bar. Fragt der Barkeeper: 'Warum so ein langes Gesicht?'",
+    "Was sagt ein Bauer, wenn er sein Traktor verloren hat? 'Wo ist mein Traktor?'",
+    "Wie nennt man einen dicken Vegetarier? Biotonne.",
+    "Wie nennt man einen Boomerang, der nicht zurückkommt? Stock.",
+    "Was ist braun, klebrig und läuft durch die Wüste? Ein Karamel.",
+    "Warum hat der Mathematiker seine Frau verlassen? Sie hat etwas mit X gemacht.",
+    "Was ist grün und steht vor der Tür? Ein Klopfsalat!",
+    "Was sitzt auf dem Baum und schreit 'Aha'? Ein Uhu mit Sprachfehler!",
+    "Was ist schwarz-weiß und kommt nicht vom Fleck? Eine Zeitung!",
+    "Was macht ein Pirat beim Camping? Er schlägt sein Segel auf!",
+    "Treffen sich zwei Jäger im Wald. Beide tot.",
+    "Was ist ein Keks unter einem Baum? Ein schattiges Plätzchen!",
+    "Was passiert, wenn man Cola und Bier gleichzeitig trinkt? Man colabiert.",
+    "Warum können Seeräuber schlecht mit Kreisen rechnen? Weil sie Pi raten."
+]
+
+# Fallback-Kommentare für Spiele
+GAME_KOMMENTARE = [
+    "Dieser Boss sieht gefährlich aus! Pass auf die Angriffe auf!",
+    "Nice! Das war ein guter Move!",
+    "Oh, knapp vorbei! Beim nächsten Mal klappt's bestimmt.",
+    "Die Grafik in diesem Spiel ist wirklich beeindruckend!",
+    "Hast du schon alle Geheimnisse in diesem Level gefunden?",
+    "Ich würde an deiner Stelle nach Heilung suchen, deine HP sind ziemlich niedrig.",
+    "Diese Gegner-KI ist ziemlich schlau!",
+    "Perfektes Timing bei diesem Sprung!",
+    "Vielleicht solltest du deine Ausrüstung upgraden?"
+]
+
+# Fallback-Kommentare für Szenen/Bilder
+SCENE_KOMMENTARE = [
+    "Die Grafik sieht wirklich fantastisch aus!",
+    "Die Farben und Texturen in dieser Szene sind unglaublich detailliert!",
+    "Diese Landschaft ist einfach atemberaubend gestaltet!",
+    "Der Charakter-Look ist echt cool - tolle Details!",
+    "Die Lichtstimmung in dieser Szene ist wirklich beeindruckend!",
+    "Dieser Ort im Spiel ist wunderschön designt!",
+    "Die Umgebung wirkt so realistisch, fast als wäre man selbst dort!",
+    "Die Animationen sind super flüssig!",
+    "Das Interface ist wirklich übersichtlich gestaltet!",
+    "Die Atmosphäre hier ist fantastisch eingefangen!"
+]
+
+# Begrüßungen für neue Zuschauer
+BEGRÜSSUNGEN = [
+    "Willkommen im Stream, {user}! Schön, dass du da bist!",
+    "Hey {user}! Willkommen! Was hältst du bisher vom Stream?",
+    "Hallo {user}! Danke, dass du vorbeischaust!",
+    "Willkommen an Bord, {user}! Mach es dir gemütlich.",
+    "Hi {user}! Schön, dich im Chat zu sehen!",
+    "Grüß dich, {user}! Genieße den Stream!",
+    "Hallo {user}! Perfektes Timing, du bist genau zum besten Teil gekommen!",
+    "Willkommen, {user}! Der Chat ist mit dir noch besser!",
+    "Da ist ja {user}! Schön, dass du den Weg zu uns gefunden hast!",
+    "Hey {user}! Tolles Timing, wir haben gerade erst angefangen!"
+]
+
+# Befehlserinnerungen
+COMMAND_REMINDERS = [
+    "📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...",
+    "👋 Neu hier? Mit !witz bekommst du einen zufälligen Witz von mir!",
+    "🎮 Verwende !info für aktuelle Spielinfos oder !stats für Statistiken.",
+    "❓ Du hast eine Frage? Benutze !frag zephyr gefolgt von deiner Frage!",
+    "🖼️ Mit !bild oder !scene kommentiere ich das aktuelle Bild im Stream.",
+    "🤔 Brauchst du Hilfe? Tippe !hilfe für eine Liste aller Befehle!"
+]
+
+# Status-Variablen
+running = True
+is_connected = False
+sock = None
+known_viewers = set()
+game_state = {}
+last_ping_time = 0
+last_scene_comment_time = 0
+reconnect_lock = threading.Lock()
+
+# === Logging-Funktionen ===
+def log(message, level=1):
+    if level > DEBUG_LEVEL:
+        return
+        
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}")
+    
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] {message}\n")
+    except Exception as e:
+        print(f"[{timestamp}] Fehler beim Loggen: {e}")
+
+def log_error(message, exception=None):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] ERROR: {message}")
+    
+    try:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] ERROR: {message}\n")
+            if exception:
+                f.write(f"[{timestamp}] Exception: {str(exception)}\n")
+                if DEBUG_LEVEL >= 2:  # Nur bei hohem Debug-Level den vollen Traceback loggen
+                    f.write(f"[{timestamp}] {traceback.format_exc()}\n")
+    except Exception as e:
+        print(f"[{timestamp}] Fehler beim Loggen: {e}")
+
+# === PID-Datei-Funktionen ===
+def create_pid_file():
+    try:
+        pid = os.getpid()
+        with open(PID_FILE, 'w') as f:
+            f.write(str(pid))
+        log(f"PID-Datei erstellt: {pid}")
+    except Exception as e:
+        log_error("Fehler beim Erstellen der PID-Datei", e)
+
+def remove_pid_file():
+    try:
+        if os.path.exists(PID_FILE):
+            os.remove(PID_FILE)
+            log("PID-Datei entfernt")
+    except Exception as e:
+        log_error("Fehler beim Entfernen der PID-Datei", e)
+
+# === Spielstand-Funktionen ===
+def load_game_state():
+    global game_state
+    try:
+        if os.path.exists(GAME_STATE_FILE):
+            with open(GAME_STATE_FILE, 'r', encoding="utf-8") as f:
+                game_state = json.load(f)
+                log(f"Spielstand geladen: {game_state}", level=2)
+        else:
+            game_state = {
+                "spiel": "Unbekannt",
+                "ort": "Unbekannt",
+                "tode": 0,
+                "level": 1,
+                "spielzeit": "00:00:00"
+            }
+            save_game_state()
+    except Exception as e:
+        log_error("Fehler beim Laden des Spielstands", e)
+        game_state = {
+            "spiel": "Unbekannt",
+            "ort": "Unbekannt",
+            "tode": 0,
+            "level": 1,
+            "spielzeit": "00:00:00"
+        }
+
+def save_game_state():
+    try:
+        with open(GAME_STATE_FILE, 'w', encoding="utf-8") as f:
+            json.dump(game_state, f, indent=2)
+            log("Spielstand gespeichert", level=2)
+    except Exception as e:
+        log_error("Fehler beim Speichern des Spielstands", e)
+
+# === Ollama-Funktionen ===
+def check_ollama():
+    try:
+        response = requests.get("http://localhost:11434/api/version", timeout=5)
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        log_error("Ollama-Server nicht erreichbar", e)
+        return None
+
+def get_response_from_ollama(prompt):
+    log(f"Sende an Ollama: {prompt[:50]}...", level=1)
+    
+    try:
+        response = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": MODEL,
+                "prompt": prompt,
+                "stream": False,
+                "max_tokens": 500
+            },
+            timeout=OLLAMA_TIMEOUT
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            text = result.get("response", "").strip()
+            log(f"Antwort von Ollama erhalten: {text[:50]}...", level=1)
+            return text
+        else:
+            log_error(f"Fehler bei Ollama-Anfrage: Status {response.status_code}", None)
+            return None
+    except Exception as e:
+        log_error("Ausnahme bei Ollama-Anfrage", e)
+        return None
+
+# === IRC-Funktionen ===
+def connect_to_twitch():
+    global sock, is_connected
+    
+    with reconnect_lock:
+        # Schließe alte Verbindung, falls vorhanden
+        if sock:
+            try:
+                sock.close()
+            except:
+                pass
+        
+        # Erstelle neuen Socket
+        sock = socket.socket()
+        sock.settimeout(SOCKET_TIMEOUT)
+        
+        try:
+            log(f"Verbinde mit {SERVER}:{PORT}...")
+            sock.connect((SERVER, PORT))
+            
+            # Sende Authentifizierungs-Daten
+            sock.send(f"PASS {TOKEN}\r\n".encode('utf-8'))
+            sock.send(f"NICK {NICKNAME}\r\n".encode('utf-8'))
+            
+            # Warte auf Antwort
+            response = ""
+            start_time = time.time()
+            while time.time() - start_time < 10:  # 10 Sekunden Timeout für Auth
+                try:
+                    data = sock.recv(2048).decode('utf-8')
+                    if not data:
+                        continue
+                    
+                    response += data
+                    log(f"Empfangen: {data.strip()}", level=2)
+                    
+                    # Prüfe auf erfolgreiche Authentifizierung
+                    if "Welcome, GLHF!" in response or ":tmi.twitch.tv 001" in response:
+                        log("Erfolgreich authentifiziert!")
+                        
+                        # Fordere IRC-Capabilities an
+                        sock.send("CAP REQ :twitch.tv/membership\r\n".encode('utf-8'))
+                        sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
+                        sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
+                        
+                        # Tritt dem Kanal bei
+                        sock.send(f"JOIN {CHANNEL}\r\n".encode('utf-8'))
+                        log(f"Kanal {CHANNEL} beigetreten")
+                        
+                        # Warte kurz auf Join-Bestätigung
+                        time.sleep(1)
+                        data = sock.recv(2048).decode('utf-8')
+                        log(f"Join-Antwort: {data.strip()}", level=2)
+                        
+                        # Sende Begrüßung
+                        send_message(f"👋 Hallo! Ich bin {BOT_NAME} und bereit, euch zu unterhalten! Befehle: !witz, !info, !stats, !hilfe")
+                        
+                        is_connected = True
+                        return True
+                except socket.timeout:
+                    continue
+                except Exception as recv_err:
+                    log_error("Fehler beim Empfangen von Daten", recv_err)
+                    break
+            
+            log_error("Timeout bei der Authentifizierung", None)
+            return False
+        except Exception as e:
+            log_error("Verbindungsfehler", e)
+            return False
+
+def send_message(message):
+    global is_connected
+    
+    if not is_connected:
+        log("Nicht verbunden beim Senden der Nachricht")
+        return False
+    
+    try:
+        sock.send(f"PRIVMSG {CHANNEL} :{message}\r\n".encode('utf-8'))
+        log(f"Nachricht gesendet: {message[:50]}...")
+        return True
+    except Exception as e:
+        log_error("Fehler beim Senden der Nachricht", e)
+        is_connected = False
+        return False
+
+def send_ping():
+    global is_connected
+    
+    if not is_connected:
+        return False
+    
+    try:
+        sock.send("PING :tmi.twitch.tv\r\n".encode('utf-8'))
+        log("PING gesendet", level=2)
+        return True
+    except Exception as e:
+        log_error("Fehler beim Senden des PINGs", e)
+        is_connected = False
+        return False
+
+def extract_username(message_line):
+    # Versuche zuerst, den display-name aus Tags zu extrahieren
+    username = ""
+    
+    if "display-name=" in message_line:
+        try:
+            parts = message_line.split("display-name=")[1].split(";")
+            username = parts[0]
+        except:
+            pass
+    
+    # Wenn kein display-name gefunden wurde, versuche die traditionelle Methode
+    if not username:
+        try:
+            parts = message_line.split("PRIVMSG", 1)[0].split("!")
+            username = parts[0].replace(":", "")
+        except:
+            username = "unknown_user"
+    
+    return username
+
+def process_message(user, message):
+    log(f"Nachricht: {user}: {message}")
+    
+    # Wichtig: Jetzt vergleichen wir mit dem Bot-Namen statt mit NICKNAME
+    if user.lower() == BOT_NAME.lower():
+        log(f"Eigene Nachricht ignoriert: {message}")
+        return
+    
+    # Prüfen, ob es ein neuer Zuschauer ist (nur für Nicht-Bot-Accounts)
+    if user.lower() not in known_viewers and not user.lower().endswith('bot'):
+        known_viewers.add(user.lower())
+        # Begrüße neuen Zuschauer
+        threading.Thread(target=lambda: greeting_worker(user)).start()
+    
+    # Befehle verarbeiten
+    if message.lower() == "!witz":
+        threading.Thread(target=joke_worker).start()
+    
+    elif message.lower() == "!info":
+        send_info()
+    
+    elif message.lower() == "!stats":
+        send_stats()
+    
+    elif message.lower() == "!hilfe" or message.lower() == "!help":
+        send_help()
+    
+    elif message.lower() == "!bild" or message.lower() == "!scene":
+        threading.Thread(target=scene_comment_worker).start()
+    
+    elif message.lower().startswith("!spiel "):
+        game_name = message[7:].strip()
+        if game_name:
+            update_game(game_name, user)
+    
+    elif message.lower().startswith("!ort "):
+        location = message[5:].strip()
+        if location:
+            update_location(location, user)
+    
+    elif message.lower() == "!tod":
+        increment_deaths(user)
+    
+    elif message.lower().startswith("!level "):
+        try:
+            new_level = int(message[7:].strip())
+            update_level(new_level, user)
+        except ValueError:
+            send_message(f"@{user} Bitte gib eine gültige Levelnummer an!")
+    
+    elif message.lower().startswith("!frag ") and BOT_NAME.lower() in message.lower():
+        question = message.lower().split(BOT_NAME.lower(), 1)[1].strip()
+        if question:
+            threading.Thread(target=lambda: respond_to_direct_question(user, question)).start()
+    
+    elif BOT_NAME.lower() in message.lower():
+        if "?" in message:
+            threading.Thread(target=lambda: respond_to_question(user, message)).start()
+
+# === Kommando-Funktionen ===
+def joke_worker():
+    prompt = f"Erzähle einen kurzen, lustigen Witz. Mach ihn besonders humorvoll."
+    joke = get_response_from_ollama(prompt)
+    if joke:
+        send_message(f"🎭 {joke[:450]}")
+        log(f"Witz gesendet: {joke[:50]}...")
+    else:
+        fallback_joke = random.choice(WITZE)
+        send_message(f"🎭 {fallback_joke}")
+        log(f"Fallback-Witz gesendet: {fallback_joke[:50]}...")
+
+def scene_comment_worker():
+    load_game_state()
+    game = game_state.get("spiel", "Unbekannt")
+    location = game_state.get("ort", "Unbekannt")
+    
+    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Der Streamer spielt gerade {game} und befindet sich in/bei {location}. " \
+             f"Beschreibe detailliert, was in dieser Szene/auf diesem Bild wahrscheinlich zu sehen ist, und gib einen interessanten Kommentar " \
+             f"zu den visuellen Elementen ab (150-200 Zeichen). Konzentriere dich auf Grafik, Design, Atmosphäre, etc."
+    
+    comment = get_response_from_ollama(prompt)
+    if comment:
+        send_message(f"👁️ {comment[:450]}")
+        log(f"Bildkommentar gesendet: {comment[:50]}...")
+    else:
+        fallback_comment = random.choice(SCENE_KOMMENTARE)
+        send_message(f"👁️ {fallback_comment}")
+        log(f"Fallback-Bildkommentar gesendet: {fallback_comment[:50]}...")
+
+def send_info():
+    load_game_state()
+    game = game_state.get("spiel", "Unbekannt")
+    location = game_state.get("ort", "Unbekannt")
+    send_message(f"🎮 Aktuelles Spiel: {game} | 📍 Ort: {location} | ⏱️ Spielzeit: {game_state.get('spielzeit', '00:00:00')}")
+
+def send_stats():
+    load_game_state()
+    deaths = game_state.get("tode", 0)
+    level = game_state.get("level", 1)
+    send_message(f"📊 Statistiken: 💀 Tode: {deaths} | 📈 Level: {level} | 🕹️ Spiel: {game_state.get('spiel', 'Unbekannt')}")
+
+def send_help():
+    help_message = "📋 Befehle: !witz (zufälliger Witz), !info (Spielinfo), !stats (Statistiken), " + \
+                  "!bild/!scene (Kommentar zur aktuellen Szene), !spiel NAME (Spiel ändern), " + \
+                  "!ort NAME (Ort ändern), !tod (Tod zählen), !level X (Level setzen), !frag " + BOT_NAME + " ... (direkte Frage an mich)"
+    send_message(help_message)
+
+def update_game(game_name, user):
+    load_game_state()
+    old_game = game_state.get("spiel", "Unbekannt")
+    game_state["spiel"] = game_name
+    save_game_state()
+    send_message(f"🎮 @{user} hat das Spiel von '{old_game}' zu '{game_name}' geändert!")
+
+def update_location(location, user):
+    load_game_state()
+    old_location = game_state.get("ort", "Unbekannt")
+    game_state["ort"] = location
+    save_game_state()
+    send_message(f"📍 @{user} hat den Ort von '{old_location}' zu '{location}' geändert!")
+
+def increment_deaths(user):
+    load_game_state()
+    game_state["tode"] = game_state.get("tode", 0) + 1
+    deaths = game_state["tode"]
+    save_game_state()
+    send_message(f"💀 R.I.P! Todeszähler steht jetzt bei {deaths}. " + random.choice([
+        "Das war knapp!",
+        "Kopf hoch, nächstes Mal klappt's besser!",
+        "Halb so wild, du schaffst das!",
+        "Aus Fehlern lernt man!",
+        "Die Gegner werden auch immer gemeiner..."
+    ]))
+
+def update_level(level, user):
+    load_game_state()
+    old_level = game_state.get("level", 1)
+    game_state["level"] = level
+    save_game_state()
+    
+    if level > old_level:
+        send_message(f"📈 Level Up! @{user} hat das Level von {old_level} auf {level} erhöht! Weiter so!")
+    else:
+        send_message(f"📊 @{user} hat das Level auf {level} gesetzt.")
+
+def greeting_worker(user):
+    greeting = random.choice(BEGRÜSSUNGEN).format(user=user)
+    send_message(greeting)
+    log(f"Neuer Zuschauer begrüßt: {user}")
+
+def respond_to_question(user, message):
+    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Der Benutzer {user} hat dich folgendes gefragt: '{message}'. Gib eine kurze, hilfreiche Antwort (max. 200 Zeichen)."
+    
+    response = get_response_from_ollama(prompt)
+    if response:
+        send_message(f"@{user} {response[:450]}")
+        log(f"Antwort auf Frage gesendet: {response[:50]}...")
+    else:
+        send_message(f"@{user} Hmm, ich bin mir nicht sicher, was ich dazu sagen soll. Versuch's mal mit !witz für einen lustigen Witz!")
+
+def respond_to_direct_question(user, question):
+    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Beantworte folgende Frage von {user} direkt und präzise (max. 250 Zeichen): '{question}'."
+    
+    response = get_response_from_ollama(prompt)
+    if response:
+        send_message(f"@{user} {response[:450]}")
+        log(f"Antwort auf direkte Frage gesendet: {response[:50]}...")
+    else:
+        send_message(f"@{user} Entschuldige, ich konnte keine Antwort generieren. Versuche es später noch einmal.")
+
+# === Thread-Funktionen ===
+def auto_joke_worker():
+    log(f"Automatischer Witz-Thread gestartet - Intervall: {AUTO_JOKE_INTERVAL} Sekunden")
+    time.sleep(10)  # Initiale Verzögerung
+    
+    while running:
+        if is_connected:
+            joke_worker()
+        else:
+            log("Überspringe automatischen Witz: Nicht verbunden")
+        
+        for _ in range(AUTO_JOKE_INTERVAL):
+            if not running:
+                break
+            time.sleep(1)
+
+def auto_comment_worker():
+    log(f"Automatischer Kommentar-Thread gestartet - Intervall: {AUTO_COMMENT_INTERVAL} Sekunden")
+    time.sleep(30)  # Initiale Verzögerung
+    
+    while running:
+        if is_connected:
+            load_game_state()
+            game = game_state.get("spiel", "Unbekannt")
+            location = game_state.get("ort", "Unbekannt")
+            
+            if game != "Unbekannt":
+                prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Der Streamer spielt gerade {game} und befindet sich in/bei {location}. Gib einen kurzen, lustigen und hilfreichen Spielkommentar ab (max. 200 Zeichen)."
+                comment = get_response_from_ollama(prompt)
+                
+                if comment:
+                    send_message(f"🎮 {comment[:450]}")
+                    log(f"Spiel-Kommentar gesendet: {comment[:50]}...")
+                else:
+                    fallback_comment = random.choice(GAME_KOMMENTARE)
+                    send_message(f"🎮 {fallback_comment}")
+                    log(f"Fallback-Spielkommentar gesendet: {fallback_comment[:50]}...")
+        else:
+            log("Überspringe automatischen Kommentar: Nicht verbunden")
+        
+        for _ in range(AUTO_COMMENT_INTERVAL):
+            if not running:
+                break
+            time.sleep(1)
+
+def auto_scene_comment_worker():
+    global last_scene_comment_time
+    
+    log(f"Automatischer Bildkommentar-Thread gestartet - Intervall: {AUTO_SCENE_COMMENT_INTERVAL} Sekunden")
+    time.sleep(60)  # Längere initiale Verzögerung
+    
+    while running:
+        current_time = time.time()
+        
+        # Kommentare nur senden, wenn genug Zeit vergangen ist
+        if is_connected and current_time - last_scene_comment_time >= AUTO_SCENE_COMMENT_INTERVAL:
+            scene_comment_worker()
+            last_scene_comment_time = current_time
+        else:
+            remaining = AUTO_SCENE_COMMENT_INTERVAL - (current_time - last_scene_comment_time)
+            log(f"Überspringe automatischen Bildkommentar: Nächster in {int(max(0, remaining))} Sekunden", level=2)
+        
+        # Kurze Pause vor der nächsten Prüfung
+        time.sleep(30)
+
+def command_reminder_worker():
+    log(f"Befehlserinnerungs-Thread gestartet - Intervall: {COMMAND_REMINDER_INTERVAL} Sekunden")
+    time.sleep(120)  # Initiale Verzögerung (2 Minuten nach Start)
+    
+    reminder_index = 0
+    while running:
+        if is_connected:
+            reminder = COMMAND_REMINDERS[reminder_index]
+            send_message(reminder)
+            log(f"Befehlserinnerung gesendet: {reminder}")
+            
+            # Nächster Index für die nächste Nachricht
+            reminder_index = (reminder_index + 1) % len(COMMAND_REMINDERS)
+        else:
+            log("Überspringe Befehlserinnerung: Nicht verbunden")
+        
+        # Warte auf das nächste Intervall
+        for _ in range(COMMAND_REMINDER_INTERVAL):
+            if not running:
+                break
+            time.sleep(1)
+
+def connection_watchdog():
+    global is_connected, last_ping_time
+    
+    log("Verbindungs-Watchdog gestartet")
+    retry_count = 0
+    max_retries = 10
+    
+    while running:
+        current_time = time.time()
+        
+        if not is_connected:
+            retry_count += 1
+            
+            if retry_count > max_retries:
+                log_error(f"Maximale Anzahl an Wiederverbindungsversuchen ({max_retries}) erreicht", None)
+                log("Bot wird neu gestartet...")
+                os._exit(42)  # Exit-Code 42 für Neustart
+            
+            log(f"Nicht verbunden - Versuche Wiederverbindung ({retry_count}/{max_retries})...")
+            if connect_to_twitch():
+                retry_count = 0
+                last_ping_time = current_time
+        else:
+            # Sende regelmäßig PINGs zur Verbindungsprüfung
+            if current_time - last_ping_time > PING_INTERVAL:
+                if send_ping():
+                    last_ping_time = current_time
+        
+        time.sleep(5)  # Kurze Pause
+
+def message_receiver():
+    global is_connected, last_ping_time
+    
+    log("Nachrichtenempfänger gestartet")
+    
+    while running:
+        if not is_connected:
+            time.sleep(1)
+            continue
+        
+        try:
+            response = ""
+            sock.settimeout(0.5)  # Kurzer Timeout für schnelle Reaktion
+            
+            try:
+                response = sock.recv(2048).decode('utf-8')
+                last_ping_time = time.time()  # Aktualisiere bei jeder Nachricht
+            except socket.timeout:
+                continue
+            except Exception as e:
+                log_error("Fehler beim Empfangen", e)
+                is_connected = False
+                continue
+            
+            if not response:
+                continue
+            
+            # Verarbeite jede Zeile separat
+            for line in response.split('\r\n'):
+                if not line:
+                    continue
+                
+                log(f"Empfangen: {line}", level=2)  # Nur bei höherem Debug-Level
+                
+                # Reagiere auf PING vom Server
+                if line.startswith("PING"):
+                    reply = line.replace("PING", "PONG")
+                    sock.send(f"{reply}\r\n".encode('utf-8'))
+                    log(f"PING beantwortet mit: {reply}", level=2)  # Nur bei höherem Debug-Level
+                    continue
+                
+                # Verarbeite Nachrichten
+                if "PRIVMSG" in line:
+                    # Extrahiere Benutzernamen und Nachricht
+                    username = extract_username(line)
+                    
+                    try:
+                        message_content = line.split("PRIVMSG", 1)[1].split(":", 1)[1]
+                        
+                        # Verarbeite die Nachricht in einem separaten Thread
+                        threading.Thread(target=lambda: process_message(username, message_content)).start()
+                    except Exception as msg_err:
+                        log_error(f"Fehler beim Parsen der Nachricht: {line}", msg_err)
+        except Exception as e:
+            log_error("Unerwarteter Fehler im Nachrichtenempfänger", e)
+            time.sleep(1)  # Kurze Pause bei Fehlern
+
+# === Hauptprogramm ===
+def main():
+    global running, last_scene_comment_time
+    
+    try:
+        # Erstelle PID-Datei
+        create_pid_file()
+        
+        log(f"{BOT_NAME} Twitch-Bot wird gestartet...")
+        
+        # Initialisiere Zeitstempel
+        current_time = time.time()
+        last_scene_comment_time = current_time
+        
+        # Prüfe Ollama-API
+        ollama_version = check_ollama()
+        if ollama_version:
+            log(f"Ollama API Version: {ollama_version}")
+        else:
+            log_error("Ollama API nicht erreichbar. Stelle sicher, dass Ollama läuft!", None)
+        
+        # Teste Ollama-Verbindung
+        test_response = get_response_from_ollama("Sage 'Der Bot funktioniert!'")
+        if test_response:
+            log(f"Test-Antwort: {test_response[:150]}...")
+        else:
+            log_error("Ollama-Test fehlgeschlagen. Verwende Fallback-Antworten.", None)
+        
+        # Lade den initialen Spielstand
+        load_game_state()
+        
+        # Initialisiere IRC-Verbindung
+        if not connect_to_twitch():
+            log_error("Initiale Verbindung fehlgeschlagen, versuche Wiederverbindung", None)
+        
+        # Starte Threads
+        threads = []
+        
+        receiver_thread = threading.Thread(target=message_receiver)
+        receiver_thread.daemon = True
+        receiver_thread.start()
+        threads.append(receiver_thread)
+        
+        joke_thread = threading.Thread(target=auto_joke_worker)
+        joke_thread.daemon = True
+        joke_thread.start()
+        threads.append(joke_thread)
+        
+        comment_thread = threading.Thread(target=auto_comment_worker)
+        comment_thread.daemon = True
+        comment_thread.start()
+        threads.append(comment_thread)
+        
+        # Thread für automatische Bildkommentare
+        scene_thread = threading.Thread(target=auto_scene_comment_worker)
+        scene_thread.daemon = True
+        scene_thread.start()
+        threads.append(scene_thread)
+        
+        # Thread für Befehlserinnerungen
+        reminder_thread = threading.Thread(target=command_reminder_worker)
+        reminder_thread.daemon = True
+        reminder_thread.start()
+        threads.append(reminder_thread)
+        
+        # Verbindungs-Watchdog
+        watchdog_thread = threading.Thread(target=connection_watchdog)
+        watchdog_thread.daemon = True
+        watchdog_thread.start()
+        threads.append(watchdog_thread)
+        
+        # Hauptschleife - warte einfach auf Beendigung
+        log("Bot läuft jetzt...")
+        while running:
+            time.sleep(1)
+    
+    except KeyboardInterrupt:
+        log("Bot wird durch Benutzer beendet")
+    except Exception as e:
+        log_error("Unerwarteter Fehler im Hauptprogramm", e)
+    finally:
+        running = False
+        if sock:
+            try:
+                sock.close()
+            except:
+                pass
+        
+        remove_pid_file()
+        log("Bot wird beendet...")
+
+if __name__ == "__main__":
+    main()
