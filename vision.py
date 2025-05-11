@@ -1,25 +1,34 @@
-def identify_game(image_path):
+def identify_content_type(image_path):
     """
-    Identifiziert das im Bild gezeigte Spiel.
+    Identifiziert den Typ des angezeigten Inhalts im Screenshot.
     
     Args:
         image_path: Pfad zum Screenshot
         
     Returns:
-        Name des identifizierten Spiels oder "Unbekannt"
+        Dictionary mit Typ und Details des Inhalts
     """
     if not os.path.exists(image_path):
-        return "Unbekannt"
+        return {"type": "unbekannt", "details": {}}
         
     try:
         with open(image_path, "rb") as img_file:
             image_bytes = img_file.read()
             encoded_image = base64.b64encode(image_bytes).decode('utf-8')
 
-        # Spezifischerer Prompt zur Spielidentifikation
-        prompt = """Erkenne das Videospiel auf diesem Screenshot. 
-        Gib NUR den Namen des Spiels zurück, keine weiteren Informationen oder Beschreibungen.
-        Falls du dir nicht sicher bist oder es kein Spiel ist, antworte nur mit "Unbekannt"."""
+        prompt = """Analysiere diesen Screenshot und bestimme, was darauf zu sehen ist.
+        Mögliche Kategorien sind:
+        - Videospiel (wenn ja, welches?)
+        - Code/Programmierumgebung (wenn ja, welche Sprache?)
+        - Website/Browser (wenn ja, welcher Inhalt?)
+        - Desktop/Betriebssystem (wenn ja, welches?)
+        - Textdokument/Tabelle (wenn ja, welcher Inhalt?)
+        - Terminal/Konsole
+        - Video/Stream
+        - Sonstiges
+
+        Antwort im JSON-Format: 
+        {"type": "kategorie", "details": {"name": "konkreter_name", "beschreibung": "kurze_beschreibung"}}"""
 
         payload = {
             "model": "llava",
@@ -29,17 +38,24 @@ def identify_game(image_path):
         }
 
         response = requests.post("http://localhost:11434/api/generate", 
-                                json=payload, 
-                                timeout=30)
+                               json=payload, 
+                               timeout=30)
         if response.ok:
-            game_name = response.json().get("response", "").strip()
-            # Filtere zu lange oder zu allgemeine Antworten
-            if len(game_name) > 50 or "ich kann nicht" in game_name.lower() or "schwer zu sagen" in game_name.lower():
-                return "Unbekannt"
-            return game_name
+            result = response.json().get("response", "").strip()
+            try:
+                # Versuche JSON zu parsen
+                import json
+                content_info = json.loads(result)
+                return content_info
+            except:
+                # Fallback wenn kein valides JSON zurückkommt
+                return {
+                    "type": "unbekannt", 
+                    "details": {"beschreibung": result[:100] if result else "Keine Beschreibung"}
+                }
             
-        return "Unbekannt"
+        return {"type": "unbekannt", "details": {}}
         
     except Exception as e:
-        print(f"Fehler bei Spielidentifikation: {str(e)}")
-        return "Unbekannt"
+        print(f"Fehler bei Inhaltstyperkennung: {str(e)}")
+        return {"type": "unbekannt", "details": {"fehler": str(e)}}

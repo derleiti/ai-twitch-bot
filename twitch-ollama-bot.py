@@ -207,6 +207,35 @@ BEGRÜSSUNGEN = [
     "Hey {user}! Tolles Timing, wir haben gerade erst angefangen!"
 ]
 
+# Fallback: Wenn keine Bildanalyse möglich war
+    content_type = content_info.get("type", "").lower()
+    
+    if "videospiel" in content_type:
+        fallback_comment = random.choice(GAME_KOMMENTARE)
+    elif "code" in content_type or "programmier" in content_type:
+        fallback_comment = random.choice(CODE_KOMMENTARE)
+    elif "browser" in content_type or "website" in content_type:
+        fallback_comment = random.choice(WEB_KOMMENTARE)
+    elif "terminal" in content_type or "konsole" in content_type:
+        fallback_comment = random.choice(TERMINAL_KOMMENTARE)
+    elif "dokument" in content_type or "text" in content_type:
+        fallback_comment = random.choice(DOKUMENT_KOMMENTARE)
+    else:
+        # Allgemeine Fallback-Kommentare
+        fallback_comment = random.choice([
+            "Was für ein interessanter Screenshot! Das sieht spannend aus.",
+            "Coole Sache, die du uns da zeigst!",
+            "Da passiert ja einiges auf dem Bildschirm!",
+            "Interessante Darstellung - gefällt mir!",
+            "Das ist mal was anderes, nice!",
+            "Spannender Content, den du da streamst!",
+            "Interessant, was du uns da präsentierst.",
+            "Cool, da bin ich gespannt, wie es weitergeht!",
+            "Das sieht vielversprechend aus!",
+            "Tolle Sache, die du da machst!"
+        ])
+
+
 # Befehlserinnerungen
 COMMAND_REMINDERS = [
     "📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...",
@@ -574,6 +603,91 @@ def scene_comment_worker():
         os.makedirs(screenshots_dir, exist_ok=True)
         log(f"Screenshots-Verzeichnis erstellt: {screenshots_dir}")
         
+    # Versuche den neuesten Screenshot zu bekommen
+    latest_screenshot = get_latest_screenshot_path()
+    
+    load_game_state()
+    
+    # Versuche den Inhaltstyp zu identifizieren
+    content_info = {"type": "unbekannt", "details": {}}
+    try:
+        from vision import identify_content_type
+        content_info = identify_content_type(latest_screenshot)
+        log(f"Erkannter Inhaltstyp: {content_info['type']}", level=2)
+        
+        # Aktualisiere Spielstand nur, wenn ein Spiel erkannt wurde
+        if content_info['type'] == "Videospiel" and "name" in content_info['details']:
+            game_name = content_info['details']['name']
+            if game_name and game_state.get("spiel") != game_name:
+                log(f"Neues Spiel erkannt: {game_name}")
+                game_state["spiel"] = game_name
+                save_game_state()
+    except (ImportError, Exception) as e:
+        log(f"Inhaltstyperkennung nicht verfügbar oder fehlgeschlagen: {e}", level=2)
+    
+    game = game_state.get("spiel", "Unbekannt")
+    location = game_state.get("ort", "Unbekannt")
+    
+    if latest_screenshot:
+        try:
+            vision_description = get_vision_description(latest_screenshot)
+            if vision_description:
+                # Angepasster Prompt basierend auf dem Inhaltstyp
+                content_type = content_info.get("type", "unbekannt").lower()
+                content_details = content_info.get("details", {})
+                
+                if "videospiel" in content_type:
+                    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Auf dem Bild wird das Spiel '{game}' gezeigt. " \
+                             f"Ein KI-Vision-Modell hat folgendes erkannt: '{vision_description}'. " \
+                             f"Gib einen lustigen, spielbezogenen Kommentar zu dieser Szene ab (max. 2 Sätze)."
+                elif "code" in content_type or "programmier" in content_type:
+                    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Auf dem Bild ist Code oder eine Programmierumgebung zu sehen. " \
+                             f"Ein KI-Vision-Modell hat folgendes erkannt: '{vision_description}'. " \
+                             f"Gib einen witzigen Kommentar zum gezeigten Code ab, der für Programmierer lustig ist (max. 2 Sätze)."
+                elif "browser" in content_type or "website" in content_type:
+                    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Auf dem Bild ist ein Browser oder eine Website zu sehen. " \
+                             f"Ein KI-Vision-Modell hat folgendes erkannt: '{vision_description}'. " \
+                             f"Mach einen lustigen Kommentar zum angezeigten Webinhalt (max. 2 Sätze)."
+                elif "terminal" in content_type or "konsole" in content_type:
+                    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Auf dem Bild ist ein Terminal oder eine Konsole zu sehen. " \
+                             f"Ein KI-Vision-Modell hat folgendes erkannt: '{vision_description}'. " \
+                             f"Mach einen witzigen, computerbezogenen Kommentar für Technikfans (max. 2 Sätze)."
+                else:
+                    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. " \
+                             f"Ein KI-Vision-Modell hat folgendes auf dem aktuellen Bild erkannt: '{vision_description}'. " \
+                             f"Gib einen lustigen, passenden Kommentar dazu ab (max. 2 Sätze)."
+                
+                comment = get_response_from_ollama(prompt)
+                if comment:
+                    # Entferne Anführungszeichen wenn vorhanden
+                    comment = comment.strip('"\'')
+                    send_message(f"👁️ {comment[:450]}")
+                    log(f"Bildkommentar gesendet (mit Vision): {comment[:50]}...")
+                    return
+        except Exception as e:
+            log_error("Fehler bei der Bildanalyse", e)
+    
+    # Fallback: Wenn keine Bildanalyse möglich war
+    if "videospiel" in content_info.get("type", "").lower():
+        fallback_comment = random.choice(GAME_KOMMENTARE)
+    else:
+        # Allgemeinere Fallback-Kommentare für nicht-Spiel-Inhalte
+        fallback_comment = random.choice([
+            "Was für ein interessanter Screenshot! Das sieht spannend aus.",
+            "Coole Sache, die du uns da zeigst!",
+            "Da passiert ja einiges auf dem Bildschirm!",
+            "Interessante Darstellung - gefällt mir!",
+            "Das ist mal was anderes, nice!",
+            "Spannender Content, den du da streamst!",
+            "Interessant, was du uns da präsentierst.",
+            "Cool, da bin ich gespannt, wie es weitergeht!",
+            "Das sieht vielversprechend aus!",
+            "Tolle Sache, die du da machst!"
+        ])
+    
+    send_message(f"👁️ {fallback_comment}")
+    log(f"Fallback-Bildkommentar gesendet: {fallback_comment[:50]}...")
+
     # Versuche den neuesten Screenshot zu bekommen
     latest_screenshot = get_latest_screenshot_path()
     
