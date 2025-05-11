@@ -19,8 +19,14 @@ echo -e "${BLUE}=== Twitch-Ollama-Bot Starter ===${NC}"
 # Prüfe, ob das Hauptverzeichnis existiert
 if [ ! -d "$BASE_DIR" ]; then
     echo -e "${RED}Fehler: Das Verzeichnis $BASE_DIR existiert nicht!${NC}"
+    echo -e "${YELLOW}Erstelle Verzeichnis...${NC}"
     mkdir -p "$BASE_DIR"
-    echo -e "${GREEN}Verzeichnis erstellt: $BASE_DIR${NC}"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Verzeichnis erstellt: $BASE_DIR${NC}"
+    else
+        echo -e "${RED}Konnte Verzeichnis nicht erstellen. Bitte manuell anlegen.${NC}"
+        exit 1
+    fi
 fi
 
 # Prüfe, ob das Bot-Skript existiert
@@ -97,26 +103,74 @@ else
     }
 fi
 
-# Warte auf Ollama-Server
-echo -e "${YELLOW}Warte auf Ollama-Server...${NC}"
-for i in {1..60}; do
-    if curl -s --fail http://localhost:11434/api/version > /dev/null; then
-        echo -e "${GREEN}Ollama-Server bereit nach $i Sekunden${NC}"
-        break
+# Prüfe, ob Ollama läuft
+echo -e "${YELLOW}Prüfe Ollama-Server...${NC}"
+if ! curl -s --fail http://localhost:11434/api/version > /dev/null; then
+    echo -e "${RED}Ollama-Server scheint nicht zu laufen!${NC}"
+    echo -e "${YELLOW}Versuche Ollama zu starten...${NC}"
+    
+    # Versuche Ollama zu starten
+    if systemctl is-active --quiet ollama; then
+        echo -e "${YELLOW}Ollama-Dienst läuft, aber API antwortet nicht. Neustart...${NC}"
+        systemctl restart ollama
+    else
+        echo -e "${YELLOW}Ollama-Dienst starten...${NC}"
+        systemctl start ollama
     fi
     
-    if [ $i -eq 60 ]; then
-        echo -e "${RED}FEHLER: Ollama-Server nach 60 Sekunden nicht erreichbar!${NC}"
-        echo "Bitte starte Ollama mit 'ollama serve' und versuche es erneut."
-        exit 1
+    # Warte auf Ollama-Server
+    echo -e "${YELLOW}Warte auf Ollama-Server...${NC}"
+    for i in {1..60}; do
+        if curl -s --fail http://localhost:11434/api/version > /dev/null; then
+            echo -e "${GREEN}Ollama-Server bereit nach $i Sekunden${NC}"
+            break
+        fi
+        
+        if [ $i -eq 60 ]; then
+            echo -e "${RED}FEHLER: Ollama-Server nach 60 Sekunden nicht erreichbar!${NC}"
+            echo -e "${YELLOW}Bitte starte Ollama mit 'ollama serve' und versuche es erneut.${NC}"
+            exit 1
+        fi
+        
+        echo -n "."
+        sleep 1
+    done
+else
+    echo -e "${GREEN}Ollama-Server läuft.${NC}"
+fi
+
+# Prüfe, ob erforderliche Modelle verfügbar sind
+echo -e "${YELLOW}Prüfe erforderliche Modelle...${NC}"
+for MODEL in "zephyr" "llava"; do
+    if ! curl -s --fail "http://localhost:11434/api/tags" | grep -q "\"name\":\"$MODEL\""; then
+        echo -e "${YELLOW}Modell '$MODEL' scheint nicht verfügbar zu sein. Versuche zu pullen...${NC}"
+        ollama pull $MODEL
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}WARNUNG: Konnte Modell '$MODEL' nicht herunterladen.${NC}"
+            echo -e "${YELLOW}Der Bot wird möglicherweise nicht korrekt funktionieren.${NC}"
+            echo -e "${YELLOW}Du kannst das Modell später manuell installieren mit: 'ollama pull $MODEL'${NC}"
+        else
+            echo -e "${GREEN}Modell '$MODEL' erfolgreich heruntergeladen.${NC}"
+        fi
+    else
+        echo -e "${GREEN}Modell '$MODEL' ist verfügbar.${NC}"
     fi
-    
-    echo -n "."
-    sleep 1
 done
 
 # Stelle sicher, dass das Bot-Skript ausführbar ist
 chmod +x "$BOT_SCRIPT"
+
+# Stelle sicher, dass das Screenshots-Verzeichnis existiert
+SCREENSHOTS_DIR="$BASE_DIR/screenshots"
+if [ ! -d "$SCREENSHOTS_DIR" ]; then
+    echo -e "${YELLOW}Erstelle Screenshots-Verzeichnis...${NC}"
+    mkdir -p "$SCREENSHOTS_DIR"
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Verzeichnis erstellt: $SCREENSHOTS_DIR${NC}"
+    else
+        echo -e "${RED}Konnte Screenshots-Verzeichnis nicht erstellen.${NC}"
+    fi
+fi
 
 # Starte den Bot im Hintergrund
 echo -e "${YELLOW}Starte Twitch-Ollama-Bot...${NC}"
@@ -142,6 +196,24 @@ if ps -p $BOT_PID > /dev/null; then
     echo -e "\n${BLUE}Wie überwache ich den Bot?${NC}"
     echo -e "Logs ansehen: ${YELLOW}tail -f $LOG_FILE${NC}"
     echo -e "Bot manuell stoppen: ${YELLOW}kill $BOT_PID${NC}"
+    
+    # Starte auch den Screenshot-Watcher, falls vorhanden
+    WATCHER_SCRIPT="$BASE_DIR/watch_screenshots.py"
+    if [ -f "$WATCHER_SCRIPT" ]; then
+        echo -e "\n${YELLOW}Starte Screenshot-Watcher...${NC}"
+        chmod +x "$WATCHER_SCRIPT"
+        if [ -d "$VENV_DIR" ]; then
+            nohup "$VENV_DIR/bin/python3" "$WATCHER_SCRIPT" >> "$BASE_DIR/watcher.log" 2>&1 &
+        else
+            nohup python3 "$WATCHER_SCRIPT" >> "$BASE_DIR/watcher.log" 2>&1 &
+        fi
+        WATCHER_PID=$!
+        if ps -p $WATCHER_PID > /dev/null; then
+            echo -e "${GREEN}✓ Screenshot-Watcher gestartet mit PID $WATCHER_PID${NC}"
+        else
+            echo -e "${RED}FEHLER: Screenshot-Watcher konnte nicht gestartet werden${NC}"
+        fi
+    fi
 else
     echo -e "${RED}FEHLER: Bot konnte nicht gestartet werden oder wurde sofort beendet${NC}"
     echo -e "Überprüfe die Logs für weitere Details: ${YELLOW}cat $LOG_FILE${NC}"
@@ -159,17 +231,11 @@ create_service_file() {
             
             echo -e "${YELLOW}Erstelle systemd-Service-Datei...${NC}"
             
-            # Pfad zur virtuellen Umgebung oder direkt zum Python-Interpreter
-            if [ -d "$VENV_DIR" ]; then
-                PYTHON_PATH="$VENV_DIR/bin/python3"
-            else
-                PYTHON_PATH=$(which python3)
-            fi
-            
             cat > "$SYSTEMD_SERVICE" << EOLS
 [Unit]
 Description=Twitch Ollama Chatbot
-After=network.target
+After=network.target ollama.service
+Requires=ollama.service
 
 [Service]
 Type=simple

@@ -139,6 +139,7 @@ OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "30"))  # Timeout für Ollama-A
 RECONNECT_DELAY = int(os.getenv("RECONNECT_DELAY", "10"))  # Sekunden zwischen Wiederverbindungsversuchen
 PING_INTERVAL = int(os.getenv("PING_INTERVAL", "30"))  # Sekunden zwischen PING-Anfragen
 SOCKET_TIMEOUT = int(os.getenv("SOCKET_TIMEOUT", "15"))  # Socket-Timeout in Sekunden
+OLLAMA_RETRY_COUNT = int(os.getenv("OLLAMA_RETRY_COUNT", "3"))  # Anzahl der Wiederholungsversuche für Ollama-API-Anfragen
 
 # Debug-Level (0=minimal, 1=normal, 2=ausführlich)
 DEBUG_LEVEL = int(os.getenv("DEBUG_LEVEL", "1"))
@@ -318,33 +319,59 @@ def check_ollama():
         log_error("Ollama-Server nicht erreichbar", e)
         return None
 
-def get_response_from_ollama(prompt):
+def get_response_from_ollama(prompt, retries=OLLAMA_RETRY_COUNT):
     log(f"Sende an Ollama: {prompt[:50]}...", level=1)
     
-    try:
-        # Versuche das neuere Format für Ollama 0.6.x
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": MODEL,
-                "prompt": prompt,
-                "stream": False
-            },
-            timeout=OLLAMA_TIMEOUT
-        )
-        
-        if response.status_code == 200:
-            result = response.json()
-            text = result.get("response", "").strip()
-            if text:
-                log(f"Antwort von Ollama erhalten: {text[:50]}...", level=1)
-                return text
+    for attempt in range(retries):
+        try:
+            # Versuche das neuere Format für Ollama 0.6.x
+            response = requests.post(
+                OLLAMA_URL,
+                json={
+                    "model": MODEL,
+                    "messages": [{"role": "system", "content": f"Du bist ein hilfreicher Twitch-Bot namens {BOT_NAME}. Antworte immer auf Deutsch, kurz und prägnant."}, {"role": "user", "content": prompt}],
+                    "stream": False
+                },
+                timeout=OLLAMA_TIMEOUT
+            )
             
-        log_error(f"Fehler bei Ollama-Anfrage: Status {response.status_code}", None)
-        return None
-    except Exception as e:
-        log_error("Ausnahme bei Ollama-Anfrage", e)
-        return None
+            if response.status_code == 200:
+                result = response.json()
+                text = result.get("response", "").strip()
+                if text:
+                    log(f"Antwort von Ollama erhalten: {text[:50]}...", level=1)
+                    return text
+                
+            # Wenn die erste Methode fehlschlägt, versuche die ältere Methode
+            response = requests.post(
+                OLLAMA_URL,
+                json={
+                    "model": MODEL,
+                    "prompt": prompt,
+                    "stream": False
+                },
+                timeout=OLLAMA_TIMEOUT
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                text = result.get("response", "").strip()
+                if text:
+                    log(f"Antwort von Ollama erhalten (altes Format): {text[:50]}...", level=1)
+                    return text
+                    
+            log_error(f"Fehler bei Ollama-Anfrage (Versuch {attempt+1}/{retries}): Status {response.status_code}")
+            
+            # Warte etwas länger zwischen den Versuchen
+            if attempt < retries - 1:
+                time.sleep(2 * (attempt + 1))
+                
+        except Exception as e:
+            log_error(f"Ausnahme bei Ollama-Anfrage (Versuch {attempt+1}/{retries})", e)
+            if attempt < retries - 1:
+                time.sleep(2 * (attempt + 1))
+    
+    return None
 
 # === IRC-Funktionen ===
 def connect_to_twitch():

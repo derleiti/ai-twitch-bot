@@ -1,41 +1,45 @@
-import requests
-import base64
-import os
-
-def get_latest_screenshot_path():
-    # Hier könntest du deinen OBS-/Screenshot-Pfad einstellen
-    screenshot_dir = "/tmp/screenshots"
-    if not os.path.exists(screenshot_dir):
-        return None
-
-    screenshots = sorted([
-        os.path.join(screenshot_dir, f)
-        for f in os.listdir(screenshot_dir)
-        if f.lower().endswith(('.png', '.jpg', '.jpeg'))
-    ], key=os.path.getmtime, reverse=True)
-
-    return screenshots[0] if screenshots else None
-
-def get_vision_description(image_path):
+def identify_game(image_path):
+    """
+    Identifiziert das im Bild gezeigte Spiel.
+    
+    Args:
+        image_path: Pfad zum Screenshot
+        
+    Returns:
+        Name des identifizierten Spiels oder "Unbekannt"
+    """
     if not os.path.exists(image_path):
-        return "Kein Bild gefunden."
-
-    with open(image_path, "rb") as img_file:
-        image_bytes = img_file.read()
-        encoded_image = base64.b64encode(image_bytes).decode('utf-8')
-
-    payload = {
-        "model": "llava",  # ggf. "llava:7b" je nach Ollama
-        "prompt": "Beschreibe das Bild möglichst präzise auf Deutsch.",
-        "images": [encoded_image],
-        "stream": False
-    }
-
+        return "Unbekannt"
+        
     try:
-        response = requests.post("http://localhost:11434/api/generate", json=payload, timeout=30)
+        with open(image_path, "rb") as img_file:
+            image_bytes = img_file.read()
+            encoded_image = base64.b64encode(image_bytes).decode('utf-8')
+
+        # Spezifischerer Prompt zur Spielidentifikation
+        prompt = """Erkenne das Videospiel auf diesem Screenshot. 
+        Gib NUR den Namen des Spiels zurück, keine weiteren Informationen oder Beschreibungen.
+        Falls du dir nicht sicher bist oder es kein Spiel ist, antworte nur mit "Unbekannt"."""
+
+        payload = {
+            "model": "llava",
+            "prompt": prompt,
+            "images": [encoded_image],
+            "stream": False
+        }
+
+        response = requests.post("http://localhost:11434/api/generate", 
+                                json=payload, 
+                                timeout=30)
         if response.ok:
-            return response.json().get("response", "").strip()
-        else:
-            return f"Ollama-Fehler: {response.status_code}"
+            game_name = response.json().get("response", "").strip()
+            # Filtere zu lange oder zu allgemeine Antworten
+            if len(game_name) > 50 or "ich kann nicht" in game_name.lower() or "schwer zu sagen" in game_name.lower():
+                return "Unbekannt"
+            return game_name
+            
+        return "Unbekannt"
+        
     except Exception as e:
-        return f"Ollama-Ausnahme: {str(e)}"
+        print(f"Fehler bei Spielidentifikation: {str(e)}")
+        return "Unbekannt"
