@@ -11,7 +11,6 @@ import os
 import json
 import traceback
 import re
-from bildanalyse import get_vision_description
 from datetime import datetime
 from collections import Counter, defaultdict
 from dotenv import load_dotenv
@@ -19,9 +18,59 @@ from dotenv import load_dotenv
 # Lade Umgebungsvariablen aus .env Datei
 load_dotenv()
 
+# --- Import für Bildanalyse ---
+try:
+    from bildanalyse import get_vision_description
+except ImportError:
+    # Fallback für fehlende bildanalyse.py
+    import base64
+    
+    def get_vision_description(image_path, vision_model="llava"):
+        if not os.path.isfile(image_path):
+            return None
 
-# --- Screenshot-basiertes Game Detection (statt game_state.json) ---
-from vision import get_latest_screenshot_path, get_vision_description
+        with open(image_path, "rb") as f:
+            img_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+        try:
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": vision_model,
+                    "prompt": "Beschreibe möglichst genau, was auf dem Bild zu sehen ist.",
+                    "images": [img_b64]
+                },
+                timeout=30
+            )
+            if response.status_code == 200:
+                return response.json().get("response", "").strip()
+        except Exception as e:
+            print(f"Fehler bei Vision-Modell: {e}")
+        
+        return None
+
+# --- Import für Screenshot-Handler ---
+try:
+    from vision import get_latest_screenshot_path
+except ImportError:
+    # Fallback für fehlende vision.py
+    def get_latest_screenshot_path():
+        """Fallback für fehlende vision.py"""
+        screenshot_dir = os.path.expanduser("~/zephyr/screenshots")
+        if not os.path.exists(screenshot_dir):
+            os.makedirs(screenshot_dir, exist_ok=True)
+            return None
+        
+        screenshots = sorted([
+            os.path.join(screenshot_dir, f)
+            for f in os.listdir(screenshot_dir)
+            if f.lower().endswith(('.png', '.jpg', '.jpeg'))
+        ], key=os.path.getmtime, reverse=True)
+        
+        return screenshots[0] if screenshots else None
+
+# Import base64 für Bildverarbeitung
+import base64
 
 # Holt den aktuellsten Screenshot
 latest_screenshot = get_latest_screenshot_path()
@@ -52,12 +101,31 @@ TOKEN = os.getenv("OAUTH_TOKEN", "")           # OAuth Token: https://twitchapps
 CHANNEL = os.getenv("CHANNEL", "")             # Kanal, dem der Bot beitreten soll
 BOT_NAME = os.getenv("BOT_NAME", "zephyr")     # Anzeigename des Bots im Chat
 
+# Prüfung der kritischen Umgebungsvariablen
+if not NICKNAME or not TOKEN or not CHANNEL:
+    print("Kritische Umgebungsvariablen fehlen. Bitte .env-Datei prüfen: BOT_USERNAME, OAUTH_TOKEN, CHANNEL")
+    # Fallback für Test-/Entwicklungszwecke
+    if not NICKNAME: 
+        NICKNAME = "testbot"
+        print("Verwende Fallback für BOT_USERNAME")
+    if not TOKEN: 
+        TOKEN = "oauth:test"
+        print("Verwende Fallback für OAUTH_TOKEN (nur für Tests!)")
+    if not CHANNEL: 
+        CHANNEL = "#testchannel"
+        print("Verwende Fallback für CHANNEL")
+
 # Ollama-Konfiguration
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
 MODEL = os.getenv("OLLAMA_MODEL", "zephyr")
 
 # Pfade und Dateien
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if not os.path.exists(BASE_DIR):
+    BASE_DIR = os.path.expanduser("~/zephyr")
+    os.makedirs(BASE_DIR, exist_ok=True)
+    print(f"BASE_DIR nicht gefunden, verwende: {BASE_DIR}")
+
 LOG_FILE = os.path.join(BASE_DIR, "twitch-ollama-bot.log")
 GAME_STATE_FILE = os.path.join(BASE_DIR, "game_state.json")
 PID_FILE = os.path.join(BASE_DIR, "twitch-ollama-bot.pid")
@@ -254,13 +322,13 @@ def get_response_from_ollama(prompt):
     log(f"Sende an Ollama: {prompt[:50]}...", level=1)
     
     try:
+        # Versuche das neuere Format für Ollama 0.6.x
         response = requests.post(
             OLLAMA_URL,
             json={
                 "model": MODEL,
                 "prompt": prompt,
-                "stream": False,
-                "max_tokens": 500
+                "stream": False
             },
             timeout=OLLAMA_TIMEOUT
         )
@@ -268,11 +336,12 @@ def get_response_from_ollama(prompt):
         if response.status_code == 200:
             result = response.json()
             text = result.get("response", "").strip()
-            log(f"Antwort von Ollama erhalten: {text[:50]}...", level=1)
-            return text
-        else:
-            log_error(f"Fehler bei Ollama-Anfrage: Status {response.status_code}", None)
-            return None
+            if text:
+                log(f"Antwort von Ollama erhalten: {text[:50]}...", level=1)
+                return text
+            
+        log_error(f"Fehler bei Ollama-Anfrage: Status {response.status_code}", None)
+        return None
     except Exception as e:
         log_error("Ausnahme bei Ollama-Anfrage", e)
         return None
@@ -472,10 +541,34 @@ def joke_worker():
         log(f"Fallback-Witz gesendet: {fallback_joke[:50]}...")
 
 def scene_comment_worker():
+    # Stelle sicher, dass das Screenshots-Verzeichnis existiert
+    screenshots_dir = os.path.join(BASE_DIR, "screenshots")
+    if not os.path.exists(screenshots_dir):
+        os.makedirs(screenshots_dir, exist_ok=True)
+        log(f"Screenshots-Verzeichnis erstellt: {screenshots_dir}")
+        
+    # Versuche den neuesten Screenshot zu bekommen
+    latest_screenshot = get_latest_screenshot_path()
+    
     load_game_state()
     game = game_state.get("spiel", "Unbekannt")
     location = game_state.get("ort", "Unbekannt")
     
+    if latest_screenshot:
+        try:
+            vision_description = get_vision_description(latest_screenshot)
+            if vision_description:
+                prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Ein KI-Vision-Modell hat folgendes auf dem aktuellen Bild erkannt: '{vision_description}'. " \
+                         f"Basierend darauf, gib einen interessanten, humorvollen Kommentar zu dieser Szene ab (max. 200 Zeichen)."
+                comment = get_response_from_ollama(prompt)
+                if comment:
+                    send_message(f"👁️ {comment[:450]}")
+                    log(f"Bildkommentar gesendet (mit Vision): {comment[:50]}...")
+                    return
+        except Exception as e:
+            log_error("Fehler bei der Bildanalyse", e)
+    
+    # Fallback: Wenn keine Bildanalyse möglich war
     prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Der Streamer spielt gerade {game} und befindet sich in/bei {location}. " \
              f"Beschreibe detailliert, was in dieser Szene/auf diesem Bild wahrscheinlich zu sehen ist, und gib einen interessanten Kommentar " \
              f"zu den visuellen Elementen ab (150-200 Zeichen). Konzentriere dich auf Grafik, Design, Atmosphäre, etc."
@@ -757,6 +850,12 @@ def main():
         # Initialisiere Zeitstempel
         current_time = time.time()
         last_scene_comment_time = current_time
+        
+        # Stelle sicher, dass Screenshots-Verzeichnis existiert
+        screenshots_dir = os.path.join(BASE_DIR, "screenshots")
+        if not os.path.exists(screenshots_dir):
+            os.makedirs(screenshots_dir, exist_ok=True)
+            log(f"Screenshots-Verzeichnis erstellt: {screenshots_dir}")
         
         # Prüfe Ollama-API
         ollama_version = check_ollama()
