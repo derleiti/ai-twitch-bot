@@ -193,6 +193,59 @@ SCENE_KOMMENTARE = [
     "Die Atmosphäre hier ist fantastisch eingefangen!"
 ]
 
+# Hinzufügen der fehlenden Kommentar-Listen
+CODE_KOMMENTARE = [
+    "Wow, das ist ein eleganter Code!",
+    "Diese Funktion sieht effizienter aus als mein Algorithmus!",
+    "Ich sehe da einen möglichen Bug in Zeile 42! Nur Spaß!",
+    "Schicker Code! Hast du an Fehlerbehandlung gedacht?",
+    "Clean Code at its finest!",
+    "Die Variablennamen sind sehr aussagekräftig!",
+    "Mit mehr Kommentaren wäre der Code noch besser lesbar!",
+    "Dieser Code ist so gut strukturiert, da wird selbst Linus neidisch!",
+    "Programmieren ist wie Zauberei, und du bist definitiv ein Meister!",
+    "Ich sehe da einige clevere Optimierungen!"
+]
+
+WEB_KOMMENTARE = [
+    "Diese Website hat ein tolles Design!",
+    "Das Interface sieht sehr benutzerfreundlich aus!",
+    "Die Farbkombination dieser Seite ist echt ansprechend!",
+    "Interessanter Content auf dieser Webseite!",
+    "Diese Seite lädt schneller als ich rechnen kann!",
+    "Schickes Web-Design - responsive und modern!",
+    "Die Navigation ist wirklich gut durchdacht!",
+    "Das nenne ich mal eine übersichtliche Webseite!",
+    "Die Schriftart passt perfekt zum Stil der Seite!",
+    "Diese Website sieht auf jedem Gerät gut aus!"
+]
+
+TERMINAL_KOMMENTARE = [
+    "Ah, der gute alte Terminal - wo echte Techies sich zu Hause fühlen!",
+    "Wer braucht schon GUIs, wenn man Kommandozeilen hat?",
+    "Grüne Schrift auf schwarzem Hintergrund - klassisch und zeitlos!",
+    "Mit diesen Befehlen bist du schneller als jede Maus!",
+    "Ich fühle mich wie in 'Matrix', wenn ich dir beim Tippen zusehe!",
+    "Bash, Zsh oder Fish? Egal, Hauptsache Terminal-Power!",
+    "Das ist echtes Computing - direkt auf Maschinenebene!",
+    "Ein echter Hacker braucht nur eine Kommandozeile und einen Kaffee!",
+    "Elegant, effizient und ohne Schnickschnack - so muss IT sein!",
+    "Das Terminal lügt nie - im Gegensatz zu manchen UIs!"
+]
+
+DOKUMENT_KOMMENTARE = [
+    "Dieses Dokument ist sehr gut strukturiert!",
+    "Die Formatierung macht das Lesen angenehm!",
+    "Interessante Informationen in diesem Text!",
+    "Diese Präsentation hat wirklich Stil!",
+    "Die Grafiken im Dokument sind sehr aussagekräftig!",
+    "Elegant formatiert und leicht zu lesen - top!",
+    "Die Gliederung dieses Dokuments ist vorbildlich!",
+    "Inhaltlich tiefgründig und optisch ansprechend!",
+    "Diese Tabelle fasst die Daten perfekt zusammen!",
+    "Ein Dokument, das Klarheit schafft - sehr gut!"
+]
+
 # Begrüßungen für neue Zuschauer
 BEGRÜSSUNGEN = [
     "Willkommen im Stream, {user}! Schön, dass du da bist!",
@@ -207,33 +260,7 @@ BEGRÜSSUNGEN = [
     "Hey {user}! Tolles Timing, wir haben gerade erst angefangen!"
 ]
 
-content_type = content_info.get("type", "").lower()
-    
-    if "videospiel" in content_type:
-        fallback_comment = random.choice(GAME_KOMMENTARE)
-    elif "code" in content_type or "programmier" in content_type:
-        fallback_comment = random.choice(CODE_KOMMENTARE)
-    elif "browser" in content_type or "website" in content_type:
-        fallback_comment = random.choice(WEB_KOMMENTARE)
-    elif "terminal" in content_type or "konsole" in content_type:
-        fallback_comment = random.choice(TERMINAL_KOMMENTARE)
-    elif "dokument" in content_type or "text" in content_type:
-        fallback_comment = random.choice(DOKUMENT_KOMMENTARE)
-    else:
-        # Allgemeine Fallback-Kommentare
-        fallback_comment = random.choice([
-            "Was für ein interessanter Screenshot! Das sieht spannend aus.",
-            "Coole Sache, die du uns da zeigst!",
-            "Da passiert ja einiges auf dem Bildschirm!",
-            "Interessante Darstellung - gefällt mir!",
-            "Das ist mal was anderes, nice!",
-            "Spannender Content, den du da streamst!",
-            "Interessant, was du uns da präsentierst.",
-            "Cool, da bin ich gespannt, wie es weitergeht!",
-            "Das sieht vielversprechend aus!",
-            "Tolle Sache, die du da machst!"
-        ])
-
+# Entferne den falsch eingerückten Code-Block, der hier stand
 
 # Befehlserinnerungen
 COMMAND_REMINDERS = [
@@ -627,14 +654,40 @@ def scene_comment_worker():
     game = game_state.get("spiel", "Unbekannt")
     location = game_state.get("ort", "Unbekannt")
     
+    # Hier die fehlerhafte Zeile mit korrekter Einrückung einfügen
+    content_type = content_info.get("type", "").lower()
+    
+    fallback_comment = ""
+    if "videospiel" in content_type:
+        fallback_comment = random.choice(GAME_KOMMENTARE)
+    elif "code" in content_type or "programmier" in content_type:
+        fallback_comment = random.choice(CODE_KOMMENTARE)
+    elif "browser" in content_type or "website" in content_type:
+        fallback_comment = random.choice(WEB_KOMMENTARE)
+    elif "terminal" in content_type or "konsole" in content_type:
+        fallback_comment = random.choice(TERMINAL_KOMMENTARE)
+    elif "dokument" in content_type or "text" in content_type:
+        fallback_comment = random.choice(DOKUMENT_KOMMENTARE)
+    else:
+        # Allgemeine Fallback-Kommentare
+        fallback_comment = random.choice([
+            "Was für ein interessanter Screenshot! Das sieht spannend aus.",
+            "Coole Sache, die du uns da zeigst!",
+            "Da passiert ja einiges auf dem Bildschirm!",
+            "Interessante Darstellung - gefällt mir!",
+            "Das ist mal was anderes, nice!",
+            "Spannender Content, den du da streamst!",
+            "Interessant, was du uns da präsentierst.",
+            "Cool, da bin ich gespannt, wie es weitergeht!",
+            "Das sieht vielversprechend aus!",
+            "Tolle Sache, die du da machst!"
+        ])
+    
     if latest_screenshot:
         try:
             vision_description = get_vision_description(latest_screenshot)
             if vision_description:
                 # Angepasster Prompt basierend auf dem Inhaltstyp
-                content_type = content_info.get("type", "unbekannt").lower()
-                content_details = content_info.get("details", {})
-                
                 if "videospiel" in content_type:
                     prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Auf dem Bild wird das Spiel '{game}' gezeigt. " \
                              f"Ein KI-Vision-Modell hat folgendes erkannt: '{vision_description}'. " \
@@ -666,40 +719,9 @@ def scene_comment_worker():
         except Exception as e:
             log_error("Fehler bei der Bildanalyse", e)
     
-    
+    # Wenn wir hier ankommen, verwenden wir den Fallback-Kommentar
     send_message(f"👁️ {fallback_comment}")
     log(f"Fallback-Bildkommentar gesendet: {fallback_comment[:50]}...")
-
-    # Versuche den neuesten Screenshot zu bekommen
-    latest_screenshot = get_latest_screenshot_path()
-    
-    load_game_state()
-    game = game_state.get("spiel", "Unbekannt")
-    location = game_state.get("ort", "Unbekannt")
-    
-    if latest_screenshot:
-        try:
-            vision_description = get_vision_description(latest_screenshot)
-            if vision_description:
-                prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Ein KI-Vision-Modell hat folgendes auf dem aktuellen Bild erkannt: '{vision_description}'. " \
-                         f"Basierend darauf, gib einen interessanten, humorvollen Kommentar zu dieser Szene ab (max. 200 Zeichen)."
-                comment = get_response_from_ollama(prompt)
-                if comment:
-                    send_message(f"👁️ {comment[:450]}")
-                    log(f"Bildkommentar gesendet (mit Vision): {comment[:50]}...")
-                    return
-        except Exception as e:
-            log_error("Fehler bei der Bildanalyse", e)
-    
-    
-    comment = get_response_from_ollama(prompt)
-    if comment:
-        send_message(f"👁️ {comment[:450]}")
-        log(f"Bildkommentar gesendet: {comment[:50]}...")
-    else:
-        fallback_comment = random.choice(SCENE_KOMMENTARE)
-        send_message(f"👁️ {fallback_comment}")
-        log(f"Fallback-Bildkommentar gesendet: {fallback_comment[:50]}...")
 
 def send_info():
     load_game_state()

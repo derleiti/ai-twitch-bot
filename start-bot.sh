@@ -14,6 +14,12 @@ LOG_FILE="$BASE_DIR/twitch-ollama-bot.log"
 PID_FILE="$BASE_DIR/twitch-ollama-bot.pid"
 VENV_DIR="$BASE_DIR/venv"
 
+# Erkennung, ob das Skript als Systemd-Service läuft
+IS_SERVICE=false
+if [ -n "$INVOCATION_ID" ] || [[ "$1" == "--service" ]]; then
+    IS_SERVICE=true
+fi
+
 echo -e "${BLUE}=== Twitch-Ollama-Bot Starter ===${NC}"
 
 # Prüfe, ob das Hauptverzeichnis existiert
@@ -40,8 +46,15 @@ if [ -f "$PID_FILE" ]; then
     PID=$(cat "$PID_FILE")
     if ps -p "$PID" > /dev/null; then
         echo -e "${YELLOW}Bot läuft bereits mit PID $PID${NC}"
-        read -p "Möchtest du den laufenden Bot neu starten? (j/n): " restart
-        if [ "$restart" = "j" ] || [ "$restart" = "J" ]; then
+        
+        # Bei Service-Modus automatisch neustarten ohne Nachfrage
+        if [ "$IS_SERVICE" = true ]; then
+            RESTART="j"
+        else
+            read -p "Möchtest du den laufenden Bot neu starten? (j/n): " RESTART
+        fi
+        
+        if [ "$RESTART" = "j" ] || [ "$RESTART" = "J" ]; then
             echo -e "${YELLOW}Stoppe laufenden Bot mit PID $PID...${NC}"
             kill "$PID"
             sleep 2
@@ -222,6 +235,11 @@ fi
 
 # Erstellen eines systemd-Service (optional)
 create_service_file() {
+    # Wenn im Service-Modus, überspringe die interaktive Abfrage
+    if [ "$IS_SERVICE" = true ]; then
+        return 0
+    fi
+    
     if [ -d "/etc/systemd/system" ]; then
         echo -e "\n${YELLOW}Möchtest du einen systemd-Service für den Bot erstellen? (j/n): ${NC}"
         read create_service
@@ -241,7 +259,7 @@ Requires=ollama.service
 Type=simple
 User=root
 WorkingDirectory=$BASE_DIR
-ExecStart=$BASE_DIR/start-bot.sh
+ExecStart=$BASE_DIR/start-bot.sh --service
 Restart=on-failure
 RestartSec=10
 
@@ -268,7 +286,17 @@ EOLS
     fi
 }
 
-# Frage, ob ein systemd-Service erstellt werden soll
+# Frage, ob ein systemd-Service erstellt werden soll (nur im interaktiven Modus)
 create_service_file
+
+# Im Service-Modus blockieren wir das Skript, damit systemd den Prozess nicht beendet
+if [ "$IS_SERVICE" = true ]; then
+    echo -e "${BLUE}Laufe im Service-Modus. Prozess bleibt aktiv.${NC}"
+    # Halte das Skript am Laufen, solange der Bot läuft
+    while ps -p $BOT_PID > /dev/null; do
+        sleep 10
+    done
+    echo -e "${RED}Bot-Prozess wurde beendet, Service wird heruntergefahren.${NC}"
+fi
 
 exit 0
