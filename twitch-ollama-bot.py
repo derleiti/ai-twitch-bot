@@ -207,8 +207,7 @@ BEGRÜSSUNGEN = [
     "Hey {user}! Tolles Timing, wir haben gerade erst angefangen!"
 ]
 
-# Fallback: Wenn keine Bildanalyse möglich war
-    content_type = content_info.get("type", "").lower()
+content_type = content_info.get("type", "").lower()
     
     if "videospiel" in content_type:
         fallback_comment = random.choice(GAME_KOMMENTARE)
@@ -667,23 +666,6 @@ def scene_comment_worker():
         except Exception as e:
             log_error("Fehler bei der Bildanalyse", e)
     
-    # Fallback: Wenn keine Bildanalyse möglich war
-    if "videospiel" in content_info.get("type", "").lower():
-        fallback_comment = random.choice(GAME_KOMMENTARE)
-    else:
-        # Allgemeinere Fallback-Kommentare für nicht-Spiel-Inhalte
-        fallback_comment = random.choice([
-            "Was für ein interessanter Screenshot! Das sieht spannend aus.",
-            "Coole Sache, die du uns da zeigst!",
-            "Da passiert ja einiges auf dem Bildschirm!",
-            "Interessante Darstellung - gefällt mir!",
-            "Das ist mal was anderes, nice!",
-            "Spannender Content, den du da streamst!",
-            "Interessant, was du uns da präsentierst.",
-            "Cool, da bin ich gespannt, wie es weitergeht!",
-            "Das sieht vielversprechend aus!",
-            "Tolle Sache, die du da machst!"
-        ])
     
     send_message(f"👁️ {fallback_comment}")
     log(f"Fallback-Bildkommentar gesendet: {fallback_comment[:50]}...")
@@ -709,10 +691,6 @@ def scene_comment_worker():
         except Exception as e:
             log_error("Fehler bei der Bildanalyse", e)
     
-    # Fallback: Wenn keine Bildanalyse möglich war
-    prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Der Streamer spielt gerade {game} und befindet sich in/bei {location}. " \
-             f"Beschreibe detailliert, was in dieser Szene/auf diesem Bild wahrscheinlich zu sehen ist, und gib einen interessanten Kommentar " \
-             f"zu den visuellen Elementen ab (150-200 Zeichen). Konzentriere dich auf Grafik, Design, Atmosphäre, etc."
     
     comment = get_response_from_ollama(prompt)
     if comment:
