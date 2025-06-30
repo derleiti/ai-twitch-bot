@@ -17,14 +17,29 @@ SEEN_FILES_CACHE = os.path.join(tempfile.gettempdir(), "zephyr_seen_files.txt")
 MAX_CACHE_SIZE = 1000  # Maximale Anzahl von Dateien im Cache
 MAX_SCREENSHOTS = 100  # NEU: Max. 100 Dateien behalten
 
-def send_message(message):
+def send_message_to_platforms(message, exclude_platform=None):
+    """Sendet eine Nachricht an alle verfügbaren Plattformen"""
+    success = False
+    
+    # Versuche Import der Multi-Platform-Bot-Funktionen
     try:
         sys.path.append(BASE_DIR)
-        from twitch_ollama_bot import send_message as bot_send_message
-        return bot_send_message(message)
+        from multi_platform_bot import send_message_to_platforms as bot_send_platforms
+        return bot_send_platforms(message, exclude_platform)
     except ImportError:
-        print(f"⚠ Konnte send_message nicht importieren - Ausgabe: {message}")
-        return False
+        pass
+    
+    # Fallback: Versuche alte Twitch-Bot-Funktion
+    try:
+        from twitch_ollama_bot import send_message as twitch_send_message
+        return twitch_send_message(message)
+    except ImportError:
+        pass
+    
+    # Letzter Fallback: Nur ausgeben
+    platform_prefix = "📸 [AUTO] " if not exclude_platform else f"📸 [{exclude_platform.upper()}] "
+    print(f"⚠ Konnte Nachricht nicht senden - Ausgabe: {platform_prefix}{message}")
+    return False
 
 def load_seen_files():
     seen_files = set()
@@ -81,10 +96,16 @@ def handle_new_file(file_path):
     print(f"[{timestamp}] 📸 Neues Bild erkannt: {file_path}")
     
     try:
+        # Analysiere ohne Platform-Hint (für alle Plattformen)
         result = analyze_and_comment(file_path)
         if result:
-            send_message(f"👁 {result[:450]}")
-            return True
+            # Sende an alle verfügbare Plattformen
+            success = send_message_to_platforms(f"👁 {result[:450]}")
+            if success:
+                print(f"[{timestamp}] ✅ Kommentar erfolgreich an Plattformen gesendet")
+            else:
+                print(f"[{timestamp}] ⚠ Kommentar konnte nicht gesendet werden")
+            return success
         else:
             print(f"[{timestamp}] ⚠ Analyse oder Antwort fehlgeschlagen.")
     except Exception as e:
@@ -93,7 +114,7 @@ def handle_new_file(file_path):
     return False
 
 def main():
-    print(f"👁 Screenshot-Watcher startet - Überwache: {SCREENSHOT_DIR}")
+    print(f"👁 Multi-Platform Screenshot-Watcher startet - Überwache: {SCREENSHOT_DIR}")
     
     if not os.path.exists(SCREENSHOT_DIR):
         os.makedirs(SCREENSHOT_DIR, exist_ok=True)
@@ -123,7 +144,7 @@ def main():
                     if file_hash not in seen_files:
                         seen_files.add(file_hash)
                         if handle_new_file(full_path):
-                            cleanup_screenshot_dir()  # NEU: Auto-Cleanup direkt danach
+                            cleanup_screenshot_dir()  # Auto-Cleanup direkt danach
                             save_seen_files(seen_files)
                 
             except Exception as e:
@@ -138,7 +159,7 @@ def main():
         print(f"❌ Unerwarteter Fehler: {e}")
     finally:
         save_seen_files(seen_files)
-        print("💾 Cache gespeichert. Programm wird beendet.")
+        print("💾 Cache gespeichert. Multi-Platform Screenshot-Watcher wird beendet.")
 
 if __name__ == "__main__":
     main()

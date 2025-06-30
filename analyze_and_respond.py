@@ -302,7 +302,7 @@ Sei unterhaltsam und originell. Maximal 2 Sätze. Deutsch."""
     # Fallback: zufälliger Standardkommentar
     return random.choice(SCENE_KOMMENTARE)
 
-def analyze_and_comment(image_path):
+def analyze_and_comment(image_path, platform_hint=None):
     """Analysiert ein Bild und generiert einen Kommentar dazu"""
     # Bild analysieren
     scene_description = get_vision_description(image_path)
@@ -314,6 +314,11 @@ def analyze_and_comment(image_path):
     # Kommentar generieren
     comment = generate_chat_comment(scene_description)
     
+    # Platform-spezifische Anpassungen
+    if platform_hint and comment:
+        platform_emoji = "💬" if platform_hint == "twitch" else "🔴" if platform_hint == "youtube" else "👁️"
+        comment = f"{platform_emoji} {comment}"
+    
     return comment
 
 # Für Testzwecke
@@ -321,7 +326,11 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:
         image_path = sys.argv[1]
+        platform = sys.argv[2] if len(sys.argv) > 2 else None
+        
         print(f"🔍 Analysiere Bild: {image_path}")
+        if platform:
+            print(f"🎯 Platform-Hint: {platform}")
         
         # Bild analysieren
         scene_description = get_vision_description(image_path)
@@ -333,7 +342,7 @@ if __name__ == "__main__":
             print(f"📊 Erkannter Content-Typ: {content_type}")
             
             # Kommentar generieren
-            comment = generate_chat_comment(scene_description)
+            comment = analyze_and_comment(image_path, platform)
             if comment:
                 print(f"💬 Generierter Kommentar:\n{comment}")
             else:
@@ -341,4 +350,5 @@ if __name__ == "__main__":
         else:
             print("❌ Konnte keine Bildbeschreibung erhalten")
     else:
-        print("Bitte Bildpfad angeben: python analyze_and_respond.py /pfad/zum/bild.jpg")
+        print("Bitte Bildpfad angeben: python analyze_and_respond.py /pfad/zum/bild.jpg [platform]")
+        print("Platform kann 'twitch' oder 'youtube' sein (optional)")
