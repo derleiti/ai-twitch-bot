@@ -1,9 +1,1 @@
-Das Bild zeigt eine Computer-Arbeitsumgebung mit einer Virtuellen Maschine (VM) im Hintergrund und mehreren aktiven Windows-Fenstern auf der Desktop-Umgebung. Es sind insgesamt fünf Fenster mit unterschiedlichen Anwendungen und Dokumenten gezeigt:
-
-1. Ein Fenster mit einer Datei oder einem Codeeditor, in dem Text angezeigt wird.
-2. Ein Fenster mit einem Code-Editor, in dem mehrere Zeilen von Quellcode angezeigt werden.
-3. Ein Fenster mit einer Browser-Seite, die eine Website darstellt.
-4. Ein Fenster mit einer Anwendung, die Daten oder Grafiken anzeigen scheint.
-5. Ein Fenster mit einem Einstieg zur Dokumentenbearbeitung, das möglicherweise ein Word-Dokument enthält.
-
-In den Windows-Fenstern sind Textzeilen und Code-Quellcode zu sehen, was auf eine Programmierung hindeutet. Es gibt die Anzeige eines Computer-Arbeitsplatzes mit mehreren verschiedenen Anwendungen zum Ausführen von Aufgaben oder Arbeiten an einem Projekt.
+Das Bild zeigt eine verzweigte Ansicht eines Computer- oder Laptop-Bildschirms mit verschiedenen Seiten und Dienste angezeigt. Es gibt unter anderem ein Desktop-Background-Fenster, einen Browser-Fenster mit einer Websuche, ein Text-Editor-Programm mit einem offenen Text-Dokument und einen Screenshot-Bildschirm mit einem Analyseprogramm, das mehrere Datenpunkte und eine Text-Box mit dem Inhalt "Welcome to the site!" anzeigt. Der Computer- oder Laptop-Screenshot ist von links nach rechts angeordnet und zeigt die verschiedenen Funktionen und Programme des Geräts.
