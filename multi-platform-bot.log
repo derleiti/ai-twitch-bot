@@ -399,3 +399,1519 @@ Warum hat d...
 [MULTI] [2025-06-30 14:44:01] Antwort von Ollama Chat API erhalten: 🤖 Oh, du bist mitten in der "Kleinen Stadt im West...
 [TWITCH] [2025-06-30 14:44:01] Nachricht gesendet: 🎮 🤖 Oh, du bist mitten in der "Kleinen Stadt im We...
 [MULTI] [2025-06-30 14:44:01] Spiel-Kommentar gesendet: 🤖 Oh, du bist mitten in der "Kleinen Stadt im West...
+[MULTI] [2025-06-30 14:44:31] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 14:44:31] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:44:31] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:44:40] LLaVA Legacy-API-Beschreibung erhalten (1146 Zeichen)
+[MULTI] [2025-06-30 14:44:40] Erkannter Inhaltstyp: code
+[MULTI] [2025-06-30 14:44:40] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot Code...
+[MULTI] [2025-06-30 14:44:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:44:43] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:34:23] PID-Datei erstellt: 2074971
+[MULTI] [2025-06-30 14:34:23] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 14:34:23] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 14:34:23] Ollama-Server ist erreichbar, Version: 0.9.1
+[YouTube] [2025-06-30 14:34:23] Teste YouTube-Verbindung...
+[YouTube] [2025-06-30 14:34:23] YouTube API-Key ist gültig
+[YouTube] [2025-06-30 14:34:23] Live-Stream gefunden: sKMHoSz2avQ
+[YouTube] [2025-06-30 14:34:23] Live-Chat-ID gefunden: Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 14:34:23] YouTube-Verbindung erfolgreich getestet
+[YOUTUBE] [2025-06-30 14:34:23] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 14:34:23] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 14:34:24] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 14:34:24] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 14:34:25] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 14:34:25] Twitch-Nachrichtenempfänger gestartet
+[TWITCH] [2025-06-30 14:34:25] Twitch-Verbindungs-Watchdog gestartet
+[YouTube] [2025-06-30 14:34:25] Message-Callback gesetzt
+[YouTube] [2025-06-30 14:34:25] YouTube Chat Worker gestartet
+[YouTube] [2025-06-30 14:34:25] Initialisiere YouTube Live-Chat...
+[YouTube] [2025-06-30 14:34:25] YouTube Chat Reader Thread gestartet
+[YOUTUBE] [2025-06-30 14:34:25] YouTube Chat Reader gestartet
+[YouTube] [2025-06-30 14:34:25] YouTube API-Key ist gültig
+[YouTube] [2025-06-30 14:34:25] Live-Stream gefunden: sKMHoSz2avQ
+[YouTube] [2025-06-30 14:34:25] Live-Chat-ID gefunden: Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 14:34:25] YouTube Live-Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 14:34:28] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 14:34:28] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 14:34:28] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 14:34:28] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+[MULTI] [2025-06-30 14:34:28] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+[MULTI] [2025-06-30 14:34:28] Befehlserinnerungs-Thread gestartet - Intervall: 600 Sekunden
+[MULTI] [2025-06-30 14:34:28] Teste Bildanalyse-Funktionen...
+[MULTI] [2025-06-30 14:34:28] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:34:38] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:34:40] LLaVA Legacy-API-Beschreibung erhalten (1059 Zeichen)
+[MULTI] [2025-06-30 14:34:40] Bildanalyse funktioniert: 1059 Zeichen Beschreibung erhalten
+[MULTI] [2025-06-30 14:34:40] Multi-Platform-Bot läuft jetzt...
+[MULTI] [2025-06-30 14:34:58] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:35:04] Antwort von Ollama Chat API erhalten: 😂 Warum ist der Computer im Fitnessstudio so belie...
+[TWITCH] [2025-06-30 14:35:04] Nachricht gesendet: 🎭 😂 Warum ist der Computer im Fitnessstudio so bel...
+[MULTI] [2025-06-30 14:35:04] Witz gesendet: 😂 Warum ist der Computer im Fitnessstudio so belie...
+[MULTI] [2025-06-30 14:35:16] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 14:35:26] Antwort von Ollama Chat API erhalten: 🤖 Guten Tag! Ihr erkundet wohl die düsteren Katako...
+[TWITCH] [2025-06-30 14:35:26] Nachricht gesendet: 🎮 🤖 Guten Tag! Ihr erkundet wohl die düsteren Kata...
+[MULTI] [2025-06-30 14:35:26] Spiel-Kommentar gesendet: 🤖 Guten Tag! Ihr erkundet wohl die düsteren Katako...
+[MULTI] [2025-06-30 14:35:33] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 14:35:40] Status: Twitch: ✅ | YouTube: ✅
+[TWITCH] [2025-06-30 14:36:28] Nachricht gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe...
+[MULTI] [2025-06-30 14:36:28] Befehlserinnerung gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 14:36:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:37:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:38:04] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:38:24] Antwort von Ollama Chat API erhalten: 😂 Natürlich, hier ist ein lustiger Witz für dich:
+...
+[TWITCH] [2025-06-30 14:38:24] Nachricht gesendet: 🎭 😂 Natürlich, hier ist ein lustiger Witz für dich...
+[MULTI] [2025-06-30 14:38:24] Witz gesendet: 😂 Natürlich, hier ist ein lustiger Witz für dich:
+...
+[MULTI] [2025-06-30 14:38:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:39:26] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:39:28] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 14:39:28] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:39:28] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:39:40] Antwort von Ollama Chat API erhalten: 🧙‍♂️Oh, schau an! In der Stadt "Kvatch" zu sein, i...
+[TWITCH] [2025-06-30 14:39:40] Nachricht gesendet: 🎮 🧙‍♂️Oh, schau an! In der Stadt "Kvatch" zu sein,...
+[MULTI] [2025-06-30 14:39:40] Spiel-Kommentar gesendet: 🧙‍♂️Oh, schau an! In der Stadt "Kvatch" zu sein, i...
+[MULTI] [2025-06-30 14:39:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:39:45] LLaVA Legacy-API-Beschreibung erhalten (431 Zeichen)
+[MULTI] [2025-06-30 14:39:45] Erkannter Inhaltstyp: terminal
+[MULTI] [2025-06-30 14:39:45] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot ein ...
+[MULTI] [2025-06-30 14:40:01] Antwort von Ollama Chat API erhalten: 😂 "Schau mal, wie viel Spaß man auf der Konsole ha...
+[TWITCH] [2025-06-30 14:40:01] Nachricht gesendet: 👁️ 😂 "Schau mal, wie viel Spaß man auf der Konsole...
+[MULTI] [2025-06-30 14:40:01] Bildkommentar gesendet: 😂 "Schau mal, wie viel Spaß man auf der Konsole ha...
+[MULTI] [2025-06-30 14:40:20] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 14:40:40] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 14:40:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:41:24] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:41:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:41:43] Antwort von Ollama Chat API erhalten: 😂 Natürlich, hier ist ein lustiger Witz für dich:
+...
+[TWITCH] [2025-06-30 14:41:43] Nachricht gesendet: 🎭 😂 Natürlich, hier ist ein lustiger Witz für dich...
+[MULTI] [2025-06-30 14:41:43] Witz gesendet: 😂 Natürlich, hier ist ein lustiger Witz für dich:
+...
+[MULTI] [2025-06-30 14:42:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:43:40] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:43:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:44:01] Antwort von Ollama Chat API erhalten: 🤖 Oh, du bist mitten in der "Kleinen Stadt im West...
+[TWITCH] [2025-06-30 14:44:01] Nachricht gesendet: 🎮 🤖 Oh, du bist mitten in der "Kleinen Stadt im We...
+[MULTI] [2025-06-30 14:44:01] Spiel-Kommentar gesendet: 🤖 Oh, du bist mitten in der "Kleinen Stadt im West...
+[MULTI] [2025-06-30 14:44:31] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 14:44:31] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:44:31] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:44:40] LLaVA Legacy-API-Beschreibung erhalten (1146 Zeichen)
+[MULTI] [2025-06-30 14:44:40] Erkannter Inhaltstyp: code
+[MULTI] [2025-06-30 14:44:40] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot Code...
+[MULTI] [2025-06-30 14:44:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:44:43] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:44:57] Antwort von Ollama Chat API erhalten: 😂 Hey Twitch-Fans, seht ihr das? Selbst im Kaleido...
+[TWITCH] [2025-06-30 14:44:57] Nachricht gesendet: 👁️ 😂 Hey Twitch-Fans, seht ihr das? Selbst im Kale...
+[MULTI] [2025-06-30 14:44:57] Bildkommentar gesendet: 😂 Hey Twitch-Fans, seht ihr das? Selbst im Kaleido...
+[MULTI] [2025-06-30 14:45:09] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 14:45:13] ERROR: Fehler bei Chat API-Anfrage, versuche Generate: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
+[MULTI] [2025-06-30 14:45:13] Exception: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
+[MULTI] [2025-06-30 14:45:28] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 14:45:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:45:42] Antwort von Ollama Generate API erhalten: 😂 Natürlich, hier kommt ein kurzer, lustiger Witz:...
+[TWITCH] [2025-06-30 14:45:42] Nachricht gesendet: 🎭 😂 Natürlich, hier kommt ein kurzer, lustiger Wit...
+[MULTI] [2025-06-30 14:45:42] Witz gesendet: 😂 Natürlich, hier kommt ein kurzer, lustiger Witz:...
+[TWITCH] [2025-06-30 14:46:28] Nachricht gesendet: 👋 Neu hier? Mit !witz bekommst du einen zufälligen...
+[MULTI] [2025-06-30 14:46:28] Befehlserinnerung gesendet: 👋 Neu hier? Mit !witz bekommst du einen zufälligen Witz von mir!
+[MULTI] [2025-06-30 14:46:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:47:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:48:01] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:48:21] Antwort von Ollama Chat API erhalten: 🤖 Oh, du bist in Oblivion Remastered unterwegs! Hi...
+[TWITCH] [2025-06-30 14:48:21] Nachricht gesendet: 🎮 🤖 Oh, du bist in Oblivion Remastered unterwegs! ...
+[MULTI] [2025-06-30 14:48:21] Spiel-Kommentar gesendet: 🤖 Oh, du bist in Oblivion Remastered unterwegs! Hi...
+[MULTI] [2025-06-30 14:48:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:48:42] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:49:11] Antwort von Ollama Chat API erhalten: 😂 Natürlich, hier kommt ein lustiger Witz für dich...
+[TWITCH] [2025-06-30 14:49:11] Nachricht gesendet: 🎭 😂 Natürlich, hier kommt ein lustiger Witz für di...
+[MULTI] [2025-06-30 14:49:11] Witz gesendet: 😂 Natürlich, hier kommt ein lustiger Witz für dich...
+[MULTI] [2025-06-30 14:49:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:49:57] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 14:49:57] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:49:57] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:50:15] LLaVA Legacy-API-Beschreibung erhalten (614 Zeichen)
+[MULTI] [2025-06-30 14:50:15] Erkannter Inhaltstyp: browser
+[MULTI] [2025-06-30 14:50:15] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot eine...
+[MULTI] [2025-06-30 14:50:16] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 14:50:29] Antwort von Ollama Chat API erhalten: 😂 Ob der Streamer gerade seine ganzen Geheim-Codes...
+[TWITCH] [2025-06-30 14:50:29] Nachricht gesendet: 👁️ 😂 Ob der Streamer gerade seine ganzen Geheim-Co...
+[MULTI] [2025-06-30 14:50:29] Bildkommentar gesendet: 😂 Ob der Streamer gerade seine ganzen Geheim-Codes...
+[MULTI] [2025-06-30 14:50:33] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 14:50:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:51:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:52:11] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:52:21] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:52:32] Antwort von Ollama Chat API erhalten: 😂 Natürlich, hier kommt ein kurzer, lustiger Witz ...
+[TWITCH] [2025-06-30 14:52:32] Nachricht gesendet: 🎭 😂 Natürlich, hier kommt ein kurzer, lustiger Wit...
+[MULTI] [2025-06-30 14:52:32] Witz gesendet: 😂 Natürlich, hier kommt ein kurzer, lustiger Witz ...
+[MULTI] [2025-06-30 14:52:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:52:51] ERROR: Fehler bei Chat API-Anfrage, versuche Generate: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
+[MULTI] [2025-06-30 14:52:51] Exception: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
+[MULTI] [2025-06-30 14:53:18] Antwort von Ollama Generate API erhalten: 🤖 Oh, du bist in der "Klagenden Festung" von Obliv...
+[TWITCH] [2025-06-30 14:53:18] Nachricht gesendet: 🎮 🤖 Oh, du bist in der "Klagenden Festung" von Obl...
+[MULTI] [2025-06-30 14:53:18] Spiel-Kommentar gesendet: 🤖 Oh, du bist in der "Klagenden Festung" von Obliv...
+[MULTI] [2025-06-30 14:53:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:54:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:54:59] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 14:54:59] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:54:59] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:55:17] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 14:55:19] LLaVA Legacy-API-Beschreibung erhalten (853 Zeichen)
+[MULTI] [2025-06-30 14:55:19] Erkannter Inhaltstyp: game
+[MULTI] [2025-06-30 14:55:19] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot ein ...
+[MULTI] [2025-06-30 14:55:32] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:55:35] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 14:55:38] Antwort von Ollama Chat API erhalten: 😂 "Jetzt mal ehrlich, Leute, habt ihr schon mal so...
+[TWITCH] [2025-06-30 14:55:38] Nachricht gesendet: 👁️ 😂 "Jetzt mal ehrlich, Leute, habt ihr schon mal...
+[MULTI] [2025-06-30 14:55:38] Bildkommentar gesendet: 😂 "Jetzt mal ehrlich, Leute, habt ihr schon mal so...
+[MULTI] [2025-06-30 14:55:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:55:57] Antwort von Ollama Chat API erhalten: 😂 Natürlich, hier kommt ein lustiger Witz für dich...
+[TWITCH] [2025-06-30 14:55:57] Nachricht gesendet: 🎭 😂 Natürlich, hier kommt ein lustiger Witz für di...
+[MULTI] [2025-06-30 14:55:57] Witz gesendet: 😂 Natürlich, hier kommt ein lustiger Witz für dich...
+[TWITCH] [2025-06-30 14:56:28] Nachricht gesendet: 🎮 Verwende !info für aktuelle Spielinfos oder !sta...
+[MULTI] [2025-06-30 14:56:28] Befehlserinnerung gesendet: 🎮 Verwende !info für aktuelle Spielinfos oder !stats für Statistiken.
+[MULTI] [2025-06-30 14:56:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:57:18] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:57:30] Antwort von Ollama Chat API erhalten: "*Zephyr*": Guck mal, dein Charakter ist im *Falke...
+[TWITCH] [2025-06-30 14:57:30] Nachricht gesendet: 🎮 "*Zephyr*": Guck mal, dein Charakter ist im *Fal...
+[MULTI] [2025-06-30 14:57:30] Spiel-Kommentar gesendet: "*Zephyr*": Guck mal, dein Charakter ist im *Falke...
+[MULTI] [2025-06-30 14:57:40] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 14:58:36] PID-Datei erstellt: 2176684
+[MULTI] [2025-06-30 14:58:36] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 14:58:36] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 14:58:36] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 14:58:36] Ollama-Server ist erreichbar, Version: 0.9.1
+[YOUTUBE] [2025-06-30 14:58:36] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 14:58:36] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 14:58:37] Empfangen: :tmi.twitch.tv 001 derleiti :Welcome, GLHF!
+:tmi.twitch.tv 002 derleiti :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 derleiti :This server is rather new
+:tmi.twitch.tv 004 derleiti :-
+:tmi.twitch.tv 375 derleiti :-
+:tmi.twitch.tv 372 derleiti :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 derleiti :>
+[TWITCH] [2025-06-30 14:58:37] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 14:58:37] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 14:58:38] Join-Antwort: :tmi.twitch.tv CAP * ACK :twitch.tv/membership
+:tmi.twitch.tv CAP * ACK :twitch.tv/tags
+:tmi.twitch.tv CAP * ACK :twitch.tv/commands
+:derleiti!derleiti@derleiti.tmi.twitch.tv JOIN #derleiti
+:derleiti.tmi.twitch.tv 353 derleiti = #derleiti :derleiti
+:derleiti.tmi.twitch.tv 366 derleiti #derleiti :End of /NAMES list
+@badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+@emote-only=0;followers-only=-1;r9k=0;room-id=35881927;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #derleiti
+[TWITCH] [2025-06-30 14:58:38] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 14:58:38] Twitch-Nachrichtenempfänger gestartet
+[TWITCH] [2025-06-30 14:58:38] Twitch-Verbindungs-Watchdog gestartet
+[YOUTUBE] [2025-06-30 14:58:38] YouTube Chat Reader gestartet
+[TWITCH] [2025-06-30 14:58:38] PING gesendet
+[TWITCH] [2025-06-30 14:58:38] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YOUTUBE] [2025-06-30 14:58:41] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 14:58:41] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 14:58:41] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 14:58:41] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+[MULTI] [2025-06-30 14:58:41] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+[MULTI] [2025-06-30 14:58:41] Befehlserinnerungs-Thread gestartet - Intervall: 600 Sekunden
+[MULTI] [2025-06-30 14:58:41] Teste Bildanalyse-Funktionen...
+[MULTI] [2025-06-30 14:58:41] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:58:41] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:58:36] PID-Datei erstellt: 2176684
+[MULTI] [2025-06-30 14:58:36] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 14:58:36] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 14:58:36] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 14:58:36] Ollama-Server ist erreichbar, Version: 0.9.1
+[YouTube] [2025-06-30 14:58:36] Teste YouTube-Verbindung...
+[YouTube] [2025-06-30 14:58:36] Teste YouTube API-Key (Versuch 1/3)...
+[YouTube] [2025-06-30 14:58:36] YouTube API-Key ist gültig - Kanal: TechMediaGamesBlog
+[YouTube] [2025-06-30 14:58:36] ✓ API-Key ist gültig
+[YouTube] [2025-06-30 14:58:36] Suche Live-Stream (Versuch 1/3)...
+[YouTube] [2025-06-30 14:58:36] Gefunden: 1 Live-Stream(s)
+[YouTube] [2025-06-30 14:58:36] Live-Stream gefunden: away from the keyboard (ID: sKMHoSz2avQ)
+[YouTube] [2025-06-30 14:58:36] ✓ Live-Stream gefunden
+[YouTube] [2025-06-30 14:58:36] Hole Live-Chat-ID für Video sKMHoSz2avQ (Versuch 1)...
+[YouTube] [2025-06-30 14:58:36] Live-Chat-ID gefunden für 'away from the keyboard': Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 14:58:36] ✓ Live-Chat verfügbar
+[YouTube] [2025-06-30 14:58:36] YouTube-Verbindung vollständig erfolgreich getestet
+[YOUTUBE] [2025-06-30 14:58:36] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 14:58:36] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 14:58:37] Empfangen: :tmi.twitch.tv 001 derleiti :Welcome, GLHF!
+:tmi.twitch.tv 002 derleiti :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 derleiti :This server is rather new
+:tmi.twitch.tv 004 derleiti :-
+:tmi.twitch.tv 375 derleiti :-
+:tmi.twitch.tv 372 derleiti :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 derleiti :>
+[TWITCH] [2025-06-30 14:58:37] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 14:58:37] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 14:58:38] Join-Antwort: :tmi.twitch.tv CAP * ACK :twitch.tv/membership
+:tmi.twitch.tv CAP * ACK :twitch.tv/tags
+:tmi.twitch.tv CAP * ACK :twitch.tv/commands
+:derleiti!derleiti@derleiti.tmi.twitch.tv JOIN #derleiti
+:derleiti.tmi.twitch.tv 353 derleiti = #derleiti :derleiti
+:derleiti.tmi.twitch.tv 366 derleiti #derleiti :End of /NAMES list
+@badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+@emote-only=0;followers-only=-1;r9k=0;room-id=35881927;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #derleiti
+[TWITCH] [2025-06-30 14:58:38] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 14:58:38] Twitch-Nachrichtenempfänger gestartet
+[TWITCH] [2025-06-30 14:58:38] Twitch-Verbindungs-Watchdog gestartet
+[YouTube] [2025-06-30 14:58:38] Message-Callback gesetzt: youtube_message_handler
+[YouTube] [2025-06-30 14:58:38] YouTube Chat Worker gestartet
+[YouTube] [2025-06-30 14:58:38] Initialisiere YouTube Live-Chat...
+[YouTube] [2025-06-30 14:58:38] Teste YouTube API-Key (Versuch 1/3)...
+[TWITCH] [2025-06-30 14:58:38] PING gesendet
+[YouTube] [2025-06-30 14:58:38] YouTube Chat Reader Thread gestartet
+[YOUTUBE] [2025-06-30 14:58:38] YouTube Chat Reader gestartet
+[YouTube] [2025-06-30 14:58:38] YouTube API-Key ist gültig - Kanal: TechMediaGamesBlog
+[YouTube] [2025-06-30 14:58:38] Suche Live-Stream (Versuch 1/3)...
+[TWITCH] [2025-06-30 14:58:38] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 14:58:38] Gefunden: 1 Live-Stream(s)
+[YouTube] [2025-06-30 14:58:38] Live-Stream gefunden: away from the keyboard (ID: sKMHoSz2avQ)
+[YouTube] [2025-06-30 14:58:38] Hole Live-Chat-ID für Video sKMHoSz2avQ (Versuch 1)...
+[YouTube] [2025-06-30 14:58:38] Live-Chat-ID gefunden für 'away from the keyboard': Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 14:58:38] ✓ YouTube Live-Chat erfolgreich initialisiert
+[YouTube] [2025-06-30 14:58:38] Live-Chat-ID: Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 14:58:38] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:58:38] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:58:38] API antwortete mit 13 Chat-Items
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: hi (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: hi...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr test123 (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr test123...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: test (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: test...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: test12345 (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: test12345...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: debug test 123 (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: debug test 123...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: hallo zephyr (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: hallo zephyr...
+[YouTube] [2025-06-30 14:58:38] API-Item: TechMediaGamesBlog: debug test 789 (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:58:38] Eigene Nachricht übersprungen: debug test 789...
+[YouTube] [2025-06-30 14:58:38] Verarbeite 0 neue Nachrichten (13 insgesamt neu)
+[YOUTUBE] [2025-06-30 14:58:41] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 14:58:41] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 14:58:41] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 14:58:41] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+[MULTI] [2025-06-30 14:58:41] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+[MULTI] [2025-06-30 14:58:41] Befehlserinnerungs-Thread gestartet - Intervall: 600 Sekunden
+[MULTI] [2025-06-30 14:58:41] Teste Bildanalyse-Funktionen...
+[MULTI] [2025-06-30 14:58:41] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 14:58:41] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[YouTube] [2025-06-30 14:58:43] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:58:43] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:58:43] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:58:43] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 14:58:45] Empfangen: :nightbot!nightbot@nightbot.tmi.twitch.tv JOIN #derleiti
+[TWITCH] [2025-06-30 14:58:45] Empfangen: :streamelements!streamelements@streamelements.tmi.twitch.tv JOIN #derleiti
+[TWITCH] [2025-06-30 14:58:45] Empfangen: :streamlabs!streamlabs@streamlabs.tmi.twitch.tv JOIN #derleiti
+[MULTI] [2025-06-30 14:58:51] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:58:51] LLaVA Legacy-API-Beschreibung erhalten (1177 Zeichen)
+[MULTI] [2025-06-30 14:58:51] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 14:58:51] Bildanalyse funktioniert: 1177 Zeichen Beschreibung erhalten
+[MULTI] [2025-06-30 14:58:51] Multi-Platform-Bot läuft jetzt...
+[MULTI] [2025-06-30 14:58:58] Antwort von Ollama Chat API erhalten: Ein Elefant geht in ein Café und bittet den Kellne...
+[TWITCH] [2025-06-30 14:58:58] Nachricht gesendet: 🎭 Ein Elefant geht in ein Café und bittet den Kell...
+[MULTI] [2025-06-30 14:58:58] Witz gesendet: Ein Elefant geht in ein Café und bittet den Kellne...
+[TWITCH] [2025-06-30 14:58:58] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=68f69804-29d2-43b2-b441-7e3ce2130c44;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 14:59:11] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 14:59:11] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 14:59:17] Antwort von Ollama Chat API erhalten: Der Nachtkönig der Blutreiter schaut euch von oben...
+[TWITCH] [2025-06-30 14:59:17] Nachricht gesendet: 🎮 Der Nachtkönig der Blutreiter schaut euch von ob...
+[MULTI] [2025-06-30 14:59:17] Spiel-Kommentar gesendet: Der Nachtkönig der Blutreiter schaut euch von oben...
+[TWITCH] [2025-06-30 14:59:18] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=3d91af2f-269c-48bd-9873-1459a7b0c5a7;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 14:59:41] Überspringe automatischen Bildkommentar: Nächster in 235 Sekunden
+[MULTI] [2025-06-30 14:59:51] Status: Twitch: ✅ | YouTube: ✅
+[TWITCH] [2025-06-30 14:59:53] PING gesendet
+[TWITCH] [2025-06-30 14:59:53] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:00:11] Überspringe automatischen Bildkommentar: Nächster in 205 Sekunden
+[TWITCH] [2025-06-30 14:58:45] Empfangen: :nightbot!nightbot@nightbot.tmi.twitch.tv JOIN #derleiti
+[TWITCH] [2025-06-30 14:58:45] Empfangen: :streamelements!streamelements@streamelements.tmi.twitch.tv JOIN #derleiti
+[TWITCH] [2025-06-30 14:58:45] Empfangen: :streamlabs!streamlabs@streamlabs.tmi.twitch.tv JOIN #derleiti
+[YouTube] [2025-06-30 14:58:48] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:58:48] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:58:48] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:58:48] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 14:58:51] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 14:58:51] LLaVA Legacy-API-Beschreibung erhalten (1177 Zeichen)
+[MULTI] [2025-06-30 14:58:51] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 14:58:51] Bildanalyse funktioniert: 1177 Zeichen Beschreibung erhalten
+[MULTI] [2025-06-30 14:58:51] Multi-Platform-Bot läuft jetzt...
+[YouTube] [2025-06-30 14:58:53] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:58:53] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:58:53] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:58:53] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 14:58:58] Antwort von Ollama Chat API erhalten: Ein Elefant geht in ein Café und bittet den Kellne...
+[TWITCH] [2025-06-30 14:58:58] Nachricht gesendet: 🎭 Ein Elefant geht in ein Café und bittet den Kell...
+[MULTI] [2025-06-30 14:58:58] Witz gesendet: Ein Elefant geht in ein Café und bittet den Kellne...
+[YouTube] [2025-06-30 14:58:58] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:58:58] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:58:58] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:58:58] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 14:58:58] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=68f69804-29d2-43b2-b441-7e3ce2130c44;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 14:59:03] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:03] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:03] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:03] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:08] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:08] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:09] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:09] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 14:59:11] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 14:59:11] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[YouTube] [2025-06-30 14:59:14] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:14] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:14] API antwortete mit 1 Chat-Items
+[YouTube] [2025-06-30 14:59:14] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 14:59:14] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 14:59:14] Verarbeite 0 neue Nachrichten (1 insgesamt neu)
+[MULTI] [2025-06-30 14:59:17] Antwort von Ollama Chat API erhalten: Der Nachtkönig der Blutreiter schaut euch von oben...
+[TWITCH] [2025-06-30 14:59:17] Nachricht gesendet: 🎮 Der Nachtkönig der Blutreiter schaut euch von ob...
+[MULTI] [2025-06-30 14:59:17] Spiel-Kommentar gesendet: Der Nachtkönig der Blutreiter schaut euch von oben...
+[TWITCH] [2025-06-30 14:59:18] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=3d91af2f-269c-48bd-9873-1459a7b0c5a7;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 14:59:19] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:19] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:19] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:19] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:24] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:24] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:24] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:24] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:29] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:29] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:29] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:29] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:34] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:34] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:34] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:34] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:39] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:39] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:39] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:39] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 14:59:41] Überspringe automatischen Bildkommentar: Nächster in 235 Sekunden
+[YouTube] [2025-06-30 14:59:44] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:44] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:44] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:44] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:49] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:49] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:49] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:49] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 14:59:51] Status: Twitch: ✅ | YouTube: ✅
+[TWITCH] [2025-06-30 14:59:53] PING gesendet
+[TWITCH] [2025-06-30 14:59:53] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 14:59:54] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:54] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:54] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:54] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 14:59:59] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 14:59:59] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 14:59:59] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 14:59:59] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:00:04] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:04] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:04] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:04] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:00:09] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:09] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:09] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:09] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:00:11] Überspringe automatischen Bildkommentar: Nächster in 205 Sekunden
+[TWITCH] [2025-06-30 15:00:24] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=e75fb5fe-5094-4dc1-b9b7-6eac6cd37943;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751288424288;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:00:24] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[TWITCH] [2025-06-30 15:00:41] Nachricht gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe...
+[MULTI] [2025-06-30 15:00:41] Befehlserinnerung gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 15:00:41] Überspringe automatischen Bildkommentar: Nächster in 175 Sekunden
+[TWITCH] [2025-06-30 15:00:41] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=cde33bb7-4c92-4bc9-a4a7-c6ba4359df50;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:00:50] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=90d657a2-1a31-4c44-a0ef-499acf77aa95;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751288450376;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:00:50] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:00:51] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 15:01:11] Überspringe automatischen Bildkommentar: Nächster in 145 Sekunden
+[TWITCH] [2025-06-30 15:01:23] PING gesendet
+[TWITCH] [2025-06-30 15:01:23] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:01:41] Überspringe automatischen Bildkommentar: Nächster in 115 Sekunden
+[YouTube] [2025-06-30 15:00:14] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:14] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:14] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:14] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:00:19] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:19] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:20] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:20] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:00:24] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=e75fb5fe-5094-4dc1-b9b7-6eac6cd37943;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751288424288;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:00:24] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[YouTube] [2025-06-30 15:00:25] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:25] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:25] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:25] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:00:30] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:30] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:30] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:30] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:00:35] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:35] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:35] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:35] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:00:40] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:40] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:40] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:40] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:00:41] Nachricht gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe...
+[MULTI] [2025-06-30 15:00:41] Befehlserinnerung gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 15:00:41] Überspringe automatischen Bildkommentar: Nächster in 175 Sekunden
+[TWITCH] [2025-06-30 15:00:41] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=cde33bb7-4c92-4bc9-a4a7-c6ba4359df50;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 15:00:45] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:45] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:45] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:45] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:00:50] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=90d657a2-1a31-4c44-a0ef-499acf77aa95;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751288450376;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:00:50] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[YouTube] [2025-06-30 15:00:50] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:50] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:50] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:50] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:00:51] Status: Twitch: ✅ | YouTube: ✅
+[YouTube] [2025-06-30 15:00:55] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:00:55] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:00:55] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:00:55] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:00] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:00] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:00] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:00] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:05] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:05] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:05] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:05] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:10] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:10] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:10] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:10] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:01:11] Überspringe automatischen Bildkommentar: Nächster in 145 Sekunden
+[YouTube] [2025-06-30 15:01:15] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:15] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:15] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:15] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:20] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:20] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:21] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:21] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:01:23] PING gesendet
+[TWITCH] [2025-06-30 15:01:23] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:01:26] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:26] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:26] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:26] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:31] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:31] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:31] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:31] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:36] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:36] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:36] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:36] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:01:41] Überspringe automatischen Bildkommentar: Nächster in 115 Sekunden
+[YouTube] [2025-06-30 15:01:41] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:41] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:41] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:41] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:46] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:46] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:46] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:46] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:01:51] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:51] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[MULTI] [2025-06-30 15:01:51] Status: Twitch: ✅ | YouTube: ✅
+[TWITCH] [2025-06-30 15:01:58] PING gesendet
+[TWITCH] [2025-06-30 15:01:58] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:01:58] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 15:02:11] Überspringe automatischen Bildkommentar: Nächster in 85 Sekunden
+[MULTI] [2025-06-30 15:02:14] Antwort von Ollama Chat API erhalten: Ein Elefant geht in eine Bäckerei und fragt: "Könn...
+[TWITCH] [2025-06-30 15:02:14] Nachricht gesendet: 🎭 Ein Elefant geht in eine Bäckerei und fragt: "Kö...
+[MULTI] [2025-06-30 15:02:14] Witz gesendet: Ein Elefant geht in eine Bäckerei und fragt: "Könn...
+[TWITCH] [2025-06-30 15:02:14] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=03acac31-b5cf-4963-9e1b-0169157e559e;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:02:14] Empfangen: :tmi.twitch.tv 421 derleiti DAS :Unknown command
+[MULTI] [2025-06-30 15:02:41] Überspringe automatischen Bildkommentar: Nächster in 55 Sekunden
+[TWITCH] [2025-06-30 15:02:48] PING gesendet
+[TWITCH] [2025-06-30 15:02:48] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:02:51] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 15:03:11] Überspringe automatischen Bildkommentar: Nächster in 25 Sekunden
+[TWITCH] [2025-06-30 15:03:14] Empfangen: PING :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:03:14] PING beantwortet mit: PONG :tmi.twitch.tv
+[MULTI] [2025-06-30 15:03:18] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:03:18] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 15:03:28] Antwort von Ollama Chat API erhalten: Der Streamer hat gerade die Tür des Skaloptrons ge...
+[TWITCH] [2025-06-30 15:03:28] Nachricht gesendet: 🎮 Der Streamer hat gerade die Tür des Skaloptrons ...
+[YouTube] [2025-06-30 15:01:51] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:51] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:01:51] Status: Twitch: ✅ | YouTube: ✅
+[YouTube] [2025-06-30 15:01:56] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:01:56] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:01:56] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:01:56] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:01:58] PING gesendet
+[TWITCH] [2025-06-30 15:01:58] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:01:58] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[YouTube] [2025-06-30 15:02:01] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:01] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:01] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:01] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:06] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:06] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:06] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:06] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:02:11] Überspringe automatischen Bildkommentar: Nächster in 85 Sekunden
+[YouTube] [2025-06-30 15:02:11] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:11] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:11] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:11] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:02:14] Antwort von Ollama Chat API erhalten: Ein Elefant geht in eine Bäckerei und fragt: "Könn...
+[TWITCH] [2025-06-30 15:02:14] Nachricht gesendet: 🎭 Ein Elefant geht in eine Bäckerei und fragt: "Kö...
+[MULTI] [2025-06-30 15:02:14] Witz gesendet: Ein Elefant geht in eine Bäckerei und fragt: "Könn...
+[TWITCH] [2025-06-30 15:02:14] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=03acac31-b5cf-4963-9e1b-0169157e559e;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:02:14] Empfangen: :tmi.twitch.tv 421 derleiti DAS :Unknown command
+[YouTube] [2025-06-30 15:02:16] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:16] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:16] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:16] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:21] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:21] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:22] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:22] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:27] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:27] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:27] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:27] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:32] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:32] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:32] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:32] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:37] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:37] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:37] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:37] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:02:41] Überspringe automatischen Bildkommentar: Nächster in 55 Sekunden
+[YouTube] [2025-06-30 15:02:42] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:42] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:42] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:42] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:47] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:47] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:47] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:47] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:02:48] PING gesendet
+[TWITCH] [2025-06-30 15:02:48] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:02:51] Status: Twitch: ✅ | YouTube: ✅
+[YouTube] [2025-06-30 15:02:52] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:52] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:52] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:52] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:02:57] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:02:57] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:02:57] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:02:57] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:03:02] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:03:02] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:03:02] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:03:02] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:03:07] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:03:07] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:03:07] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:03:07] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:03:11] Überspringe automatischen Bildkommentar: Nächster in 25 Sekunden
+[YouTube] [2025-06-30 15:03:12] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:03:12] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:03:12] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:03:12] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:03:14] Empfangen: PING :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:03:14] PING beantwortet mit: PONG :tmi.twitch.tv
+[YouTube] [2025-06-30 15:03:17] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:03:17] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:03:17] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:03:17] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:03:18] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:03:18] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[YouTube] [2025-06-30 15:03:22] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:03:22] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:03:22] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:03:22] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:03:27] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:03:27] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:03:28] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:03:28] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:03:28] Antwort von Ollama Chat API erhalten: Der Streamer hat gerade die Tür des Skaloptrons ge...
+[TWITCH] [2025-06-30 15:03:28] Nachricht gesendet: 🎮 Der Streamer hat gerade die Tür des Skaloptrons ...
+[MULTI] [2025-06-30 15:03:28] Spiel-Kommentar gesendet: Der Streamer hat gerade die Tür des Skaloptrons ge...
+[TWITCH] [2025-06-30 15:03:29] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=2ba2fa6e-96ff-4c6e-a1c8-c6d2d6efd5b0;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:03:41] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 15:03:41] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:03:41] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:03:41] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:03:51] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 15:03:52] LLaVA Legacy-API-Beschreibung erhalten (531 Zeichen)
+[MULTI] [2025-06-30 15:03:52] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 15:03:52] Erkannter Inhaltstyp: document
+[MULTI] [2025-06-30 15:03:52] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot ein ...
+[MULTI] [2025-06-30 15:03:56] Antwort von Ollama Chat API erhalten: Zephyr: Das Dokument lässt vermuten, dass es sich ...
+[TWITCH] [2025-06-30 15:03:56] Nachricht gesendet: 👁️ Zephyr: Das Dokument lässt vermuten, dass es si...
+[MULTI] [2025-06-30 15:03:56] Bildkommentar gesendet: Zephyr: Das Dokument lässt vermuten, dass es sich ...
+[TWITCH] [2025-06-30 15:03:56] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=c3ee0c57-f568-4090-b4ae-bb18df9e5e6f;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:04:26] Überspringe automatischen Bildkommentar: Nächster in 254 Sekunden
+[TWITCH] [2025-06-30 15:04:28] PING gesendet
+[TWITCH] [2025-06-30 15:04:28] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:04:51] Status: Twitch: ✅ | YouTube: ✅
+[MULTI] [2025-06-30 15:09:03] PID-Datei erstellt: 2207496
+[MULTI] [2025-06-30 15:09:03] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 15:09:03] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 15:09:03] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:09:03] Ollama-Server ist erreichbar, Version: 0.9.1
+[MULTI] [2025-06-30 15:09:03] 🔗 Initialisiere Message Dispatcher...
+[MULTI] [2025-06-30 15:09:03] ✅ Message Dispatcher erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 15:09:03] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 15:09:03] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 15:09:04] Empfangen: :tmi.twitch.tv 001 derleiti :Welcome, GLHF!
+:tmi.twitch.tv 002 derleiti :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 derleiti :This server is rather new
+:tmi.twitch.tv 004 derleiti :-
+:tmi.twitch.tv 375 derleiti :-
+:tmi.twitch.tv 372 derleiti :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 derleiti :>
+[TWITCH] [2025-06-30 15:09:04] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 15:09:04] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 15:09:05] Join-Antwort: :tmi.twitch.tv CAP * ACK :twitch.tv/membership
+:tmi.twitch.tv CAP * ACK :twitch.tv/tags
+:tmi.twitch.tv CAP * ACK :twitch.tv/commands
+:derleiti!derleiti@derleiti.tmi.twitch.tv JOIN #derleiti
+:derleiti.tmi.twitch.tv 353 derleiti = #derleiti :derleiti
+:derleiti.tmi.twitch.tv 366 derleiti #derleiti :End of /NAMES list
+@badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+@emote-only=0;followers-only=-1;r9k=0;room-id=35881927;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #derleiti
+[TWITCH] [2025-06-30 15:09:05] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 15:09:05] Twitch-Nachrichtenempfänger gestartet
+[YOUTUBE] [2025-06-30 15:09:05] YouTube Chat Reader gestartet
+[TWITCH] [2025-06-30 15:09:05] Twitch-Verbindungs-Watchdog gestartet
+[TWITCH] [2025-06-30 15:09:05] PING gesendet
+[TWITCH] [2025-06-30 15:09:05] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YOUTUBE] [2025-06-30 15:09:08] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 15:09:08] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 15:09:08] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+[MULTI] [2025-06-30 15:09:08] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 15:09:08] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+✅ Message Dispatcher erfolgreich geladen
+[MULTI] [2025-06-30 15:09:03] PID-Datei erstellt: 2207496
+[MULTI] [2025-06-30 15:09:03] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 15:09:03] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 15:09:03] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:09:03] Ollama-Server ist erreichbar, Version: 0.9.1
+[MULTI] [2025-06-30 15:09:03] 🔗 Initialisiere Message Dispatcher...
+[DISPATCHER] Handler für twitch registriert
+[DISPATCHER] Handler für youtube registriert
+[DISPATCHER] Handler für vision registriert
+[DISPATCHER] Sender für twitch registriert
+[DISPATCHER] Sender für youtube registriert
+[DISPATCHER] Message Worker gestartet
+[DISPATCHER] Message Dispatcher gestartet
+[MULTI] [2025-06-30 15:09:03] ✅ Message Dispatcher erfolgreich initialisiert
+[YouTube] [2025-06-30 15:09:03] Teste YouTube-Verbindung...
+[YouTube] [2025-06-30 15:09:03] Teste YouTube API-Key (Versuch 1/3)...
+[YouTube] [2025-06-30 15:09:03] YouTube API-Key ist gültig - Kanal: TechMediaGamesBlog
+[YouTube] [2025-06-30 15:09:03] ✓ API-Key ist gültig
+[YouTube] [2025-06-30 15:09:03] Suche Live-Stream (Versuch 1/3)...
+[YouTube] [2025-06-30 15:09:03] Gefunden: 1 Live-Stream(s)
+[YouTube] [2025-06-30 15:09:03] Live-Stream gefunden: away from the keyboard (ID: sKMHoSz2avQ)
+[YouTube] [2025-06-30 15:09:03] ✓ Live-Stream gefunden
+[YouTube] [2025-06-30 15:09:03] Hole Live-Chat-ID für Video sKMHoSz2avQ (Versuch 1)...
+[YouTube] [2025-06-30 15:09:03] Live-Chat-ID gefunden für 'away from the keyboard': Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 15:09:03] ✓ Live-Chat verfügbar
+[YouTube] [2025-06-30 15:09:03] YouTube-Verbindung vollständig erfolgreich getestet
+[YOUTUBE] [2025-06-30 15:09:03] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 15:09:03] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 15:09:04] Empfangen: :tmi.twitch.tv 001 derleiti :Welcome, GLHF!
+:tmi.twitch.tv 002 derleiti :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 derleiti :This server is rather new
+:tmi.twitch.tv 004 derleiti :-
+:tmi.twitch.tv 375 derleiti :-
+:tmi.twitch.tv 372 derleiti :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 derleiti :>
+[TWITCH] [2025-06-30 15:09:04] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 15:09:04] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 15:09:05] Join-Antwort: :tmi.twitch.tv CAP * ACK :twitch.tv/membership
+:tmi.twitch.tv CAP * ACK :twitch.tv/tags
+:tmi.twitch.tv CAP * ACK :twitch.tv/commands
+:derleiti!derleiti@derleiti.tmi.twitch.tv JOIN #derleiti
+:derleiti.tmi.twitch.tv 353 derleiti = #derleiti :derleiti
+:derleiti.tmi.twitch.tv 366 derleiti #derleiti :End of /NAMES list
+@badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+@emote-only=0;followers-only=-1;r9k=0;room-id=35881927;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #derleiti
+[TWITCH] [2025-06-30 15:09:05] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 15:09:05] Twitch-Nachrichtenempfänger gestartet
+[TWITCH] [2025-06-30 15:09:05] Twitch-Verbindungs-Watchdog gestartet
+[YouTube] [2025-06-30 15:09:05] Message-Callback gesetzt: youtube_message_handler
+[YouTube] [2025-06-30 15:09:05] YouTube Chat Worker gestartet
+[YouTube] [2025-06-30 15:09:05] Initialisiere YouTube Live-Chat...
+[YouTube] [2025-06-30 15:09:05] Teste YouTube API-Key (Versuch 1/3)...
+[YouTube] [2025-06-30 15:09:05] YouTube Chat Reader Thread gestartet
+[YOUTUBE] [2025-06-30 15:09:05] YouTube Chat Reader gestartet
+[TWITCH] [2025-06-30 15:09:05] PING gesendet
+[YouTube] [2025-06-30 15:09:05] YouTube API-Key ist gültig - Kanal: TechMediaGamesBlog
+[YouTube] [2025-06-30 15:09:05] Suche Live-Stream (Versuch 1/3)...
+[TWITCH] [2025-06-30 15:09:05] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:09:05] Gefunden: 1 Live-Stream(s)
+[YouTube] [2025-06-30 15:09:05] Live-Stream gefunden: away from the keyboard (ID: sKMHoSz2avQ)
+[YouTube] [2025-06-30 15:09:05] Hole Live-Chat-ID für Video sKMHoSz2avQ (Versuch 1)...
+[YouTube] [2025-06-30 15:09:05] Live-Chat-ID gefunden für 'away from the keyboard': Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 15:09:05] ✓ YouTube Live-Chat erfolgreich initialisiert
+[YouTube] [2025-06-30 15:09:05] Live-Chat-ID: Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 15:09:05] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:09:05] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:09:05] API antwortete mit 14 Chat-Items
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: hi (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: hi...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr test123 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr test123...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: test (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: test...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: test12345 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: test12345...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: debug test 123 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: debug test 123...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: hallo zephyr (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: hallo zephyr...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: debug test 789 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: debug test 789...
+[YouTube] [2025-06-30 15:09:05] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:05] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:05] Verarbeite 0 neue Nachrichten (14 insgesamt neu)
+[YOUTUBE] [2025-06-30 15:09:08] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 15:09:08] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 15:09:08] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 15:09:08] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+[MULTI] [2025-06-30 15:09:08] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+[MULTI] [2025-06-30 15:09:08] Teste Bildanalyse-Funktionen...
+[MULTI] [2025-06-30 15:09:08] Befehlserinnerungs-Thread gestartet - Intervall: 600 Sekunden
+[MULTI] [2025-06-30 15:09:08] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:09:08] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:09:16] LLaVA Legacy-API-Beschreibung erhalten (577 Zeichen)
+[MULTI] [2025-06-30 15:09:16] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 15:09:16] Bildanalyse funktioniert: 577 Zeichen Beschreibung erhalten
+[MULTI] [2025-06-30 15:09:16] Multi-Platform-Bot läuft jetzt...
+[MULTI] [2025-06-30 15:09:18] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 15:09:23] Antwort von Ollama Chat API erhalten: Einst gab es zwei Papstmänner mit gleichen Namen, ...
+[TWITCH] [2025-06-30 15:09:23] Nachricht gesendet: 🎭 Einst gab es zwei Papstmänner mit gleichen Namen...
+[MULTI] [2025-06-30 15:09:23] 📺 [YouTube] Würde senden: 🎭 Einst gab es zwei Papstmänner mit gleichen Namen, Papst Benedikt XVI. Um Verwechselungen zu vermeiden, nannten sie sich den Älteren und den Jüngeren. Eines Tages bemerkte der Ältere, dass der Jüngere immer dumm vor ihm sah, was ihm sehr aufgefallen hatte. Als er dann bemerkte, dass der Jüngere ihn mit dem Blick nach und nach aus der Zimmertür verfolgte, rief er: "Mein Gott, warum lacht mein Papst so laut?"
+[MULTI] [2025-06-30 15:09:23] Witz gesendet: Einst gab es zwei Papstmänner mit gleichen Namen, ...
+[TWITCH] [2025-06-30 15:09:23] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=914b6422-cdd7-4ac7-b3e9-2248368c6f30;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:09:47] PID-Datei erstellt: 2209895
+[MULTI] [2025-06-30 15:09:47] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 15:09:47] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 15:09:47] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:09:47] Ollama-Server ist erreichbar, Version: 0.9.1
+[MULTI] [2025-06-30 15:09:47] 🔗 Initialisiere Message Dispatcher...
+[MULTI] [2025-06-30 15:09:47] ✅ Message Dispatcher erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 15:09:47] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 15:09:47] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 15:09:48] Empfangen: :tmi.twitch.tv 001 derleiti :Welcome, GLHF!
+:tmi.twitch.tv 002 derleiti :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 derleiti :This server is rather new
+:tmi.twitch.tv 004 derleiti :-
+:tmi.twitch.tv 375 derleiti :-
+:tmi.twitch.tv 372 derleiti :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 derleiti :>
+[TWITCH] [2025-06-30 15:09:48] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 15:09:48] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 15:09:49] Join-Antwort: :tmi.twitch.tv CAP * ACK :twitch.tv/membership
+:tmi.twitch.tv CAP * ACK :twitch.tv/tags
+:tmi.twitch.tv CAP * ACK :twitch.tv/commands
+:derleiti!derleiti@derleiti.tmi.twitch.tv JOIN #derleiti
+:derleiti.tmi.twitch.tv 353 derleiti = #derleiti :streamlabs derleiti nightbot streamelements
+:derleiti.tmi.twitch.tv 366 derleiti #derleiti :End of /NAMES list
+@badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+@emote-only=0;followers-only=-1;r9k=0;room-id=35881927;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #derleiti
+[TWITCH] [2025-06-30 15:09:49] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 15:09:49] Twitch-Nachrichtenempfänger gestartet
+[TWITCH] [2025-06-30 15:09:49] Twitch-Verbindungs-Watchdog gestartet
+[YOUTUBE] [2025-06-30 15:09:49] YouTube Chat Reader gestartet
+[TWITCH] [2025-06-30 15:09:49] PING gesendet
+[TWITCH] [2025-06-30 15:09:49] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YOUTUBE] [2025-06-30 15:09:52] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 15:09:52] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 15:09:52] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 15:09:52] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+✅ Message Dispatcher erfolgreich geladen
+[MULTI] [2025-06-30 15:09:47] PID-Datei erstellt: 2209895
+[MULTI] [2025-06-30 15:09:47] zephyr Multi-Platform-Bot wird gestartet...
+[MULTI] [2025-06-30 15:09:47] Plattformen: Twitch=True, YouTube=True
+[MULTI] [2025-06-30 15:09:47] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:09:47] Ollama-Server ist erreichbar, Version: 0.9.1
+[MULTI] [2025-06-30 15:09:47] 🔗 Initialisiere Message Dispatcher...
+[DISPATCHER] Handler für twitch registriert
+[DISPATCHER] Handler für youtube registriert
+[DISPATCHER] Handler für vision registriert
+[DISPATCHER] Sender für twitch registriert
+[DISPATCHER] Sender für youtube registriert
+[DISPATCHER] Message Worker gestartet
+[DISPATCHER] Message Dispatcher gestartet
+[MULTI] [2025-06-30 15:09:47] ✅ Message Dispatcher erfolgreich initialisiert
+[YouTube] [2025-06-30 15:09:47] Teste YouTube-Verbindung...
+[YouTube] [2025-06-30 15:09:47] Teste YouTube API-Key (Versuch 1/3)...
+[YouTube] [2025-06-30 15:09:47] YouTube API-Key ist gültig - Kanal: TechMediaGamesBlog
+[YouTube] [2025-06-30 15:09:47] ✓ API-Key ist gültig
+[YouTube] [2025-06-30 15:09:47] Suche Live-Stream (Versuch 1/3)...
+[YouTube] [2025-06-30 15:09:47] Gefunden: 1 Live-Stream(s)
+[YouTube] [2025-06-30 15:09:47] Live-Stream gefunden: away from the keyboard (ID: sKMHoSz2avQ)
+[YouTube] [2025-06-30 15:09:47] ✓ Live-Stream gefunden
+[YouTube] [2025-06-30 15:09:47] Hole Live-Chat-ID für Video sKMHoSz2avQ (Versuch 1)...
+[YouTube] [2025-06-30 15:09:47] Live-Chat-ID gefunden für 'away from the keyboard': Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 15:09:47] ✓ Live-Chat verfügbar
+[YouTube] [2025-06-30 15:09:47] YouTube-Verbindung vollständig erfolgreich getestet
+[YOUTUBE] [2025-06-30 15:09:47] YouTube-Verbindung erfolgreich getestet
+[TWITCH] [2025-06-30 15:09:47] Verbinde mit irc.chat.twitch.tv:6667...
+[TWITCH] [2025-06-30 15:09:48] Empfangen: :tmi.twitch.tv 001 derleiti :Welcome, GLHF!
+:tmi.twitch.tv 002 derleiti :Your host is tmi.twitch.tv
+:tmi.twitch.tv 003 derleiti :This server is rather new
+:tmi.twitch.tv 004 derleiti :-
+:tmi.twitch.tv 375 derleiti :-
+:tmi.twitch.tv 372 derleiti :You are in a maze of twisty passages, all alike.
+:tmi.twitch.tv 376 derleiti :>
+[TWITCH] [2025-06-30 15:09:48] Erfolgreich authentifiziert!
+[TWITCH] [2025-06-30 15:09:48] Kanal #derleiti beigetreten
+[TWITCH] [2025-06-30 15:09:49] Join-Antwort: :tmi.twitch.tv CAP * ACK :twitch.tv/membership
+:tmi.twitch.tv CAP * ACK :twitch.tv/tags
+:tmi.twitch.tv CAP * ACK :twitch.tv/commands
+:derleiti!derleiti@derleiti.tmi.twitch.tv JOIN #derleiti
+:derleiti.tmi.twitch.tv 353 derleiti = #derleiti :streamlabs derleiti nightbot streamelements
+:derleiti.tmi.twitch.tv 366 derleiti #derleiti :End of /NAMES list
+@badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+@emote-only=0;followers-only=-1;r9k=0;room-id=35881927;slow=0;subs-only=0 :tmi.twitch.tv ROOMSTATE #derleiti
+[TWITCH] [2025-06-30 15:09:49] Nicht verbunden beim Senden der Nachricht
+[TWITCH] [2025-06-30 15:09:49] Twitch-Nachrichtenempfänger gestartet
+[TWITCH] [2025-06-30 15:09:49] Twitch-Verbindungs-Watchdog gestartet
+[YouTube] [2025-06-30 15:09:49] Message-Callback gesetzt: youtube_message_handler
+[YouTube] [2025-06-30 15:09:49] YouTube Chat Worker gestartet
+[YouTube] [2025-06-30 15:09:49] Initialisiere YouTube Live-Chat...
+[YouTube] [2025-06-30 15:09:49] Teste YouTube API-Key (Versuch 1/3)...
+[YouTube] [2025-06-30 15:09:49] YouTube Chat Reader Thread gestartet
+[YOUTUBE] [2025-06-30 15:09:49] YouTube Chat Reader gestartet
+[TWITCH] [2025-06-30 15:09:49] PING gesendet
+[YouTube] [2025-06-30 15:09:49] YouTube API-Key ist gültig - Kanal: TechMediaGamesBlog
+[YouTube] [2025-06-30 15:09:49] Suche Live-Stream (Versuch 1/3)...
+[TWITCH] [2025-06-30 15:09:49] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:09:49] Gefunden: 1 Live-Stream(s)
+[YouTube] [2025-06-30 15:09:49] Live-Stream gefunden: away from the keyboard (ID: sKMHoSz2avQ)
+[YouTube] [2025-06-30 15:09:49] Hole Live-Chat-ID für Video sKMHoSz2avQ (Versuch 1)...
+[YouTube] [2025-06-30 15:09:49] Live-Chat-ID gefunden für 'away from the keyboard': Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 15:09:49] ✓ YouTube Live-Chat erfolgreich initialisiert
+[YouTube] [2025-06-30 15:09:49] Live-Chat-ID: Cg0KC3NLTUhvU3oyYXZRKicKGFVDWFVXQThIOTY2Y2FYenp1Tk8tMk9WQRILc0tNSG9TejJhdlE
+[YouTube] [2025-06-30 15:09:49] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:09:49] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:09:49] API antwortete mit 14 Chat-Items
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: hi (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: hi...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr test123 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr test123...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr hallo vom youtube chat (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr hallo vom youtube chat...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: test (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: test...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: test12345 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: test12345...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: debug test 123 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: debug test 123...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: hallo zephyr (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: hallo zephyr...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: debug test 789 (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: debug test 789...
+[YouTube] [2025-06-30 15:09:49] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:09:49] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:09:49] Verarbeite 0 neue Nachrichten (14 insgesamt neu)
+[YOUTUBE] [2025-06-30 15:09:52] YouTube Chat erfolgreich initialisiert
+[YOUTUBE] [2025-06-30 15:09:52] YouTube Status Monitor gestartet
+[MULTI] [2025-06-30 15:09:52] Automatischer Witz-Thread gestartet - Intervall: 180 Sekunden
+[MULTI] [2025-06-30 15:09:52] Automatischer Kommentar-Thread gestartet - Intervall: 240 Sekunden
+[MULTI] [2025-06-30 15:09:52] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+[MULTI] [2025-06-30 15:09:52] Befehlserinnerungs-Thread gestartet - Intervall: 600 Sekunden
+[MULTI] [2025-06-30 15:09:52] Teste Bildanalyse-Funktionen...
+[MULTI] [2025-06-30 15:09:52] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:09:52] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:10:02] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 15:10:09] LLaVA Legacy-API-Beschreibung erhalten (716 Zeichen)
+[MULTI] [2025-06-30 15:10:09] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 15:10:09] Bildanalyse funktioniert: 716 Zeichen Beschreibung erhalten
+[MULTI] [2025-06-30 15:10:09] Multi-Platform-Bot läuft jetzt...
+[MULTI] [2025-06-30 15:10:09] Antwort von Ollama Chat API erhalten: Einmal gab es zwei Käse, die sich sehr freundlich ...
+[TWITCH] [2025-06-30 15:10:09] Nachricht gesendet: 🎭 Einmal gab es zwei Käse, die sich sehr freundlic...
+[MULTI] [2025-06-30 15:10:09] 📺 [YouTube] Würde senden: 🎭 Einmal gab es zwei Käse, die sich sehr freundlich zugeben begannen, dass sie beide Lieferkäse waren. Es war ein längeres Gespräch und beide Käse waren sicher, dass sie das niedrigste und unwiderstehbarste der gesamten Käsesortimente waren. Als die Liefermänner erschienen, ergriffen sie sich die Hände und riefen: "Auf Wiedersehen, wir sehen uns wieder bei der nächsten Lieferung!"
+[MULTI] [2025-06-30 15:10:09] Witz gesendet: Einmal gab es zwei Käse, die sich sehr freundlich ...
+[TWITCH] [2025-06-30 15:10:09] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=5640d84a-ed78-42b1-8716-7077e2bff479;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:10:16] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=31176299-a3bd-4642-9b7f-f4524c5153d3;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289016044;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :Wie Austin Powers sagen würde. Benimm dich!
+[TWITCH] [2025-06-30 15:10:16] 📨 Message Handler: Nightbot auf twitch: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:10:16] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:10:22] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:10:22] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[TWITCH] [2025-06-30 15:10:33] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=f8210bed-c6a6-4268-a70f-12333b2a1263;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289033360;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :https://linktr.ee/derleiti
+[TWITCH] [2025-06-30 15:10:33] 📨 Message Handler: Nightbot auf twitch: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:10:33] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:10:38] Antwort von Ollama Chat API erhalten: Der Spieler stößt auf ein Rätsel, um das nächste T...
+[TWITCH] [2025-06-30 15:10:38] Nachricht gesendet: 🎮 Der Spieler stößt auf ein Rätsel, um das nächste...
+[MULTI] [2025-06-30 15:10:38] 📺 [YouTube] Würde senden: 🎮 Der Spieler stößt auf ein Rätsel, um das nächste Tor zu öffnen. Lasse uns die Geisterhände befragen! Mit einem Schlag der Axt löst er das Rätsel und kann weiter in die abtrünkliche Stadt vordringen. Aufwärts nach dem Schatz geht's, Zephyr bleibt dir bei der Seite!
+[MULTI] [2025-06-30 15:10:38] Spiel-Kommentar gesendet: Der Spieler stößt auf ein Rätsel, um das nächste T...
+[TWITCH] [2025-06-30 15:10:39] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=fa2843cc-9011-49cf-ba49-f24fe68e6f70;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:09:52] Automatischer Bildkommentar-Thread gestartet - Intervall: 300 Sekunden
+[MULTI] [2025-06-30 15:09:52] Befehlserinnerungs-Thread gestartet - Intervall: 600 Sekunden
+[MULTI] [2025-06-30 15:09:52] Teste Bildanalyse-Funktionen...
+[MULTI] [2025-06-30 15:09:52] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:09:52] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[YouTube] [2025-06-30 15:09:54] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:09:54] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:09:54] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:09:54] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:09:59] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:09:59] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:00] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:00] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:10:02] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[YouTube] [2025-06-30 15:10:05] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:05] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:05] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:05] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:10:09] LLaVA Legacy-API-Beschreibung erhalten (716 Zeichen)
+[MULTI] [2025-06-30 15:10:09] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 15:10:09] Bildanalyse funktioniert: 716 Zeichen Beschreibung erhalten
+[MULTI] [2025-06-30 15:10:09] Multi-Platform-Bot läuft jetzt...
+[MULTI] [2025-06-30 15:10:09] Antwort von Ollama Chat API erhalten: Einmal gab es zwei Käse, die sich sehr freundlich ...
+[TWITCH] [2025-06-30 15:10:09] Nachricht gesendet: 🎭 Einmal gab es zwei Käse, die sich sehr freundlic...
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 🎭 Einmal gab es zwei Käse, die sich sehr freundlic...
+[MULTI] [2025-06-30 15:10:09] 📺 [YouTube] Würde senden: 🎭 Einmal gab es zwei Käse, die sich sehr freundlich zugeben begannen, dass sie beide Lieferkäse waren. Es war ein längeres Gespräch und beide Käse waren sicher, dass sie das niedrigste und unwiderstehbarste der gesamten Käsesortimente waren. Als die Liefermänner erschienen, ergriffen sie sich die Hände und riefen: "Auf Wiedersehen, wir sehen uns wieder bei der nächsten Lieferung!"
+[MULTI] [2025-06-30 15:10:09] Witz gesendet: Einmal gab es zwei Käse, die sich sehr freundlich ...
+[TWITCH] [2025-06-30 15:10:09] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=5640d84a-ed78-42b1-8716-7077e2bff479;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 15:10:10] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:10] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:10] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:10] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:10:15] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:15] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:15] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:15] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:10:16] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=31176299-a3bd-4642-9b7f-f4524c5153d3;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289016044;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :Wie Austin Powers sagen würde. Benimm dich!
+[DISPATCHER] 📨 TWITCH: Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[TWITCH] [2025-06-30 15:10:16] 📨 Message Handler: Nightbot auf twitch: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:10:16] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[YouTube] [2025-06-30 15:10:20] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:20] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:20] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:20] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:10:22] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:10:22] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[YouTube] [2025-06-30 15:10:25] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:25] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:25] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:25] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:10:30] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:30] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:30] API antwortete mit 1 Chat-Items
+[YouTube] [2025-06-30 15:10:30] API-Item: TechMediaGamesBlog: !frag zephyr wie gehts (Type: textMessageEvent)
+[YouTube] [2025-06-30 15:10:30] Eigene Nachricht übersprungen: !frag zephyr wie gehts...
+[YouTube] [2025-06-30 15:10:30] Verarbeite 0 neue Nachrichten (1 insgesamt neu)
+[TWITCH] [2025-06-30 15:10:33] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=f8210bed-c6a6-4268-a70f-12333b2a1263;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289033360;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :https://linktr.ee/derleiti
+[DISPATCHER] 📨 TWITCH: Nightbot: https://linktr.ee/derleiti
+[TWITCH] [2025-06-30 15:10:33] 📨 Message Handler: Nightbot auf twitch: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:10:33] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[YouTube] [2025-06-30 15:10:35] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:35] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:35] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:35] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:10:38] Antwort von Ollama Chat API erhalten: Der Spieler stößt auf ein Rätsel, um das nächste T...
+[TWITCH] [2025-06-30 15:10:38] Nachricht gesendet: 🎮 Der Spieler stößt auf ein Rätsel, um das nächste...
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 🎮 Der Spieler stößt auf ein Rätsel, um das nächste...
+[MULTI] [2025-06-30 15:10:38] 📺 [YouTube] Würde senden: 🎮 Der Spieler stößt auf ein Rätsel, um das nächste Tor zu öffnen. Lasse uns die Geisterhände befragen! Mit einem Schlag der Axt löst er das Rätsel und kann weiter in die abtrünkliche Stadt vordringen. Aufwärts nach dem Schatz geht's, Zephyr bleibt dir bei der Seite!
+[MULTI] [2025-06-30 15:10:38] Spiel-Kommentar gesendet: Der Spieler stößt auf ein Rätsel, um das nächste T...
+[TWITCH] [2025-06-30 15:10:39] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=fa2843cc-9011-49cf-ba49-f24fe68e6f70;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 15:10:40] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:40] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:40] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:40] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:10:45] Rufe neue Chat-Nachrichten ab...
+[MULTI] [2025-06-30 15:10:52] Überspringe automatischen Bildkommentar: Nächster in 234 Sekunden
+[TWITCH] [2025-06-30 15:11:09] PING gesendet
+[MULTI] [2025-06-30 15:11:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[TWITCH] [2025-06-30 15:11:09] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:11:22] Überspringe automatischen Bildkommentar: Nächster in 204 Sekunden
+[TWITCH] [2025-06-30 15:11:44] PING gesendet
+[TWITCH] [2025-06-30 15:11:44] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:11:52] Nachricht gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe...
+[MULTI] [2025-06-30 15:11:52] 📺 [YouTube] Würde senden: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 15:11:52] Befehlserinnerung gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 15:11:52] Überspringe automatischen Bildkommentar: Nächster in 174 Sekunden
+[TWITCH] [2025-06-30 15:11:52] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=ea4aa8c9-4dbd-4bd8-8e88-11ef4a5c73b8;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:12:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[MULTI] [2025-06-30 15:12:22] Überspringe automatischen Bildkommentar: Nächster in 144 Sekunden
+[TWITCH] [2025-06-30 15:12:24] PING gesendet
+[TWITCH] [2025-06-30 15:12:24] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:10:45] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:45] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:45] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:10:50] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:50] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:50] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:50] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:10:52] Überspringe automatischen Bildkommentar: Nächster in 234 Sekunden
+[YouTube] [2025-06-30 15:10:55] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:10:55] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:10:56] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:10:56] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:01] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:01] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:01] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:01] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:06] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:06] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:06] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:06] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:11:09] PING gesendet
+[MULTI] [2025-06-30 15:11:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[TWITCH] [2025-06-30 15:11:09] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:11:11] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:11] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:11] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:11] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:16] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:16] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:16] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:16] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:21] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:21] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:21] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:21] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:11:22] Überspringe automatischen Bildkommentar: Nächster in 204 Sekunden
+[YouTube] [2025-06-30 15:11:26] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:26] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:26] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:26] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:31] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:31] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:31] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:31] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:36] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:36] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:36] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:36] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:41] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:41] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:41] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:41] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:11:44] PING gesendet
+[TWITCH] [2025-06-30 15:11:44] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:11:46] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:46] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:46] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:46] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:11:51] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:51] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:51] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:51] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:11:52] Nachricht gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe...
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe...
+[MULTI] [2025-06-30 15:11:52] 📺 [YouTube] Würde senden: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 15:11:52] Befehlserinnerung gesendet: 📋 Verfügbare Befehle: !witz, !info, !stats, !hilfe, !bild, !spiel NAME, !ort NAME, !tod, !level X, !frag zephyr ...
+[MULTI] [2025-06-30 15:11:52] Überspringe automatischen Bildkommentar: Nächster in 174 Sekunden
+[TWITCH] [2025-06-30 15:11:52] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=ea4aa8c9-4dbd-4bd8-8e88-11ef4a5c73b8;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 15:11:56] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:11:56] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:11:57] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:11:57] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:02] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:02] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:02] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:02] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:07] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:07] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:07] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:07] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:12:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[YouTube] [2025-06-30 15:12:12] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:12] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:12] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:12] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:17] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:17] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:17] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:17] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:12:22] Überspringe automatischen Bildkommentar: Nächster in 144 Sekunden
+[YouTube] [2025-06-30 15:12:22] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:22] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:22] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:22] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:12:24] PING gesendet
+[TWITCH] [2025-06-30 15:12:24] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:12:27] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:27] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[MULTI] [2025-06-30 15:12:52] Überspringe automatischen Bildkommentar: Nächster in 114 Sekunden
+[TWITCH] [2025-06-30 15:12:59] PING gesendet
+[TWITCH] [2025-06-30 15:12:59] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:13:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[MULTI] [2025-06-30 15:13:09] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 15:13:20] Antwort von Ollama Chat API erhalten: Ein Elefant geht in eine Bar und bestellt ein Bier...
+[TWITCH] [2025-06-30 15:13:20] Nachricht gesendet: 🎭 Ein Elefant geht in eine Bar und bestellt ein Bi...
+[MULTI] [2025-06-30 15:13:20] 📺 [YouTube] Würde senden: 🎭 Ein Elefant geht in eine Bar und bestellt ein Bier für seine Freundin mit dem Namen "Trunk." Die Barkeeperin fragt: "Warum heißt Ihre Trunkliebe 'Trunk'?" Der Elefant antwortet lachend: "Ich glaube, sie hat einfach meinen Vorname angenommen!"
+[MULTI] [2025-06-30 15:13:20] Witz gesendet: Ein Elefant geht in eine Bar und bestellt ein Bier...
+[TWITCH] [2025-06-30 15:13:20] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=f1e2f5e2-63b1-458f-b588-56b744d8201b;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:13:22] Überspringe automatischen Bildkommentar: Nächster in 84 Sekunden
+[MULTI] [2025-06-30 15:13:52] Überspringe automatischen Bildkommentar: Nächster in 54 Sekunden
+[TWITCH] [2025-06-30 15:13:54] PING gesendet
+[TWITCH] [2025-06-30 15:13:54] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:13:54] Empfangen: PING :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:13:54] PING beantwortet mit: PONG :tmi.twitch.tv
+[YouTube] [2025-06-30 15:12:27] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:27] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:32] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:32] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:32] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:32] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:37] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:37] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:37] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:37] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:42] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:42] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:42] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:42] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:47] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:47] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:47] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:47] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:12:52] Überspringe automatischen Bildkommentar: Nächster in 114 Sekunden
+[YouTube] [2025-06-30 15:12:52] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:52] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:52] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:52] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:12:57] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:12:57] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:12:57] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:12:57] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:12:59] PING gesendet
+[TWITCH] [2025-06-30 15:12:59] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:13:02] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:02] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:03] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:03] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:08] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:08] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:08] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:08] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:13:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[MULTI] [2025-06-30 15:13:09] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[YouTube] [2025-06-30 15:13:13] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:13] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:13] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:13] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:18] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:18] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:18] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:18] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:13:20] Antwort von Ollama Chat API erhalten: Ein Elefant geht in eine Bar und bestellt ein Bier...
+[TWITCH] [2025-06-30 15:13:20] Nachricht gesendet: 🎭 Ein Elefant geht in eine Bar und bestellt ein Bi...
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 🎭 Ein Elefant geht in eine Bar und bestellt ein Bi...
+[MULTI] [2025-06-30 15:13:20] 📺 [YouTube] Würde senden: 🎭 Ein Elefant geht in eine Bar und bestellt ein Bier für seine Freundin mit dem Namen "Trunk." Die Barkeeperin fragt: "Warum heißt Ihre Trunkliebe 'Trunk'?" Der Elefant antwortet lachend: "Ich glaube, sie hat einfach meinen Vorname angenommen!"
+[MULTI] [2025-06-30 15:13:20] Witz gesendet: Ein Elefant geht in eine Bar und bestellt ein Bier...
+[TWITCH] [2025-06-30 15:13:20] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=f1e2f5e2-63b1-458f-b588-56b744d8201b;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:13:22] Überspringe automatischen Bildkommentar: Nächster in 84 Sekunden
+[YouTube] [2025-06-30 15:13:23] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:23] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:23] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:23] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:28] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:28] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:28] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:28] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:33] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:33] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:33] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:33] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:38] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:38] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:38] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:38] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:43] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:43] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:43] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:43] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:13:48] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:48] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:48] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:48] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:13:52] Überspringe automatischen Bildkommentar: Nächster in 54 Sekunden
+[YouTube] [2025-06-30 15:13:53] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:53] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:53] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:53] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:13:54] PING gesendet
+[TWITCH] [2025-06-30 15:13:54] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:13:54] Empfangen: PING :tmi.twitch.tv
+[TWITCH] [2025-06-30 15:13:54] PING beantwortet mit: PONG :tmi.twitch.tv
+[YouTube] [2025-06-30 15:13:58] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:13:58] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:13:58] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:13:58] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:14:03] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:03] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:03] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:03] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:14:08] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:08] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[MULTI] [2025-06-30 15:14:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[MULTI] [2025-06-30 15:14:22] Überspringe automatischen Bildkommentar: Nächster in 24 Sekunden
+[TWITCH] [2025-06-30 15:14:29] PING gesendet
+[TWITCH] [2025-06-30 15:14:29] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:14:38] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:14:38] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[MULTI] [2025-06-30 15:14:52] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 15:14:52] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:14:52] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:14:52] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:14:57] Antwort von Ollama Chat API erhalten: Der Spieler hat gerade das verfallene Elven-Vierte...
+[TWITCH] [2025-06-30 15:14:57] Nachricht gesendet: 🎮 Der Spieler hat gerade das verfallene Elven-Vier...
+[MULTI] [2025-06-30 15:14:57] 📺 [YouTube] Würde senden: 🎮 Der Spieler hat gerade das verfallene Elven-Viertel Betnikh erreicht! Mögen sie die geheimnisvolle Magie des Elfenvolkes erlernen, oder werden sie von ihren Schützlingen betrogen? Auf jeden Fall, muss der Helden mutige Entscheide unterbrechen und weiter durch die dunklen Straßen gehen!
+[MULTI] [2025-06-30 15:14:57] Spiel-Kommentar gesendet: Der Spieler hat gerade das verfallene Elven-Vierte...
+[TWITCH] [2025-06-30 15:14:57] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=e1b81164-9b66-4cfe-93ed-ab0fa23fb0c8;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[MULTI] [2025-06-30 15:15:03] LLaVA Legacy-API-Beschreibung erhalten (932 Zeichen)
+[MULTI] [2025-06-30 15:15:03] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 15:15:03] Erkannter Inhaltstyp: code
+[MULTI] [2025-06-30 15:15:03] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot Code...
+[MULTI] [2025-06-30 15:15:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[TWITCH] [2025-06-30 15:15:21] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=68363f04-12ca-4e34-a059-ec000aa386e6;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289321776;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :Wie Austin Powers sagen würde. Benimm dich!
+[TWITCH] [2025-06-30 15:15:21] 📨 Message Handler: Nightbot auf twitch: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:15:21] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:15:25] Antwort von Ollama Chat API erhalten: Zephyr: Du sehst in diesen Fenstern eine Welt voll...
+[TWITCH] [2025-06-30 15:15:25] Nachricht gesendet: 👁️ Zephyr: Du sehst in diesen Fenstern eine Welt v...
+[YouTube] [2025-06-30 15:14:08] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:08] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:14:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[YouTube] [2025-06-30 15:14:13] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:13] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:13] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:13] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:14:18] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:18] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:19] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:19] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:14:22] Überspringe automatischen Bildkommentar: Nächster in 24 Sekunden
+[YouTube] [2025-06-30 15:14:24] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:24] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:24] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:24] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:14:29] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:29] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:29] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:29] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:14:29] PING gesendet
+[TWITCH] [2025-06-30 15:14:29] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:14:34] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:34] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:34] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:34] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:14:38] Spielstand geladen: {'spiel': 'Oblivion Remastered', 'ort': '', 'tode': 0, 'level': 1, 'spielzeit': '00:00:00'}
+[MULTI] [2025-06-30 15:14:38] Sende an Ollama: Du bist ein Twitch-Bot namens zephyr. Der Streamer...
+[YouTube] [2025-06-30 15:14:39] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:39] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:39] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:39] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:14:44] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:44] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:44] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:44] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:14:49] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:49] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:49] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:49] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:14:52] Scene Comment Worker gestartet
+[MULTI] [2025-06-30 15:14:52] Neuester Screenshot gefunden: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:14:52] Analysiere Screenshot: /root/zephyr/screenshots/stream.jpg
+[MULTI] [2025-06-30 15:14:52] Analysiere Bild mit LLaVA: /root/zephyr/screenshots/stream.jpg
+[YouTube] [2025-06-30 15:14:54] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:54] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:54] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:54] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:14:57] Antwort von Ollama Chat API erhalten: Der Spieler hat gerade das verfallene Elven-Vierte...
+[TWITCH] [2025-06-30 15:14:57] Nachricht gesendet: 🎮 Der Spieler hat gerade das verfallene Elven-Vier...
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 🎮 Der Spieler hat gerade das verfallene Elven-Vier...
+[MULTI] [2025-06-30 15:14:57] 📺 [YouTube] Würde senden: 🎮 Der Spieler hat gerade das verfallene Elven-Viertel Betnikh erreicht! Mögen sie die geheimnisvolle Magie des Elfenvolkes erlernen, oder werden sie von ihren Schützlingen betrogen? Auf jeden Fall, muss der Helden mutige Entscheide unterbrechen und weiter durch die dunklen Straßen gehen!
+[MULTI] [2025-06-30 15:14:57] Spiel-Kommentar gesendet: Der Spieler hat gerade das verfallene Elven-Vierte...
+[TWITCH] [2025-06-30 15:14:57] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=e1b81164-9b66-4cfe-93ed-ab0fa23fb0c8;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 15:14:59] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:14:59] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:14:59] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:14:59] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:15:03] LLaVA Legacy-API-Beschreibung erhalten (932 Zeichen)
+[MULTI] [2025-06-30 15:15:03] Beschreibung in /root/zephyr/latest_vision.txt gespeichert
+[MULTI] [2025-06-30 15:15:03] Erkannter Inhaltstyp: code
+[MULTI] [2025-06-30 15:15:03] Sende an Ollama: Ein KI-Vision-Modell hat auf einem Screenshot Code...
+[YouTube] [2025-06-30 15:15:04] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:04] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:04] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:04] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:15:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 2 msgs
+[YouTube] [2025-06-30 15:15:09] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:09] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:09] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:09] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:15:14] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:14] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:14] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:14] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:15:19] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:19] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:19] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:19] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:15:21] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=68363f04-12ca-4e34-a059-ec000aa386e6;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289321776;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :Wie Austin Powers sagen würde. Benimm dich!
+[DISPATCHER] 📨 TWITCH: Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[TWITCH] [2025-06-30 15:15:21] 📨 Message Handler: Nightbot auf twitch: Wie Austin Powers sagen würde. Benimm dich!
+[MULTI] [2025-06-30 15:15:21] 💬 [TWITCH] Nightbot: Wie Austin Powers sagen würde. Benimm dich!
+[YouTube] [2025-06-30 15:15:24] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:24] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:25] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:25] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:15:25] Antwort von Ollama Chat API erhalten: Zephyr: Du sehst in diesen Fenstern eine Welt voll...
+[TWITCH] [2025-06-30 15:15:25] Nachricht gesendet: 👁️ Zephyr: Du sehst in diesen Fenstern eine Welt v...
+[MULTI] [2025-06-30 15:15:25] 📺 [YouTube] Würde senden: 👁️ Zephyr: Du sehst in diesen Fenstern eine Welt voller Geheimnisse und Kraft. Von Code-Quellcode bis zu Browser-Seiten, alles steht vor dir bereit, um dich faszinieren zu lassen. Programmierung ist die Kunst des Schaffens von Leben aus 1s und 0s, und hier bist du in der Mitte dieser digitalen Welt. Wenn du mit den Fenstern auf diese Weise ansprichst, dann mach dir gerne weiteres aus den Quelltextblöcken. Hier kannst du eigentlich alles finden, was 
+[MULTI] [2025-06-30 15:15:25] Bildkommentar gesendet: Zephyr: Du sehst in diesen Fenstern eine Welt voll...
+[TWITCH] [2025-06-30 15:15:25] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=12f61607-212f-4cef-8f26-8b388a6a467a;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:15:39] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=c8f57350-3aa6-4392-844e-0b1e62bfcc1f;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289339523;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :https://linktr.ee/derleiti
+[TWITCH] [2025-06-30 15:15:39] 📨 Message Handler: Nightbot auf twitch: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:15:39] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:15:55] Überspringe automatischen Bildkommentar: Nächster in 236 Sekunden
+[MULTI] [2025-06-30 15:16:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 4 msgs
+[TWITCH] [2025-06-30 15:16:14] PING gesendet
+[TWITCH] [2025-06-30 15:16:14] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:16:20] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[MULTI] [2025-06-30 15:16:25] Überspringe automatischen Bildkommentar: Nächster in 206 Sekunden
+[MULTI] [2025-06-30 15:16:29] Antwort von Ollama Chat API erhalten: Ein Elefant geht in ein Café und fragt den Barista...
+[TWITCH] [2025-06-30 15:16:29] Nachricht gesendet: 🎭 Ein Elefant geht in ein Café und fragt den Baris...
+[MULTI] [2025-06-30 15:16:29] 📺 [YouTube] Würde senden: 🎭 Ein Elefant geht in ein Café und fragt den Barista: "Könnten Sie mir bitte einen Tisch leihen, an dem ich meine Beine ausspannen kann?" Der Barista schaut ihn verwundert an und sagt: "Wo soll ich Ihnen einen Tisch geben, wenn Sie so viel Platz benötigen wie ein Elefant?" Der Elefant antwortet lachtend: "Ganz richtig! Ich werde dann jeden Tag Ihren Kaffee trinken und Ihnen für immer dankbar sein!" 
+
+Nun lässt sich dieser Witz als Twitch-Command mi
+[MULTI] [2025-06-30 15:16:29] Witz gesendet: Ein Elefant geht in ein Café und fragt den Barista...
+[TWITCH] [2025-06-30 15:16:30] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=81de08fe-0205-4d9a-b502-efb3260a8d43;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:16:30] Empfangen: :tmi.twitch.tv 421 derleiti NUN :Unknown command
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 👁️ Zephyr: Du sehst in diesen Fenstern eine Welt v...
+[MULTI] [2025-06-30 15:15:25] 📺 [YouTube] Würde senden: 👁️ Zephyr: Du sehst in diesen Fenstern eine Welt voller Geheimnisse und Kraft. Von Code-Quellcode bis zu Browser-Seiten, alles steht vor dir bereit, um dich faszinieren zu lassen. Programmierung ist die Kunst des Schaffens von Leben aus 1s und 0s, und hier bist du in der Mitte dieser digitalen Welt. Wenn du mit den Fenstern auf diese Weise ansprichst, dann mach dir gerne weiteres aus den Quelltextblöcken. Hier kannst du eigentlich alles finden, was 
+[MULTI] [2025-06-30 15:15:25] Bildkommentar gesendet: Zephyr: Du sehst in diesen Fenstern eine Welt voll...
+[TWITCH] [2025-06-30 15:15:25] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=12f61607-212f-4cef-8f26-8b388a6a467a;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[YouTube] [2025-06-30 15:15:30] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:30] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:30] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:30] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:15:35] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:35] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:35] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:35] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:15:39] Empfangen: @badge-info=;badges=moderator/1,partner/1;color=#7C7CE1;display-name=Nightbot;emotes=;first-msg=0;flags=;id=c8f57350-3aa6-4392-844e-0b1e62bfcc1f;mod=1;returning-chatter=0;room-id=35881927;subscriber=0;tmi-sent-ts=1751289339523;turbo=0;user-id=19264788;user-type=mod :nightbot!nightbot@nightbot.tmi.twitch.tv PRIVMSG #derleiti :https://linktr.ee/derleiti
+[DISPATCHER] 📨 TWITCH: Nightbot: https://linktr.ee/derleiti
+[TWITCH] [2025-06-30 15:15:39] 📨 Message Handler: Nightbot auf twitch: https://linktr.ee/derleiti
+[MULTI] [2025-06-30 15:15:39] 💬 [TWITCH] Nightbot: https://linktr.ee/derleiti
+[YouTube] [2025-06-30 15:15:40] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:40] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:40] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:40] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:15:45] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:45] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:45] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:45] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:15:50] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:50] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:50] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:50] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:15:55] Überspringe automatischen Bildkommentar: Nächster in 236 Sekunden
+[YouTube] [2025-06-30 15:15:55] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:15:55] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:15:55] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:15:55] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:16:00] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:00] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:00] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:00] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:16:05] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:05] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:05] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:05] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:16:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 4 msgs
+[YouTube] [2025-06-30 15:16:10] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:10] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:10] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:10] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[TWITCH] [2025-06-30 15:16:14] PING gesendet
+[TWITCH] [2025-06-30 15:16:14] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[YouTube] [2025-06-30 15:16:15] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:15] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:15] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:15] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:16:20] Sende an Ollama: Erzähle einen kurzen, lustigen Witz. Mach ihn beso...
+[YouTube] [2025-06-30 15:16:20] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:20] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:21] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:21] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:16:25] Überspringe automatischen Bildkommentar: Nächster in 206 Sekunden
+[YouTube] [2025-06-30 15:16:26] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:26] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:26] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:26] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[MULTI] [2025-06-30 15:16:29] Antwort von Ollama Chat API erhalten: Ein Elefant geht in ein Café und fragt den Barista...
+[TWITCH] [2025-06-30 15:16:29] Nachricht gesendet: 🎭 Ein Elefant geht in ein Café und fragt den Baris...
+[DISPATCHER] ✓ Nachricht an twitch gesendet: 🎭 Ein Elefant geht in ein Café und fragt den Baris...
+[MULTI] [2025-06-30 15:16:29] 📺 [YouTube] Würde senden: 🎭 Ein Elefant geht in ein Café und fragt den Barista: "Könnten Sie mir bitte einen Tisch leihen, an dem ich meine Beine ausspannen kann?" Der Barista schaut ihn verwundert an und sagt: "Wo soll ich Ihnen einen Tisch geben, wenn Sie so viel Platz benötigen wie ein Elefant?" Der Elefant antwortet lachtend: "Ganz richtig! Ich werde dann jeden Tag Ihren Kaffee trinken und Ihnen für immer dankbar sein!" 
+
+Nun lässt sich dieser Witz als Twitch-Command mi
+[MULTI] [2025-06-30 15:16:29] Witz gesendet: Ein Elefant geht in ein Café und fragt den Barista...
+[TWITCH] [2025-06-30 15:16:30] Empfangen: @badge-info=subscriber/31;badges=broadcaster/1,subscriber/0,twitch-recap-2024/1;color=#000000;display-name=derleiti;emote-sets=0,19194,300374282,592920959;id=81de08fe-0205-4d9a-b502-efb3260a8d43;mod=0;subscriber=1;user-type= :tmi.twitch.tv USERSTATE #derleiti
+[TWITCH] [2025-06-30 15:16:30] Empfangen: :tmi.twitch.tv 421 derleiti NUN :Unknown command
+[YouTube] [2025-06-30 15:16:31] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:31] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:31] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:31] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:16:36] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:36] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:36] API antwortete mit 0 Chat-Items
+[YouTube] [2025-06-30 15:16:36] Verarbeite 0 neue Nachrichten (0 insgesamt neu)
+[YouTube] [2025-06-30 15:16:41] Rufe neue Chat-Nachrichten ab...
+[YouTube] [2025-06-30 15:16:41] API-Aufruf: Hole Chat-Nachrichten (Chat-ID: Cg0KC3NLTUhvU3oyYXZR...)
+[YouTube] [2025-06-30 15:16:41] API antwortete mit 0 Chat-Items
+[MULTI] [2025-06-30 15:16:55] Überspringe automatischen Bildkommentar: Nächster in 176 Sekunden
+[TWITCH] [2025-06-30 15:17:04] PING gesendet
+[TWITCH] [2025-06-30 15:17:04] Empfangen: :tmi.twitch.tv PONG tmi.twitch.tv :tmi.twitch.tv
+[MULTI] [2025-06-30 15:17:09] Status: Twitch: ✅ | YouTube: ✅ | Dispatcher: 4 msgs
+[MULTI] [2025-06-30 15:17:25] Überspringe automatischen Bildkommentar: Nächster in 146 Sekunden

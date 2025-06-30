@@ -1,3 +1,4 @@
+# Datei: analyze_and_respond.py
 #!/usr/bin/env python3
 import os
 import requests
@@ -314,12 +315,59 @@ def analyze_and_comment(image_path, platform_hint=None):
     # Kommentar generieren
     comment = generate_chat_comment(scene_description)
     
-    # Platform-spezifische Anpassungen
-    if platform_hint and comment:
-        platform_emoji = "💬" if platform_hint == "twitch" else "🔴" if platform_hint == "youtube" else "👁️"
-        comment = f"{platform_emoji} {comment}"
+    if comment:
+        print(f"✅ Bildkommentar generiert: {comment[:50]}...")
+        
+        # NEUE FUNKTION: Sende über Message Dispatcher
+        try:
+            # Versuche den Message Dispatcher zu verwenden
+            from message_dispatcher import queue_message
+            queue_message("vision", "Screenshot-Watcher", comment)
+            print("📨 Bildkommentar an Message Dispatcher weitergeleitet")
+            return comment
+        except ImportError:
+            print("⚠️ Message Dispatcher nicht verfügbar, verwende Fallback")
+            # Fallback: Versuche direkt zu senden
+            return send_message_fallback(comment, platform_hint)
     
-    return comment
+    return None
+
+def send_message_fallback(message, platform_hint=None):
+    """Fallback-Methode für das Senden von Nachrichten ohne Dispatcher"""
+    print("🔄 Verwende Fallback-Sendung...")
+    
+    # Versuche den Multi-Platform-Bot zu verwenden
+    try:
+        import sys
+        sys.path.append(BASE_DIR)
+        from multi_platform_bot import send_message_to_platforms
+        
+        platform_emoji = "👁️"
+        formatted_message = f"{platform_emoji} {message}"
+        
+        success = send_message_to_platforms(formatted_message)
+        if success:
+            print(f"✅ Nachricht über Multi-Platform-Bot gesendet: {formatted_message[:50]}...")
+        else:
+            print("❌ Multi-Platform-Bot konnte Nachricht nicht senden")
+        return message
+        
+    except ImportError:
+        print("⚠️ Multi-Platform-Bot nicht verfügbar")
+        
+    # Versuche den alten Twitch-Bot
+    try:
+        from twitch_ollama_bot import send_message as twitch_send_message
+        success = twitch_send_message(f"👁️ {message}")
+        if success:
+            print(f"✅ Nachricht über Twitch-Bot gesendet: {message[:50]}...")
+        return message
+    except ImportError:
+        print("⚠️ Twitch-Bot nicht verfügbar")
+    
+    # Letzter Fallback: Nur ausgeben
+    print(f"⚠️ Konnte Nachricht nicht senden - Ausgabe: 👁️ {message}")
+    return message
 
 # Für Testzwecke
 if __name__ == "__main__":

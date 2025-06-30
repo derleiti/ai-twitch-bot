@@ -1,1 +1,9 @@
-Das Bild zeigt ein Screenshot eines Computers, der mit einer Linux-Distribution arbeitet. Auf der Bildschirme sind diverse Linux-Terminals, die verschiedene Eingaben und Ausgaben zeigen. Die Terminals zeigen jeweils Text und eine Kommandozeile, die meist eine Befehl ist (bash is a Unix shell and command language). Das Gesamtbild zeigt ein System mit mehreren Terminals, wobei einige von ihnen offen sind und andere verdeckt sind.
+Das Bild zeigt eine Computer-Arbeitsumgebung mit einer Virtuellen Maschine (VM) im Hintergrund und mehreren aktiven Windows-Fenstern auf der Desktop-Umgebung. Es sind insgesamt fünf Fenster mit unterschiedlichen Anwendungen und Dokumenten gezeigt:
+
+1. Ein Fenster mit einer Datei oder einem Codeeditor, in dem Text angezeigt wird.
+2. Ein Fenster mit einem Code-Editor, in dem mehrere Zeilen von Quellcode angezeigt werden.
+3. Ein Fenster mit einer Browser-Seite, die eine Website darstellt.
+4. Ein Fenster mit einer Anwendung, die Daten oder Grafiken anzeigen scheint.
+5. Ein Fenster mit einem Einstieg zur Dokumentenbearbeitung, das möglicherweise ein Word-Dokument enthält.
+
+In den Windows-Fenstern sind Textzeilen und Code-Quellcode zu sehen, was auf eine Programmierung hindeutet. Es gibt die Anzeige eines Computer-Arbeitsplatzes mit mehreren verschiedenen Anwendungen zum Ausführen von Aufgaben oder Arbeiten an einem Projekt.
