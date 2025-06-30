@@ -42,8 +42,23 @@ if not NICKNAME or not TOKEN or not CHANNEL:
         CHANNEL = "#testchannel"
         print("Verwende Fallback für CHANNEL")
 
-# Ollama-Konfiguration
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate")
+# Ollama-Konfiguration - AKTUALISIERTE URLS
+# Unterstützt sowohl die ältere als auch neuere API-Endpunkte
+OLLAMA_API_VERSION = os.getenv("OLLAMA_API_VERSION", "legacy")  # "legacy" oder "v1"
+
+# Verschiedene API-Endpunkte für Flexibilität
+OLLAMA_ENDPOINTS = {
+    "legacy": {
+        "generate": os.getenv("OLLAMA_URL", "http://localhost:11434/api/generate"),
+        "chat": os.getenv("OLLAMA_CHAT_URL", "http://localhost:11434/api/chat")
+    },
+    "v1": {
+        "generate": os.getenv("OLLAMA_URL_V1", "http://localhost:11434/v1/generate"),
+        "chat": os.getenv("OLLAMA_CHAT_URL_V1", "http://localhost:11434/v1/chat/completions")
+    }
+}
+
+# Modelle
 MODEL = os.getenv("OLLAMA_MODEL", "zephyr")
 VISION_MODEL = os.getenv("VISION_MODEL", "llava")
 
@@ -216,25 +231,29 @@ reconnect_lock = threading.Lock()
 
 # === Logging-Funktionen ===
 def log(message, level=1):
+    """Loggt eine Nachricht in die Konsole und die Log-Datei, wenn das Debug-Level ausreichend ist"""
     if level > DEBUG_LEVEL:
         return
         
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{timestamp}] {message}")
+    formatted_message = f"[{timestamp}] {message}"
+    print(formatted_message)
     
     try:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(f"[{timestamp}] {message}\n")
+            f.write(f"{formatted_message}\n")
     except Exception as e:
         print(f"[{timestamp}] Fehler beim Loggen: {e}")
 
 def log_error(message, exception=None):
+    """Loggt eine Fehlermeldung mit optionalem Exception-Traceback"""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{timestamp}] ERROR: {message}")
+    formatted_message = f"[{timestamp}] ERROR: {message}"
+    print(formatted_message)
     
     try:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(f"[{timestamp}] ERROR: {message}\n")
+            f.write(f"{formatted_message}\n")
             if exception:
                 f.write(f"[{timestamp}] Exception: {str(exception)}\n")
                 if DEBUG_LEVEL >= 2:  # Nur bei hohem Debug-Level den vollen Traceback loggen
@@ -244,6 +263,7 @@ def log_error(message, exception=None):
 
 # === PID-Datei-Funktionen ===
 def create_pid_file():
+    """Erstellt eine PID-Datei für den laufenden Prozess"""
     try:
         pid = os.getpid()
         with open(PID_FILE, 'w') as f:
@@ -253,6 +273,7 @@ def create_pid_file():
         log_error("Fehler beim Erstellen der PID-Datei", e)
 
 def remove_pid_file():
+    """Entfernt die PID-Datei beim Beenden des Prozesses"""
     try:
         if os.path.exists(PID_FILE):
             os.remove(PID_FILE)
@@ -262,6 +283,7 @@ def remove_pid_file():
 
 # === Spielstand-Funktionen ===
 def load_game_state():
+    """Lädt den aktuellen Spielstand aus der JSON-Datei"""
     global game_state
     try:
         if os.path.exists(GAME_STATE_FILE):
@@ -288,6 +310,7 @@ def load_game_state():
         }
 
 def save_game_state():
+    """Speichert den aktuellen Spielstand in der JSON-Datei"""
     try:
         with open(GAME_STATE_FILE, 'w', encoding="utf-8") as f:
             json.dump(game_state, f, indent=2)
@@ -327,7 +350,9 @@ def analyze_image_with_llava(image_path):
         
         with open(image_path, "rb") as f:
             img_b64 = base64.b64encode(f.read()).decode("utf-8")
-            
+        
+        # AKTUALISIERT: Unterstützung für verschiedene API-Versionen
+        # Funktioniert mit beiden API-Stilen - legacy und neuen v1
         payload = {
             "model": VISION_MODEL,
             "prompt": "Beschreibe möglichst genau, was auf dem Bild zu sehen ist.",
@@ -335,6 +360,46 @@ def analyze_image_with_llava(image_path):
             "stream": False
         }
         
+        # Versuche zuerst die neuere API, wenn konfiguriert
+        if OLLAMA_API_VERSION == "v1":
+            try:
+                # Für v1 API anpassen
+                messages = [
+                    {"role": "system", "content": "Du beschreibst Bilder detailliert und präzise."},
+                    {"role": "user", "content": [
+                        {"type": "text", "text": "Beschreibe möglichst genau, was auf dem Bild zu sehen ist."},
+                        {"type": "image", "image": img_b64}
+                    ]}
+                ]
+                
+                v1_payload = {
+                    "model": VISION_MODEL,
+                    "messages": messages,
+                    "stream": False
+                }
+                
+                response = requests.post(
+                    OLLAMA_ENDPOINTS["v1"]["chat"],
+                    json=v1_payload,
+                    timeout=60
+                )
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    description = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+                    log(f"LLaVA v1 API-Beschreibung erhalten ({len(description)} Zeichen)", level=1)
+                    
+                    # Speichere die Beschreibung
+                    with open(VISION_CACHE_FILE, "w", encoding="utf-8") as f:
+                        f.write(description)
+                    log(f"Beschreibung in {VISION_CACHE_FILE} gespeichert", level=2)
+                    
+                    return description
+            except Exception as e:
+                log_error(f"Fehler bei LLaVA v1 API-Anfrage: {e}", e)
+                # Fallback auf Legacy-API
+                
+        # Legacy API verwenden - entweder als Fallback oder als Hauptoption
         response = requests.post(
             "http://localhost:11434/api/generate", 
             json=payload,
@@ -343,7 +408,7 @@ def analyze_image_with_llava(image_path):
         
         if response.status_code == 200:
             description = response.json().get("response", "").strip()
-            log(f"LLaVA-Beschreibung erhalten ({len(description)} Zeichen)", level=1)
+            log(f"LLaVA Legacy-API-Beschreibung erhalten ({len(description)} Zeichen)", level=1)
             
             # Speichere die Beschreibung für die nächste Verwendung
             try:
@@ -369,16 +434,48 @@ def identify_content_type(description):
         
     description_lower = description.lower()
     
-    if any(word in description_lower for word in ["code", "programming", "programmier", "entwicklungsumgebung", "editor", "code editor", "entwickler"]):
-        return "code"
-    elif any(word in description_lower for word in ["browser", "website", "webpage", "web page", "web-site", "webseite"]):
-        return "browser"
-    elif any(word in description_lower for word in ["game", "gaming", "playing", "spiel", "videospiel", "spielen", "videogame", "game character"]):
-        return "game"
-    elif any(word in description_lower for word in ["terminal", "console", "konsole", "command line", "kommandozeile", "shell", "bash", "ubuntu"]):
-        return "terminal"
-    elif any(word in description_lower for word in ["document", "dokument", "text", "word", "textdatei", "spreadsheet", "tabelle", "präsentation"]):
-        return "document"
+    # Erweiterte Schlüsselwörter für bessere Kategorisierung
+    code_keywords = ["code", "programming", "programmier", "entwicklungsumgebung", "editor", 
+                    "code editor", "entwickler", "python", "javascript", "java", "c++", "html", 
+                    "css", "ide", "visual studio", "intellij", "github", "git", "repository"]
+    
+    browser_keywords = ["browser", "website", "webpage", "web page", "web-site", "webseite", 
+                       "firefox", "chrome", "edge", "safari", "internet explorer", "url", 
+                       "http", "https", "web browser", "online", "internet"]
+    
+    game_keywords = ["game", "gaming", "playing", "spiel", "videospiel", "spielen", "videogame", 
+                     "game character", "player", "level", "quest", "npc", "character", "console", 
+                     "playstation", "xbox", "nintendo", "mission", "achievement"]
+    
+    terminal_keywords = ["terminal", "console", "konsole", "command line", "kommandozeile", "shell", 
+                        "bash", "ubuntu", "linux", "powershell", "cmd", "command prompt", "ssh", 
+                        "unix", "cli", "befehlszeile", "terminal emulator"]
+    
+    document_keywords = ["document", "dokument", "text", "word", "textdatei", "spreadsheet", 
+                        "tabelle", "präsentation", "excel", "powerpoint", "pdf", "doc", "docx", 
+                        "brief", "artikel", "bericht", "report", "paper", "formular"]
+    
+    # Zählung der Schlüsselwörter in jeder Kategorie
+    code_count = sum(1 for keyword in code_keywords if keyword in description_lower)
+    browser_count = sum(1 for keyword in browser_keywords if keyword in description_lower)
+    game_count = sum(1 for keyword in game_keywords if keyword in description_lower)
+    terminal_count = sum(1 for keyword in terminal_keywords if keyword in description_lower)
+    document_count = sum(1 for keyword in document_keywords if keyword in description_lower)
+    
+    # Bestimme die Kategorie mit den meisten Treffern
+    counts = {
+        "code": code_count,
+        "browser": browser_count,
+        "game": game_count,
+        "terminal": terminal_count,
+        "document": document_count
+    }
+    
+    max_category = max(counts.items(), key=lambda x: x[1])
+    
+    # Wenn mindestens ein Schlüsselwort gefunden wurde, verwende diese Kategorie
+    if max_category[1] > 0:
+        return max_category[0]
     
     return "allgemein"
 
@@ -448,34 +545,73 @@ Sei unterhaltsam und originell. Maximal 2 Sätze. Deutsch."""
 
 # === Ollama-Funktionen ===
 def get_response_from_ollama(prompt, retries=OLLAMA_RETRY_COUNT):
+    """
+    Sendet eine Anfrage an den Ollama-Server und gibt die Antwort zurück.
+    Unterstützt verschiedene API-Versionen (legacy und v1).
+    """
     log(f"Sende an Ollama: {prompt[:50]}...", level=1)
     
     for attempt in range(retries):
         try:
-            # Versuche zuerst das neuere Format für Ollama 0.6.x
-            response = requests.post(
-                OLLAMA_URL,
-                json={
-                    "model": MODEL,
-                    "messages": [{"role": "system", "content": f"Du bist ein hilfreicher Twitch-Bot namens {BOT_NAME}. Antworte immer auf Deutsch, kurz und prägnant."}, {"role": "user", "content": prompt}],
-                    "stream": False
-                },
-                timeout=OLLAMA_TIMEOUT
-            )
+            # AKTUALISIERTE METHODE: Versuche zuerst die konfigurierte API-Version
             
-            if response.status_code == 200:
-                result = response.json()
-                text = result.get("response", "").strip()
-                if text:
-                    log(f"Antwort von Ollama erhalten: {text[:50]}...", level=1)
-                    return text
+            # Versuche v1 Chat-API (OpenAI-kompatibel)
+            if OLLAMA_API_VERSION == "v1":
+                try:
+                    response = requests.post(
+                        OLLAMA_ENDPOINTS["v1"]["chat"],
+                        json={
+                            "model": MODEL,
+                            "messages": [
+                                {"role": "system", "content": f"Du bist ein hilfreicher Twitch-Bot namens {BOT_NAME}. Antworte immer auf Deutsch, kurz und prägnant."},
+                                {"role": "user", "content": prompt}
+                            ],
+                            "stream": False
+                        },
+                        timeout=OLLAMA_TIMEOUT
+                    )
+                    
+                    if response.status_code == 200:
+                        result = response.json()
+                        # OpenAI-kompatible Antwortstruktur
+                        text = result.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+                        if text:
+                            log(f"Antwort von Ollama V1 API erhalten: {text[:50]}...", level=1)
+                            return text
+                except Exception as e:
+                    log_error(f"Fehler bei V1 API-Anfrage, versuche Legacy: {str(e)}", e)
+            
+            # Versuche nächste API-Version: Ollama chat API
+            try:
+                response = requests.post(
+                    OLLAMA_ENDPOINTS["legacy"]["chat"],
+                    json={
+                        "model": MODEL,
+                        "messages": [
+                            {"role": "system", "content": f"Du bist ein hilfreicher Twitch-Bot namens {BOT_NAME}. Antworte immer auf Deutsch, kurz und prägnant."},
+                            {"role": "user", "content": prompt}
+                        ],
+                        "stream": False
+                    },
+                    timeout=OLLAMA_TIMEOUT
+                )
                 
-            # Wenn die erste Methode fehlschlägt, versuche die ältere Methode
+                if response.status_code == 200:
+                    result = response.json()
+                    text = result.get("message", {}).get("content", "").strip()
+                    if text:
+                        log(f"Antwort von Ollama Chat API erhalten: {text[:50]}...", level=1)
+                        return text
+            except Exception as e:
+                log_error(f"Fehler bei Chat API-Anfrage, versuche Generate: {str(e)}", e)
+                
+            # Versuche Legacy-Format als letzte Option
             response = requests.post(
-                OLLAMA_URL,
+                OLLAMA_ENDPOINTS["legacy"]["generate"],
                 json={
                     "model": MODEL,
                     "prompt": prompt,
+                    "system": f"Du bist ein hilfreicher Twitch-Bot namens {BOT_NAME}. Antworte immer auf Deutsch, kurz und prägnant.",
                     "stream": False
                 },
                 timeout=OLLAMA_TIMEOUT
@@ -485,24 +621,47 @@ def get_response_from_ollama(prompt, retries=OLLAMA_RETRY_COUNT):
                 result = response.json()
                 text = result.get("response", "").strip()
                 if text:
-                    log(f"Antwort von Ollama erhalten (altes Format): {text[:50]}...", level=1)
+                    log(f"Antwort von Ollama Generate API erhalten: {text[:50]}...", level=1)
                     return text
                     
             log_error(f"Fehler bei Ollama-Anfrage (Versuch {attempt+1}/{retries}): Status {response.status_code}")
             
-            # Warte etwas länger zwischen den Versuchen
+            # Warte etwas länger zwischen den Versuchen mit exponentiellem Backoff
             if attempt < retries - 1:
-                time.sleep(2 * (attempt + 1))
+                wait_time = 2 * (attempt + 1)
+                log(f"Warte {wait_time}s vor nächstem Versuch...", level=2)
+                time.sleep(wait_time)
                 
         except Exception as e:
             log_error(f"Ausnahme bei Ollama-Anfrage (Versuch {attempt+1}/{retries})", e)
             if attempt < retries - 1:
-                time.sleep(2 * (attempt + 1))
+                wait_time = 2 * (attempt + 1)
+                time.sleep(wait_time)
     
     return None
 
+def check_ollama_server():
+    """Überprüft, ob der Ollama-Server erreichbar ist und gibt die Version zurück"""
+    try:
+        # Versuche erstmal den neuen API-Endpunkt
+        response = requests.get("http://localhost:11434/api/version", timeout=5)
+        if response.status_code == 200:
+            version_info = response.json()
+            return True, version_info.get("version", "unbekannt")
+            
+        # Fallback auf alte Methode
+        response = requests.get("http://localhost:11434/", timeout=5)
+        if response.status_code == 200:
+            return True, "unbekannt"
+            
+        return False, None
+    except Exception as e:
+        log_error(f"Ollama-Server nicht erreichbar: {e}", e)
+        return False, None
+
 # === IRC-Funktionen ===
 def connect_to_twitch():
+    """Stellt eine Verbindung zum Twitch IRC-Server her"""
     global sock, is_connected
     
     with reconnect_lock:
@@ -573,6 +732,7 @@ def connect_to_twitch():
             return False
 
 def send_message(message):
+    """Sendet eine Nachricht an den Twitch-Chat"""
     global is_connected
     
     if not is_connected:
@@ -589,6 +749,7 @@ def send_message(message):
         return False
 
 def send_ping():
+    """Sendet einen PING an den Twitch-Server, um die Verbindung aufrechtzuerhalten"""
     global is_connected
     
     if not is_connected:
@@ -604,27 +765,34 @@ def send_ping():
         return False
 
 def extract_username(message_line):
+    """Extrahiert den Benutzernamen aus einer IRC-Nachricht"""
     # Versuche zuerst, den display-name aus Tags zu extrahieren
     username = ""
     
     if "display-name=" in message_line:
         try:
-            parts = message_line.split("display-name=")[1].split(";")
-            username = parts[0]
+            # Verbesserte Extraktion mit regulärem Ausdruck
+            match = re.search(r'display-name=([^;]+)', message_line)
+            if match:
+                username = match.group(1)
         except:
             pass
     
     # Wenn kein display-name gefunden wurde, versuche die traditionelle Methode
     if not username:
         try:
-            parts = message_line.split("PRIVMSG", 1)[0].split("!")
-            username = parts[0].replace(":", "")
+            match = re.search(r':([^!]+)!', message_line)
+            if match:
+                username = match.group(1)
+            else:
+                username = "unknown_user"
         except:
             username = "unknown_user"
     
     return username
 
 def process_message(user, message):
+    """Verarbeitet eine empfangene Chat-Nachricht"""
     log(f"Nachricht: {user}: {message}")
     
     # Wichtig: Jetzt vergleichen wir mit dem Bot-Namen statt mit NICKNAME
@@ -685,6 +853,7 @@ def process_message(user, message):
 
 # === Kommando-Funktionen ===
 def joke_worker():
+    """Erzeugt einen Witz und sendet ihn an den Chat"""
     prompt = f"Erzähle einen kurzen, lustigen Witz. Mach ihn besonders humorvoll."
     joke = get_response_from_ollama(prompt)
     if joke:
@@ -739,24 +908,28 @@ def scene_comment_worker():
     log(f"Fallback-Bildkommentar gesendet: {fallback_comment[:50]}...")
 
 def send_info():
+    """Sendet Informationen zum aktuellen Spiel und Ort"""
     load_game_state()
     game = game_state.get("spiel", "Unbekannt")
     location = game_state.get("ort", "Unbekannt")
     send_message(f"🎮 Aktuelles Spiel: {game} | 📍 Ort: {location} | ⏱️ Spielzeit: {game_state.get('spielzeit', '00:00:00')}")
 
 def send_stats():
+    """Sendet Statistiken zum aktuellen Spielstand"""
     load_game_state()
     deaths = game_state.get("tode", 0)
     level = game_state.get("level", 1)
     send_message(f"📊 Statistiken: 💀 Tode: {deaths} | 📈 Level: {level} | 🕹️ Spiel: {game_state.get('spiel', 'Unbekannt')}")
 
 def send_help():
+    """Sendet eine Hilfe-Nachricht mit verfügbaren Befehlen"""
     help_message = "📋 Befehle: !witz (zufälliger Witz), !info (Spielinfo), !stats (Statistiken), " + \
                   "!bild/!scene (Kommentar zur aktuellen Szene), !spiel NAME (Spiel ändern), " + \
                   "!ort NAME (Ort ändern), !tod (Tod zählen), !level X (Level setzen), !frag " + BOT_NAME + " ... (direkte Frage an mich)"
     send_message(help_message)
 
 def update_game(game_name, user):
+    """Aktualisiert den Spielnamen im Spielstand"""
     load_game_state()
     old_game = game_state.get("spiel", "Unbekannt")
     game_state["spiel"] = game_name
@@ -764,6 +937,7 @@ def update_game(game_name, user):
     send_message(f"🎮 @{user} hat das Spiel von '{old_game}' zu '{game_name}' geändert!")
 
 def update_location(location, user):
+    """Aktualisiert den aktuellen Ort im Spielstand"""
     load_game_state()
     old_location = game_state.get("ort", "Unbekannt")
     game_state["ort"] = location
@@ -771,6 +945,7 @@ def update_location(location, user):
     send_message(f"📍 @{user} hat den Ort von '{old_location}' zu '{location}' geändert!")
 
 def increment_deaths(user):
+    """Erhöht den Todeszähler"""
     load_game_state()
     game_state["tode"] = game_state.get("tode", 0) + 1
     deaths = game_state["tode"]
@@ -784,6 +959,7 @@ def increment_deaths(user):
     ]))
 
 def update_level(level, user):
+    """Aktualisiert das aktuelle Level im Spielstand"""
     load_game_state()
     old_level = game_state.get("level", 1)
     game_state["level"] = level
@@ -795,11 +971,13 @@ def update_level(level, user):
         send_message(f"📊 @{user} hat das Level auf {level} gesetzt.")
 
 def greeting_worker(user):
+    """Begrüßt einen neuen Zuschauer"""
     greeting = random.choice(BEGRÜSSUNGEN).format(user=user)
     send_message(greeting)
     log(f"Neuer Zuschauer begrüßt: {user}")
 
 def respond_to_question(user, message):
+    """Antwortet auf eine Frage, die den Bot-Namen enthält"""
     prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Der Benutzer {user} hat dich folgendes gefragt: '{message}'. Gib eine kurze, hilfreiche Antwort (max. 200 Zeichen)."
     
     response = get_response_from_ollama(prompt)
@@ -810,6 +988,7 @@ def respond_to_question(user, message):
         send_message(f"@{user} Hmm, ich bin mir nicht sicher, was ich dazu sagen soll. Versuch's mal mit !witz für einen lustigen Witz!")
 
 def respond_to_direct_question(user, question):
+    """Antwortet auf eine direkte Frage mit dem !frag Befehl"""
     prompt = f"Du bist ein Twitch-Bot namens {BOT_NAME}. Beantworte folgende Frage von {user} direkt und präzise (max. 250 Zeichen): '{question}'."
     
     response = get_response_from_ollama(prompt)
@@ -821,6 +1000,7 @@ def respond_to_direct_question(user, question):
 
 # === Thread-Funktionen ===
 def auto_joke_worker():
+    """Thread für automatische Witze in regelmäßigen Abständen"""
     log(f"Automatischer Witz-Thread gestartet - Intervall: {AUTO_JOKE_INTERVAL} Sekunden")
     time.sleep(10)  # Initiale Verzögerung
     
@@ -836,6 +1016,7 @@ def auto_joke_worker():
             time.sleep(1)
 
 def auto_comment_worker():
+    """Thread für automatische Spielkommentare in regelmäßigen Abständen"""
     log(f"Automatischer Kommentar-Thread gestartet - Intervall: {AUTO_COMMENT_INTERVAL} Sekunden")
     time.sleep(30)  # Initiale Verzögerung
     
@@ -865,6 +1046,7 @@ def auto_comment_worker():
             time.sleep(1)
 
 def auto_scene_comment_worker():
+    """Thread für automatische Bildkommentare in regelmäßigen Abständen"""
     global last_scene_comment_time
     
     log(f"Automatischer Bildkommentar-Thread gestartet - Intervall: {AUTO_SCENE_COMMENT_INTERVAL} Sekunden")
@@ -885,6 +1067,7 @@ def auto_scene_comment_worker():
         time.sleep(30)
 
 def command_reminder_worker():
+    """Thread für Befehlserinnerungen in regelmäßigen Abständen"""
     log(f"Befehlserinnerungs-Thread gestartet - Intervall: {COMMAND_REMINDER_INTERVAL} Sekunden")
     time.sleep(120)  # Initiale Verzögerung (2 Minuten nach Start)
     
@@ -907,6 +1090,7 @@ def command_reminder_worker():
             time.sleep(1)
 
 def connection_watchdog():
+    """Überwacht die Verbindung und versucht bei Verbindungsabbrüchen eine Wiederverbindung"""
     global is_connected, last_ping_time
     
     log("Verbindungs-Watchdog gestartet")
@@ -937,6 +1121,7 @@ def connection_watchdog():
         time.sleep(5)  # Kurze Pause
 
 def message_receiver():
+    """Empfängt und verarbeitet eingehende IRC-Nachrichten"""
     global is_connected, last_ping_time
     
     log("Nachrichtenempfänger gestartet")
@@ -1014,6 +1199,14 @@ def main():
         
         # Lade den initialen Spielstand
         load_game_state()
+        
+        # Prüfe Ollama-Server
+        server_running, version = check_ollama_server()
+        if server_running:
+            log(f"Ollama-Server ist erreichbar, Version: {version}")
+        else:
+            log_error("Ollama-Server ist nicht erreichbar! Der Bot wird möglicherweise nicht korrekt funktionieren.")
+            log("Versuche trotzdem fortzufahren...")
         
         # Initialisiere IRC-Verbindung
         if not connect_to_twitch():
