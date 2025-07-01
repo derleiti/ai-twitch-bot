@@ -1,4 +1,3 @@
-# Datei: watch_screenshots.py
 #!/usr/bin/env python3
 import time
 import os
@@ -18,44 +17,14 @@ SEEN_FILES_CACHE = os.path.join(tempfile.gettempdir(), "zephyr_seen_files.txt")
 MAX_CACHE_SIZE = 1000  # Maximale Anzahl von Dateien im Cache
 MAX_SCREENSHOTS = 100  # NEU: Max. 100 Dateien behalten
 
-def send_message_to_platforms(message, exclude_platform=None):
-    """Sendet eine Nachricht an alle verfügbaren Plattformen - ERWEITERT mit Message Dispatcher"""
-    success = False
-    
-    # PRIORITÄT 1: Versuche Message Dispatcher
-    try:
-        from message_dispatcher import queue_message
-        queue_message("vision", "Screenshot-Watcher", message)
-        print(f"✅ [DISPATCHER] Bildkommentar an Message Queue weitergeleitet: {message[:50]}...")
-        return True
-    except ImportError:
-        print("⚠️ Message Dispatcher nicht verfügbar, verwende Fallback...")
-    except Exception as e:
-        print(f"❌ Fehler bei Message Dispatcher: {e}")
-    
-    # PRIORITÄT 2: Versuche Import der Multi-Platform-Bot-Funktionen
+def send_message(message):
     try:
         sys.path.append(BASE_DIR)
-        from multi_platform_bot import send_message_to_platforms as bot_send_platforms
-        return bot_send_platforms(message, exclude_platform)
+        from twitch_ollama_bot import send_message as bot_send_message
+        return bot_send_message(message)
     except ImportError:
-        print("⚠️ Multi-Platform-Bot Funktionen nicht verfügbar...")
-    except Exception as e:
-        print(f"❌ Fehler bei Multi-Platform-Bot: {e}")
-    
-    # PRIORITÄT 3: Fallback: Versuche alte Twitch-Bot-Funktion
-    try:
-        from twitch_ollama_bot import send_message as twitch_send_message
-        return twitch_send_message(message)
-    except ImportError:
-        print("⚠️ Twitch-Bot nicht verfügbar...")
-    except Exception as e:
-        print(f"❌ Fehler bei Twitch-Bot: {e}")
-    
-    # PRIORITÄT 4: Letzter Fallback: Nur ausgeben
-    platform_prefix = "📸 [AUTO] " if not exclude_platform else f"📸 [{exclude_platform.upper()}] "
-    print(f"⚠ Konnte Nachricht nicht senden - Ausgabe: {platform_prefix}{message}")
-    return False
+        print(f"⚠ Konnte send_message nicht importieren - Ausgabe: {message}")
+        return False
 
 def load_seen_files():
     seen_files = set()
@@ -108,42 +77,23 @@ def cleanup_screenshot_dir(max_files=MAX_SCREENSHOTS):
         print(f"⚠ Fehler beim Bereinigen: {e}")
 
 def handle_new_file(file_path):
-    """ERWEITERTE Funktion für neue Dateien mit Message Dispatcher Integration"""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{timestamp}] 📸 Neues Bild erkannt: {file_path}")
     
     try:
-        # Analysiere das Bild ohne Platform-Hint (für alle Plattformen)
         result = analyze_and_comment(file_path)
         if result:
-            # Die analyze_and_comment Funktion sendet bereits über den Message Dispatcher
-            # Falls sie das nicht kann, hat sie bereits Fallback-Methoden verwendet
-            print(f"[{timestamp}] ✅ Bildanalyse und Weiterleitung erfolgreich")
+            send_message(f"👁 {result[:450]}")
             return True
         else:
             print(f"[{timestamp}] ⚠ Analyse oder Antwort fehlgeschlagen.")
-            
-            # Fallback: Direkte Sendung einer Standard-Nachricht
-            fallback_message = "📸 Neuer Screenshot erkannt, aber Analyse fehlgeschlagen."
-            success = send_message_to_platforms(fallback_message)
-            return success
-            
     except Exception as e:
         print(f"[{timestamp}] ❌ Fehler bei Bildverarbeitung: {e}")
-        
-        # Fallback: Sende Fehlermeldung
-        try:
-            error_message = "📸 Screenshot erkannt, aber Verarbeitung fehlgeschlagen."
-            send_message_to_platforms(error_message)
-        except:
-            pass
     
     return False
 
 def main():
-    """ERWEITERTE Hauptfunktion mit Message Dispatcher Integration"""
-    print(f"👁 Multi-Platform Screenshot-Watcher startet - Überwache: {SCREENSHOT_DIR}")
-    print("🔗 Integriert mit Message Dispatcher für optimale Multi-Platform-Unterstützung")
+    print(f"👁 Screenshot-Watcher startet - Überwache: {SCREENSHOT_DIR}")
     
     if not os.path.exists(SCREENSHOT_DIR):
         os.makedirs(SCREENSHOT_DIR, exist_ok=True)
@@ -154,45 +104,32 @@ def main():
     
     last_save_time = time.time()
     
-    # Test der Message Dispatcher Verbindung
-    try:
-        from message_dispatcher import get_dispatcher_stats
-        stats = get_dispatcher_stats()
-        print(f"📊 Message Dispatcher Status: {len(stats.get('platforms_registered', []))} Plattformen registriert")
-    except ImportError:
-        print("⚠️ Message Dispatcher nicht geladen - verwende Fallback-Methoden")
-    
     try:
         while True:
             current_time = time.time()
             
-            # Speichere Cache regelmäßig
-            if current_time - last_save_time > 300:  # Alle 5 Minuten
+            if current_time - last_save_time > 300:
                 save_seen_files(seen_files)
                 last_save_time = current_time
             
             try:
-                # Prüfe die letzten 10 Dateien für neue Screenshots
                 files = sorted([f for f in os.listdir(SCREENSHOT_DIR) 
                                 if f.lower().endswith(('.jpg', '.jpeg', '.png'))])
                 
-                for f in files[-10:]:  # Nur die neuesten 10 Dateien prüfen
+                for f in files[-10:]:
                     full_path = os.path.join(SCREENSHOT_DIR, f)
                     file_hash = get_file_hash(full_path)
                     
                     if file_hash not in seen_files:
                         seen_files.add(file_hash)
-                        
-                        # Verarbeite neues Bild
                         if handle_new_file(full_path):
-                            cleanup_screenshot_dir()  # Auto-Cleanup direkt danach
-                            save_seen_files(seen_files)  # Speichere nach erfolgreicher Verarbeitung
+                            cleanup_screenshot_dir()  # NEU: Auto-Cleanup direkt danach
+                            save_seen_files(seen_files)
                 
             except Exception as e:
                 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 print(f"[{timestamp}] ❌ Fehler beim Durchsuchen des Verzeichnisses: {e}")
             
-            # Warte 3 Sekunden vor nächster Prüfung
             time.sleep(3)
             
     except KeyboardInterrupt:
@@ -201,7 +138,7 @@ def main():
         print(f"❌ Unerwarteter Fehler: {e}")
     finally:
         save_seen_files(seen_files)
-        print("💾 Cache gespeichert. Multi-Platform Screenshot-Watcher wird beendet.")
+        print("💾 Cache gespeichert. Programm wird beendet.")
 
 if __name__ == "__main__":
     main()

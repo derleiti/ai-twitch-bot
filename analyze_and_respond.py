@@ -1,4 +1,3 @@
-# Datei: analyze_and_respond.py
 #!/usr/bin/env python3
 import os
 import requests
@@ -303,7 +302,7 @@ Sei unterhaltsam und originell. Maximal 2 Sätze. Deutsch."""
     # Fallback: zufälliger Standardkommentar
     return random.choice(SCENE_KOMMENTARE)
 
-def analyze_and_comment(image_path, platform_hint=None):
+def analyze_and_comment(image_path):
     """Analysiert ein Bild und generiert einen Kommentar dazu"""
     # Bild analysieren
     scene_description = get_vision_description(image_path)
@@ -315,70 +314,14 @@ def analyze_and_comment(image_path, platform_hint=None):
     # Kommentar generieren
     comment = generate_chat_comment(scene_description)
     
-    if comment:
-        print(f"✅ Bildkommentar generiert: {comment[:50]}...")
-        
-        # NEUE FUNKTION: Sende über Message Dispatcher
-        try:
-            # Versuche den Message Dispatcher zu verwenden
-            from message_dispatcher import queue_message
-            queue_message("vision", "Screenshot-Watcher", comment)
-            print("📨 Bildkommentar an Message Dispatcher weitergeleitet")
-            return comment
-        except ImportError:
-            print("⚠️ Message Dispatcher nicht verfügbar, verwende Fallback")
-            # Fallback: Versuche direkt zu senden
-            return send_message_fallback(comment, platform_hint)
-    
-    return None
-
-def send_message_fallback(message, platform_hint=None):
-    """Fallback-Methode für das Senden von Nachrichten ohne Dispatcher"""
-    print("🔄 Verwende Fallback-Sendung...")
-    
-    # Versuche den Multi-Platform-Bot zu verwenden
-    try:
-        import sys
-        sys.path.append(BASE_DIR)
-        from multi_platform_bot import send_message_to_platforms
-        
-        platform_emoji = "👁️"
-        formatted_message = f"{platform_emoji} {message}"
-        
-        success = send_message_to_platforms(formatted_message)
-        if success:
-            print(f"✅ Nachricht über Multi-Platform-Bot gesendet: {formatted_message[:50]}...")
-        else:
-            print("❌ Multi-Platform-Bot konnte Nachricht nicht senden")
-        return message
-        
-    except ImportError:
-        print("⚠️ Multi-Platform-Bot nicht verfügbar")
-        
-    # Versuche den alten Twitch-Bot
-    try:
-        from twitch_ollama_bot import send_message as twitch_send_message
-        success = twitch_send_message(f"👁️ {message}")
-        if success:
-            print(f"✅ Nachricht über Twitch-Bot gesendet: {message[:50]}...")
-        return message
-    except ImportError:
-        print("⚠️ Twitch-Bot nicht verfügbar")
-    
-    # Letzter Fallback: Nur ausgeben
-    print(f"⚠️ Konnte Nachricht nicht senden - Ausgabe: 👁️ {message}")
-    return message
+    return comment
 
 # Für Testzwecke
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:
         image_path = sys.argv[1]
-        platform = sys.argv[2] if len(sys.argv) > 2 else None
-        
         print(f"🔍 Analysiere Bild: {image_path}")
-        if platform:
-            print(f"🎯 Platform-Hint: {platform}")
         
         # Bild analysieren
         scene_description = get_vision_description(image_path)
@@ -390,7 +333,7 @@ if __name__ == "__main__":
             print(f"📊 Erkannter Content-Typ: {content_type}")
             
             # Kommentar generieren
-            comment = analyze_and_comment(image_path, platform)
+            comment = generate_chat_comment(scene_description)
             if comment:
                 print(f"💬 Generierter Kommentar:\n{comment}")
             else:
@@ -398,5 +341,4 @@ if __name__ == "__main__":
         else:
             print("❌ Konnte keine Bildbeschreibung erhalten")
     else:
-        print("Bitte Bildpfad angeben: python analyze_and_respond.py /pfad/zum/bild.jpg [platform]")
-        print("Platform kann 'twitch' oder 'youtube' sein (optional)")
+        print("Bitte Bildpfad angeben: python analyze_and_respond.py /pfad/zum/bild.jpg")
