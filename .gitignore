@@ -1,7 +1,7 @@
 __pycache__
+.env.backup
 venv
 screenshots/
-backup-old-files/backups/.env.20250510110747
 .env.backup
 .env
 
