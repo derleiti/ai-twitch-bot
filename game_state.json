@@ -1,7 +1,5 @@
 {
-  "spiel": "Linux",
-  "ort": "",
-  "tode": 0,
-  "level": 1,
-  "spielzeit": "00:00:00"
+  "game": "Linux",
+  "mood": "Coding",
+  "player_status": "aktiv"
 }
