@@ -1,5 +1,0 @@
-Das Bild zeigt eine computer-gestützte Umgebung mit einer komplizierten Grafik-Oberfläche. Es gibt verschiedene Fenster und Programm-Fenster, die in voneinander verschachtelt sind. Jedes Fenster enthält Informationen, die jedoch nicht lesbar sind.
-
-Die Oberfläche zeigt mehrere Schichten von Farben und Texturen, die zusammen ein kunstvolles Muster bilden. Es handelt sich um eine virtuelle Umgebung, wie sie in Computersystemen verwendet wird, um die Benutzerarbeit und Anwendungen auf dem Bild zu visualisieren.
-
-Im Hintergrund sind mehrere weitere Bilder zu sehen, die den Eingangspunkt einer Webanwendung darstellen. Sie zeigen eine Warteschlange mit einem Nutzen, der in einer virtuellen Umgebung steht und sich für einen Dienst im Kundendienst meldet.
