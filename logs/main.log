@@ -1,0 +1,35 @@
+# Log started at 2025-07-03 11:05:07.834311
+[2025-07-03 11:05:07] [INFO] [MAIN] PID-Datei erstellt: 2577128
+[2025-07-03 11:05:07] [INFO] [MAIN] Zephyr Multi-Bot initialisiert
+[2025-07-03 11:05:07] [INFO] [MAIN] Starte Zephyr Multi-Bot...
+[2025-07-03 11:05:07] [INFO] [MAIN] Twitch-Client gestartet
+[2025-07-03 11:05:07] [INFO] [MAIN] YouTube-Client gestartet
+[2025-07-03 11:05:07] [INFO] [MAIN] Automatische Witze gestartet
+[2025-07-03 11:05:07] [INFO] [MAIN] Bot erfolgreich gestartet
+[2025-07-03 15:56:44] [INFO] [MAIN] Signal 15 empfangen, beende Bot...
+[2025-07-03 15:56:44] [INFO] [MAIN] Stoppe Zephyr Multi-Bot...
+[2025-07-03 15:56:44] [INFO] [MAIN] PID-Datei entfernt
+[2025-07-03 15:56:44] [INFO] [MAIN] Bot gestoppt
+[2025-07-03 15:56:44] [INFO] [MAIN] Stoppe Zephyr Multi-Bot...
+[2025-07-03 15:56:44] [INFO] [MAIN] Bot gestoppt
+[2025-07-03 15:56:44] [INFO] [MAIN] PID-Datei erstellt: 3554869
+[2025-07-03 15:56:44] [INFO] [MAIN] Zephyr Multi-Bot initialisiert
+[2025-07-03 15:56:44] [INFO] [MAIN] Starte Zephyr Multi-Bot...
+[2025-07-03 15:56:44] [INFO] [MAIN] Twitch-Client gestartet
+[2025-07-03 15:56:44] [INFO] [MAIN] YouTube-Client gestartet
+[2025-07-03 15:56:44] [INFO] [MAIN] Automatische Witze gestartet
+[2025-07-03 15:56:44] [INFO] [MAIN] Bot erfolgreich gestartet
+[2025-07-05 00:06:24] [ERROR] [MAIN] Fehler bei Ollama-Anfrage: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
+[2025-07-06 17:56:49] [INFO] [MAIN] Signal 15 empfangen, beende Bot...
+[2025-07-06 17:56:49] [INFO] [MAIN] Stoppe Zephyr Multi-Bot...
+[2025-07-06 17:56:49] [INFO] [MAIN] PID-Datei entfernt
+[2025-07-06 17:56:49] [INFO] [MAIN] Bot gestoppt
+[2025-07-06 17:56:49] [INFO] [MAIN] Stoppe Zephyr Multi-Bot...
+[2025-07-06 17:56:49] [INFO] [MAIN] Bot gestoppt
+[2025-07-06 17:56:49] [INFO] [MAIN] PID-Datei erstellt: 3181742
+[2025-07-06 17:56:49] [INFO] [MAIN] Zephyr Multi-Bot initialisiert
+[2025-07-06 17:56:49] [INFO] [MAIN] Starte Zephyr Multi-Bot...
+[2025-07-06 17:56:49] [INFO] [MAIN] Twitch-Client gestartet
+[2025-07-06 17:56:49] [INFO] [MAIN] YouTube-Client gestartet
+[2025-07-06 17:56:49] [INFO] [MAIN] Automatische Witze gestartet
+[2025-07-06 17:56:49] [INFO] [MAIN] Bot erfolgreich gestartet

@@ -1,469 +1,912 @@
 #!/usr/bin/env python3
 """
-Zephyr Multi-Platform Bot v2.0 - Unified Twitch + YouTube Bot
-Optimierter Starter für gleichzeitigen Betrieb beider Plattformen
+Zephyr Multi-Platform Bot v2.0
+Vollständig integrierter Twitch + YouTube Bot mit LLaVA Bildanalyse
 """
+
 import os
 import sys
 import time
-import signal
-import threading
-import traceback
-import subprocess
 import socket
+import threading
+import json
 import re
+import requests
+import base64
+import hashlib
+import signal
+import random
 from datetime import datetime
+from collections import deque
 from dotenv import load_dotenv
 
 # Lade Umgebungsvariablen
 load_dotenv()
 
-# Lokale Imports
-try:
-    from enhanced_message_dispatcher import EnhancedMessageDispatcher, get_dispatcher
-    from youtube_chat_reader import YouTubeChatReader
-except ImportError as e:
-    print(f"❌ Import-Fehler: {e}")
-    print("Stelle sicher, dass enhanced_message_dispatcher.py und youtube_chat_reader.py existieren.")
-    sys.exit(1)
-
-# Basis-Konfiguration
+# === KONFIGURATION ===
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+SCREENSHOTS_DIR = os.path.join(BASE_DIR, "screenshots")
+GAME_STATE_FILE = os.path.join(BASE_DIR, "game_state.json")
 PID_FILE = os.path.join(BASE_DIR, "zephyr_multi_bot.pid")
+VISION_CACHE_FILE = os.path.join(BASE_DIR, "latest_vision.txt")
+
+# Erstelle Verzeichnisse
+os.makedirs(LOG_DIR, exist_ok=True)
+os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
 # Bot-Konfiguration
+BOT_NAME = os.getenv("BOT_NAME", "zephyr")
 ENABLE_TWITCH = os.getenv("ENABLE_TWITCH", "true").lower() == "true"
 ENABLE_YOUTUBE = os.getenv("ENABLE_YOUTUBE", "true").lower() == "true"
 ENABLE_VISION = os.getenv("ENABLE_VISION", "true").lower() == "true"
 
-class ZephyrMultiBot:
-    def __init__(self):
-        self.running = False
-        self.components = {}
-        self.threads = []
-        
-        # Initialisiere Enhanced Dispatcher
-        self.dispatcher = get_dispatcher()
-        
-        self.log("🤖 Zephyr Multi-Platform Bot v2.0 initialisiert")
-    
-    def log(self, message, level="INFO"):
-        """Zentrale Logging-Funktion"""
-        timestamp = datetime.now().strftime("%H:%M:%S")
-        
-        if level == "SUCCESS":
-            print(f"✅ [{timestamp}] {message}")
-        elif level == "WARNING":
-            print(f"⚠️  [{timestamp}] {message}")
-        elif level == "ERROR":
-            print(f"❌ [{timestamp}] {message}")
-        else:
-            print(f"ℹ️  [{timestamp}] {message}")
-    
-    def create_pid_file(self):
-        """Erstellt PID-Datei"""
-        try:
-            with open(PID_FILE, 'w') as f:
-                f.write(str(os.getpid()))
-            self.log(f"PID-Datei erstellt: {os.getpid()}")
-        except Exception as e:
-            self.log(f"Fehler beim Erstellen der PID-Datei: {e}", "ERROR")
-    
-    def remove_pid_file(self):
-        """Entfernt PID-Datei"""
-        try:
-            if os.path.exists(PID_FILE):
-                os.remove(PID_FILE)
-                self.log("PID-Datei entfernt")
-        except Exception as e:
-            self.log(f"Fehler beim Entfernen der PID-Datei: {e}", "ERROR")
-    
-    def setup_signal_handlers(self):
-        """Richtet Signal-Handler ein für sauberes Beenden"""
-        def signal_handler(signum, frame):
-            self.log(f"Signal {signum} empfangen, beende Bot...")
-            self.stop()
-            sys.exit(0)
-        
-        signal.signal(signal.SIGINT, signal_handler)
-        signal.signal(signal.SIGTERM, signal_handler)
-    
-    def check_dependencies(self):
-        """Prüft Abhängigkeiten und Konfiguration"""
-        self.log("Prüfe Abhängigkeiten...")
-        
-        missing_deps = []
-        
-        # Prüfe Ollama-Server
-        try:
-            import requests
-            response = requests.get("http://localhost:11434/api/version", timeout=5)
-            if response.status_code == 200:
-                version_info = response.json()
-                self.log(f"Ollama-Server erreichbar: {version_info.get('version', 'unbekannt')}", "SUCCESS")
-            else:
-                missing_deps.append("Ollama-Server nicht erreichbar")
-        except Exception as e:
-            missing_deps.append(f"Ollama-Server: {str(e)}")
-        
-        # Prüfe Twitch-Konfiguration
-        if ENABLE_TWITCH:
-            twitch_config = ["BOT_USERNAME", "OAUTH_TOKEN", "CHANNEL"]
-            missing_twitch = [c for c in twitch_config if not os.getenv(c)]
-            if missing_twitch:
-                missing_deps.extend([f"Twitch: {c}" for c in missing_twitch])
-            else:
-                self.log("Twitch-Konfiguration OK", "SUCCESS")
-        
-        # Prüfe YouTube-Konfiguration
-        if ENABLE_YOUTUBE:
-            youtube_config = ["YOUTUBE_API_KEY", "YOUTUBE_CHANNEL_ID"]
-            missing_youtube = [c for c in youtube_config if not os.getenv(c)]
-            if missing_youtube:
-                missing_deps.extend([f"YouTube: {c}" for c in missing_youtube])
-            else:
-                self.log("YouTube-Konfiguration OK", "SUCCESS")
-        
-        # Prüfe Screenshots-Verzeichnis
-        if ENABLE_VISION:
-            screenshots_dir = os.path.join(BASE_DIR, "screenshots")
-            if not os.path.exists(screenshots_dir):
-                os.makedirs(screenshots_dir, exist_ok=True)
-                self.log(f"Screenshots-Verzeichnis erstellt: {screenshots_dir}")
-        
-        if missing_deps:
-            self.log("❌ Fehlende Abhängigkeiten:", "ERROR")
-            for dep in missing_deps:
-                self.log(f"   - {dep}", "ERROR")
-            return False
-        
-        self.log("Alle Abhängigkeiten erfüllt", "SUCCESS")
-        return True
-    
-    def start_twitch_component(self):
-        """Startet die Twitch-Komponente als integrierten IRC-Client"""
-        if not ENABLE_TWITCH:
-            self.log("Twitch-Integration deaktiviert")
-            return None
-        
-        try:
-            self.log("Starte Twitch-Komponente...")
-            
-            # Erstelle einen einfachen Twitch-Adapter
-            twitch_adapter = SimpleTwitchAdapter(self.dispatcher)
-            
-            if twitch_adapter.start():
-                self.components["twitch"] = twitch_adapter
-                self.log("Twitch-Komponente erfolgreich gestartet", "SUCCESS")
-                return twitch_adapter
-            else:
-                self.log("Fehler beim Starten der Twitch-Komponente", "ERROR")
-                return None
-                
-        except Exception as e:
-            self.log(f"Exception beim Starten der Twitch-Komponente: {e}", "ERROR")
-            return None
-    
-    def start_youtube_component(self):
-        """Startet die YouTube-Komponente"""
-        if not ENABLE_YOUTUBE:
-            self.log("YouTube-Integration deaktiviert")
-            return None
-        
-        try:
-            self.log("Starte YouTube-Komponente...")
-            
-            youtube_reader = YouTubeChatReader(self.dispatcher)
-            
-            # Registriere YouTube-Sender beim Dispatcher
-            self.dispatcher.register_sender("youtube", youtube_reader.send_message)
-            
-            if youtube_reader.start():
-                self.components["youtube"] = youtube_reader
-                self.log("YouTube-Komponente erfolgreich gestartet", "SUCCESS")
-                return youtube_reader
-            else:
-                self.log("Fehler beim Starten der YouTube-Komponente", "ERROR")
-                return None
-                
-        except Exception as e:
-            self.log(f"Exception beim Starten der YouTube-Komponente: {e}", "ERROR")
-            return None
-    
-    def start_vision_component(self):
-        """Startet die Bildanalyse-Komponente"""
-        if not ENABLE_VISION:
-            self.log("Bildanalyse deaktiviert")
-            return None
-        
-        try:
-            self.log("Starte Bildanalyse-Komponente...")
-            
-            # Vision ist bereits im Enhanced Dispatcher integriert
-            self.log("Bildanalyse-Komponente läuft im Dispatcher", "SUCCESS")
-            return True
-                
-        except Exception as e:
-            self.log(f"Exception beim Starten der Bildanalyse: {e}", "ERROR")
-            return None
-    
-    def monitor_components(self):
-        """Überwacht alle Komponenten"""
-        while self.running:
-            try:
-                # Prüfe Status aller Komponenten
-                for name, component in list(self.components.items()):
-                    if hasattr(component, 'running') and not component.running:
-                        self.log(f"Komponente {name} nicht mehr aktiv", "WARNING")
-                        
-                        # Neustart-Logik könnte hier implementiert werden
-                        # Momentan nur logging
-                
-                time.sleep(30)  # Prüfe alle 30 Sekunden
-                
-            except Exception as e:
-                self.log(f"Fehler beim Überwachen: {e}", "ERROR")
-                time.sleep(10)
-    
-    def print_status(self):
-        """Gibt den aktuellen Status aus"""
-        print("\n" + "="*50)
-        print("🤖 ZEPHYR MULTI-PLATFORM BOT STATUS")
-        print("="*50)
-        
-        # Komponenten-Status
-        print(f"🎮 Twitch:  {'✅ Aktiv' if 'twitch' in self.components else '❌ Inaktiv'}")
-        print(f"🎥 YouTube: {'✅ Aktiv' if 'youtube' in self.components else '❌ Inaktiv'}")
-        print(f"👁️  Vision:  {'✅ Aktiv' if ENABLE_VISION else '❌ Inaktiv'}")
-        
-        # Dispatcher-Statistiken
-        if self.dispatcher:
-            stats = self.dispatcher.stats
-            uptime = int(time.time() - stats["start_time"])
-            hours = uptime // 3600
-            minutes = (uptime % 3600) // 60
-            
-            print(f"\n📊 STATISTIKEN:")
-            print(f"   Nachrichten: {stats['total_messages']} (Twitch: {stats['twitch_messages']}, YouTube: {stats['youtube_messages']})")
-            print(f"   Verarbeitet: {stats['processed_messages']}")
-            print(f"   Bildanalysen: {stats['vision_updates']}")
-            print(f"   Uptime: {hours}h {minutes}m")
-        
-        print("="*50 + "\n")
-    
-    def start(self):
-        """Startet den Multi-Platform Bot"""
-        self.log("🚀 Starte Zephyr Multi-Platform Bot...")
-        
-        # Prüfe Abhängigkeiten
-        if not self.check_dependencies():
-            self.log("Abhängigkeiten nicht erfüllt, beende Bot", "ERROR")
-            return False
-        
-        # Setup
-        self.create_pid_file()
-        self.setup_signal_handlers()
-        self.running = True
-        
-        # Starte Enhanced Dispatcher
-        self.dispatcher.start()
-        self.log("Enhanced Message Dispatcher gestartet", "SUCCESS")
-        
-        # Starte Komponenten
-        self.start_twitch_component()
-        self.start_youtube_component()
-        self.start_vision_component()
-        
-        # Starte Monitor-Thread
-        monitor_thread = threading.Thread(target=self.monitor_components)
-        monitor_thread.daemon = True
-        monitor_thread.start()
-        self.threads.append(monitor_thread)
-        
-        # Status ausgeben
-        time.sleep(3)
-        self.print_status()
-        
-        return True
-    
-    def stop(self):
-        """Stoppt den Multi-Platform Bot"""
-        if not self.running:
-            return
-        
-        self.log("🛑 Stoppe Zephyr Multi-Platform Bot...")
-        self.running = False
-        
-        # Stoppe alle Komponenten
-        for name, component in self.components.items():
-            try:
-                if hasattr(component, 'stop'):
-                    component.stop()
-                    self.log(f"Komponente {name} gestoppt")
-            except Exception as e:
-                self.log(f"Fehler beim Stoppen von {name}: {e}", "ERROR")
-        
-        # Stoppe Dispatcher
-        if self.dispatcher:
-            self.dispatcher.stop()
-            self.log("Enhanced Dispatcher gestoppt")
-        
-        # Warte auf Threads
-        for thread in self.threads:
-            try:
-                thread.join(timeout=5)
-            except:
-                pass
-        
-        # Entferne PID-Datei
-        self.remove_pid_file()
-        
-        self.log("🏁 Multi-Platform Bot gestoppt", "SUCCESS")
-    
-    def run(self):
-        """Hauptlaufschleife"""
-        if not self.start():
-            return
-        
-        try:
-            self.log("🎯 Bot läuft! (Ctrl+C zum Beenden)")
-            
-            # Status-Updates alle 10 Minuten
-            last_status = time.time()
-            
-            while self.running:
-                current_time = time.time()
-                
-                # Status-Update
-                if current_time - last_status > 600:  # 10 Minuten
-                    self.print_status()
-                    last_status = current_time
-                
-                time.sleep(5)
-                
-        except KeyboardInterrupt:
-            self.log("Beendet durch Benutzer")
-        except Exception as e:
-            self.log(f"Unerwarteter Fehler: {e}", "ERROR")
-        finally:
-            self.stop()
+# Twitch-Konfiguration
+TWITCH_SERVER = "irc.chat.twitch.tv"
+TWITCH_PORT = 6667
+TWITCH_NICKNAME = os.getenv("BOT_USERNAME", "")
+TWITCH_TOKEN = os.getenv("OAUTH_TOKEN", "")
+TWITCH_CHANNEL = os.getenv("CHANNEL", "")
 
-class SimpleTwitchAdapter:
-    """Vereinfachter Twitch-Adapter für IRC-Integration"""
+# YouTube-Konfiguration
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "")
+YOUTUBE_CHANNEL_ID = os.getenv("YOUTUBE_CHANNEL_ID", "")
+YOUTUBE_BOT_NAME = os.getenv("YOUTUBE_BOT_NAME", "ZephyrBot")
+
+# Ollama-Konfiguration
+OLLAMA_BASE_URL = "http://localhost:11434"
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "zephyr")
+VISION_MODEL = os.getenv("VISION_MODEL", "llava")
+
+# Timing-Konfiguration
+SCREENSHOT_ANALYSIS_INTERVAL = int(os.getenv("SCREENSHOT_ANALYSIS_INTERVAL", "30"))
+JOKE_INTERVAL = int(os.getenv("JOKE_INTERVAL", "300"))
+YOUTUBE_POLLING_INTERVAL = int(os.getenv("YOUTUBE_POLLING_INTERVAL", "10"))
+
+# === LOGGING ===
+def setup_logging():
+    """Setup Logging-System"""
+    global main_log, twitch_log, youtube_log, vision_log
     
-    def __init__(self, dispatcher):
-        self.dispatcher = dispatcher
-        self.running = False
-        self.irc_thread = None
-        self.sock = None
+    main_log = os.path.join(LOG_DIR, "main.log")
+    twitch_log = os.path.join(LOG_DIR, "twitch.log")
+    youtube_log = os.path.join(LOG_DIR, "youtube.log")
+    vision_log = os.path.join(LOG_DIR, "vision.log")
+    
+    # Erstelle Log-Dateien falls nicht vorhanden
+    for log_file in [main_log, twitch_log, youtube_log, vision_log]:
+        if not os.path.exists(log_file):
+            with open(log_file, 'w') as f:
+                f.write(f"# Log started at {datetime.now()}\n")
+
+def log_message(message, level="INFO", category="MAIN"):
+    """Zentrale Logging-Funktion"""
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    formatted_message = f"[{timestamp}] [{level}] [{category}] {message}"
+    
+    print(formatted_message)
+    
+    # Wähle Log-Datei basierend auf Kategorie
+    log_file = main_log
+    if category == "TWITCH":
+        log_file = twitch_log
+    elif category == "YOUTUBE":
+        log_file = youtube_log
+    elif category == "VISION":
+        log_file = vision_log
+    
+    try:
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(f"{formatted_message}\n")
+    except Exception as e:
+        print(f"Logging-Fehler: {e}")
+
+# === LLAVA BILDANALYSE ===
+class LLaVAAnalyzer:
+    def __init__(self):
+        self.seen_files = set()
+        self.max_cache_size = 100
+    
+    def get_file_hash(self, file_path):
+        """Erstelle Hash für Datei"""
+        try:
+            mtime = os.path.getmtime(file_path)
+            file_size = os.path.getsize(file_path)
+            hash_str = f"{file_path}_{mtime}_{file_size}"
+            return hashlib.md5(hash_str.encode()).hexdigest()
+        except Exception:
+            return hashlib.md5(file_path.encode()).hexdigest()
+    
+    def get_latest_screenshot(self):
+        """Finde neuesten Screenshot"""
+        try:
+            screenshots = [
+                os.path.join(SCREENSHOTS_DIR, f)
+                for f in os.listdir(SCREENSHOTS_DIR)
+                if f.lower().endswith(('.png', '.jpg', '.jpeg'))
+            ]
+            
+            if not screenshots:
+                return None
+            
+            # Sortiere nach Änderungszeit
+            screenshots.sort(key=os.path.getmtime, reverse=True)
+            return screenshots[0]
+        except Exception as e:
+            log_message(f"Fehler beim Finden von Screenshots: {e}", "ERROR", "VISION")
+            return None
+    
+    def analyze_image(self, image_path):
+        """Analysiere Bild mit LLaVA"""
+        try:
+            with open(image_path, "rb") as f:
+                img_b64 = base64.b64encode(f.read()).decode("utf-8")
+            
+            payload = {
+                "model": VISION_MODEL,
+                "prompt": "Beschreibe kurz und prägnant, was auf diesem Bild zu sehen ist. Maximal 2 Sätze.",
+                "images": [img_b64],
+                "stream": False
+            }
+            
+            response = requests.post(
+                f"{OLLAMA_BASE_URL}/api/generate",
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                description = result.get("response", "").strip()
+                
+                if description:
+                    # Speichere Beschreibung für Cache
+                    with open(VISION_CACHE_FILE, "w", encoding="utf-8") as f:
+                        f.write(description)
+                    
+                    log_message(f"LLaVA-Analyse erfolgreich: {len(description)} Zeichen", "INFO", "VISION")
+                    return description
+            
+            log_message(f"LLaVA-Fehler: Status {response.status_code}", "ERROR", "VISION")
+            return None
+            
+        except Exception as e:
+            log_message(f"Fehler bei LLaVA-Analyse: {e}", "ERROR", "VISION")
+            return None
+    
+    def summarize_llava_response(self, description):
+        """Fasse LLaVA-Response zusammen"""
+        if not description:
+            return "Keine Bildbeschreibung verfügbar"
         
-        # Twitch-Konfiguration
-        self.server = "irc.chat.twitch.tv"
-        self.port = 6667
-        self.nickname = os.getenv("BOT_USERNAME", "")
-        self.token = os.getenv("OAUTH_TOKEN", "")
-        self.channel = os.getenv("CHANNEL", "")
-        self.bot_name = os.getenv("BOT_NAME", "zephyr")
+        # Kürze auf 2 Sätze
+        sentences = re.split(r'[.!?]+', description.strip())
+        summary = '. '.join(sentences[:2]).strip()
+        
+        if not summary.endswith('.'):
+            summary += '.'
+        
+        # Füge Kontext-Tag hinzu
+        tags = {
+            "spiel": "🎮",
+            "game": "🎮",
+            "menu": "📋",
+            "code": "💻",
+            "browser": "🌐",
+            "terminal": "⌨️",
+            "desktop": "🖥️"
+        }
+        
+        tag = "📸"
+        description_lower = description.lower()
+        for keyword, emoji in tags.items():
+            if keyword in description_lower:
+                tag = emoji
+                break
+        
+        return f"{tag} {summary}"
+    
+    def check_for_new_screenshot(self):
+        """Prüfe auf neue Screenshots"""
+        screenshot = self.get_latest_screenshot()
+        if not screenshot:
+            return None
+        
+        file_hash = self.get_file_hash(screenshot)
+        if file_hash in self.seen_files:
+            return None
+        
+        self.seen_files.add(file_hash)
+        
+        # Cache-Management
+        if len(self.seen_files) > self.max_cache_size:
+            # Entferne älteste Einträge
+            self.seen_files = set(list(self.seen_files)[-self.max_cache_size:])
+        
+        return screenshot
+
+# === GAME STATE ===
+class GameStateManager:
+    def __init__(self):
+        self.state = self.load_game_state()
+    
+    def load_game_state(self):
+        """Lade Spielstand"""
+        try:
+            if os.path.exists(GAME_STATE_FILE):
+                with open(GAME_STATE_FILE, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            else:
+                # Erstelle Standard-Spielstand
+                default_state = {
+                    "game": "Unbekannt",
+                    "mood": "Neutral",
+                    "player_status": "aktiv"
+                }
+                self.save_game_state(default_state)
+                return default_state
+        except Exception as e:
+            log_message(f"Fehler beim Laden des Spielstands: {e}", "ERROR", "MAIN")
+            return {"game": "Unbekannt", "mood": "Neutral", "player_status": "aktiv"}
+    
+    def save_game_state(self, state):
+        """Speichere Spielstand"""
+        try:
+            with open(GAME_STATE_FILE, 'w', encoding='utf-8') as f:
+                json.dump(state, f, indent=2, ensure_ascii=False)
+            self.state = state
+        except Exception as e:
+            log_message(f"Fehler beim Speichern des Spielstands: {e}", "ERROR", "MAIN")
+    
+    def get_context_string(self):
+        """Hole Kontext-String für Chat"""
+        return f"[{self.state.get('game', 'Unbekannt')} | {self.state.get('mood', 'Neutral')}]"
+
+# === TWITCH CLIENT ===
+class TwitchClient:
+    def __init__(self, message_callback):
+        self.message_callback = message_callback
+        self.sock = None
+        self.running = False
+        self.connected = False
+        self.thread = None
     
     def start(self):
-        """Startet den Twitch-Adapter"""
-        try:
-            # Registriere Sender beim Dispatcher
-            self.dispatcher.register_sender("twitch", self.send_message)
-            
-            # Starte IRC-Thread
-            self.running = True
-            self.irc_thread = threading.Thread(target=self.irc_worker)
-            self.irc_thread.daemon = True
-            self.irc_thread.start()
-            
-            return True
-        except Exception as e:
-            print(f"Fehler beim Starten des Twitch-Adapters: {e}")
+        """Starte Twitch-Client"""
+        if not ENABLE_TWITCH or not TWITCH_NICKNAME or not TWITCH_TOKEN:
+            log_message("Twitch deaktiviert oder unvollständige Konfiguration", "WARNING", "TWITCH")
             return False
+        
+        self.running = True
+        self.thread = threading.Thread(target=self._run)
+        self.thread.daemon = True
+        self.thread.start()
+        return True
     
-    def irc_worker(self):
-        """IRC-Worker Thread"""
+    def _run(self):
+        """Hauptloop für Twitch"""
         while self.running:
             try:
-                # Verbinde zu Twitch IRC
-                self.sock = socket.socket()
-                self.sock.settimeout(10)
-                self.sock.connect((self.server, self.port))
-                
-                # Authentifizierung
-                self.sock.send(f"PASS {self.token}\r\n".encode('utf-8'))
-                self.sock.send(f"NICK {self.nickname}\r\n".encode('utf-8'))
-                self.sock.send(f"JOIN {self.channel}\r\n".encode('utf-8'))
-                
-                print(f"✅ Twitch IRC verbunden: {self.channel}")
-                
-                # Nachrichtenschleife
-                while self.running:
-                    try:
-                        response = self.sock.recv(2048).decode('utf-8')
-                        
-                        for line in response.split('\r\n'):
-                            if not line:
-                                continue
-                            
-                            # PING/PONG
-                            if line.startswith("PING"):
-                                self.sock.send(f"PONG{line[4:]}\r\n".encode('utf-8'))
-                                continue
-                            
-                            # Chat-Nachrichten
-                            if "PRIVMSG" in line:
-                                try:
-                                    # Einfache Regex für Username
-                                    match = re.search(r':([^!]+)!', line)
-                                    if match:
-                                        username = match.group(1)
-                                        
-                                        # Nachrichteninhalt
-                                        message_content = line.split("PRIVMSG", 1)[1].split(":", 1)[1]
-                                        
-                                        # An Dispatcher weiterleiten
-                                        if username.lower() != self.bot_name.lower():
-                                            self.dispatcher.add_message("twitch", username, message_content)
-                                            
-                                except Exception as e:
-                                    print(f"Fehler beim Parsen der Twitch-Nachricht: {e}")
-                    
-                    except socket.timeout:
-                        continue
-                    except Exception as e:
-                        print(f"Fehler im Twitch IRC: {e}")
-                        break
-                        
+                self._connect()
+                self._listen()
             except Exception as e:
-                print(f"Twitch IRC Verbindungsfehler: {e}")
-                time.sleep(30)  # Warte vor Neuverbindung
+                log_message(f"Twitch-Verbindungsfehler: {e}", "ERROR", "TWITCH")
+                time.sleep(30)
+    
+    def _connect(self):
+        """Verbinde zu Twitch IRC"""
+        try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.settimeout(10)
+            self.sock.connect((TWITCH_SERVER, TWITCH_PORT))
+            
+            # Authentifizierung
+            self.sock.send(f"PASS {TWITCH_TOKEN}\r\n".encode('utf-8'))
+            self.sock.send(f"NICK {TWITCH_NICKNAME}\r\n".encode('utf-8'))
+            self.sock.send(f"JOIN {TWITCH_CHANNEL}\r\n".encode('utf-8'))
+            
+            # Capabilities
+            self.sock.send("CAP REQ :twitch.tv/membership\r\n".encode('utf-8'))
+            self.sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
+            self.sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
+            
+            self.connected = True
+            log_message(f"Twitch verbunden: {TWITCH_CHANNEL}", "INFO", "TWITCH")
+            
+            # Begrüßung
+            self.send_message(f"👋 {BOT_NAME} ist online! Befehle: !witz, !bild, !info")
+            
+        except Exception as e:
+            log_message(f"Twitch-Verbindungsfehler: {e}", "ERROR", "TWITCH")
+            self.connected = False
+    
+    def _listen(self):
+        """Höre auf Nachrichten"""
+        while self.running and self.connected:
+            try:
+                response = self.sock.recv(2048).decode('utf-8', errors='ignore')
+                
+                for line in response.split('\r\n'):
+                    if not line:
+                        continue
+                    
+                    # PING/PONG
+                    if line.startswith('PING'):
+                        self.sock.send(f"PONG{line[4:]}\r\n".encode('utf-8'))
+                        continue
+                    
+                    # Chat-Nachrichten
+                    if 'PRIVMSG' in line:
+                        self._handle_message(line)
+                        
+            except socket.timeout:
+                continue
+            except Exception as e:
+                log_message(f"Twitch-Listen-Fehler: {e}", "ERROR", "TWITCH")
+                self.connected = False
+                break
+    
+    def _handle_message(self, line):
+        """Verarbeite Chat-Nachricht"""
+        try:
+            # Extrahiere Username
+            match = re.search(r':([^!]+)!', line)
+            if not match:
+                return
+            
+            username = match.group(1)
+            
+            # Extrahiere Nachricht
+            if 'PRIVMSG' in line:
+                message = line.split('PRIVMSG', 1)[1].split(':', 1)[1].strip()
+                
+                # Ignoriere eigene Nachrichten
+                if username.lower() == BOT_NAME.lower():
+                    return
+                
+                log_message(f"{username}: {message}", "INFO", "TWITCH")
+                
+                # Callback aufrufen
+                if self.message_callback:
+                    self.message_callback("twitch", username, message)
+                    
+        except Exception as e:
+            log_message(f"Fehler beim Verarbeiten der Twitch-Nachricht: {e}", "ERROR", "TWITCH")
     
     def send_message(self, message):
-        """Sendet eine Nachricht über Twitch IRC"""
+        """Sende Nachricht"""
+        if not self.connected or not self.sock:
+            return False
+        
         try:
-            if self.sock and self.running:
-                self.sock.send(f"PRIVMSG {self.channel} :{message}\r\n".encode('utf-8'))
-                return True
+            self.sock.send(f"PRIVMSG {TWITCH_CHANNEL} :{message}\r\n".encode('utf-8'))
+            log_message(f"Gesendet: {message}", "INFO", "TWITCH")
+            return True
         except Exception as e:
-            print(f"Fehler beim Senden der Twitch-Nachricht: {e}")
-        return False
+            log_message(f"Fehler beim Senden: {e}", "ERROR", "TWITCH")
+            return False
     
     def stop(self):
-        """Stoppt den Twitch-Adapter"""
+        """Stoppe Twitch-Client"""
         self.running = False
+        self.connected = False
         if self.sock:
             try:
                 self.sock.close()
             except:
                 pass
 
+# === YOUTUBE CLIENT ===
+class YouTubeClient:
+    def __init__(self, message_callback):
+        self.message_callback = message_callback
+        self.running = False
+        self.thread = None
+        self.live_video_id = None
+        self.live_chat_id = None
+        self.next_page_token = None
+        self.seen_message_ids = set()
+    
+    def start(self):
+        """Starte YouTube-Client"""
+        if not ENABLE_YOUTUBE or not YOUTUBE_API_KEY or not YOUTUBE_CHANNEL_ID:
+            log_message("YouTube deaktiviert oder unvollständige Konfiguration", "WARNING", "YOUTUBE")
+            return False
+        
+        self.running = True
+        self.thread = threading.Thread(target=self._run)
+        self.thread.daemon = True
+        self.thread.start()
+        return True
+    
+    def _run(self):
+        """Hauptloop für YouTube"""
+        while self.running:
+            try:
+                if not self.live_chat_id:
+                    self._find_live_stream()
+                
+                if self.live_chat_id:
+                    self._read_messages()
+                
+                time.sleep(YOUTUBE_POLLING_INTERVAL)
+                
+            except Exception as e:
+                log_message(f"YouTube-Fehler: {e}", "ERROR", "YOUTUBE")
+                time.sleep(30)
+    
+    def _find_live_stream(self):
+        """Finde Live-Stream"""
+        try:
+            params = {
+                "part": "id,snippet",
+                "channelId": YOUTUBE_CHANNEL_ID,
+                "eventType": "live",
+                "type": "video",
+                "key": YOUTUBE_API_KEY,
+                "maxResults": 1
+            }
+            
+            response = requests.get(
+                "https://www.googleapis.com/youtube/v3/search",
+                params=params,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("items"):
+                    video = data["items"][0]
+                    self.live_video_id = video["id"]["videoId"]
+                    
+                    # Hole Chat-ID
+                    self._get_chat_id()
+                    
+        except Exception as e:
+            log_message(f"Fehler beim Finden des Live-Streams: {e}", "ERROR", "YOUTUBE")
+    
+    def _get_chat_id(self):
+        """Hole Chat-ID"""
+        try:
+            params = {
+                "part": "liveStreamingDetails",
+                "id": self.live_video_id,
+                "key": YOUTUBE_API_KEY
+            }
+            
+            response = requests.get(
+                "https://www.googleapis.com/youtube/v3/videos",
+                params=params,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("items"):
+                    video = data["items"][0]
+                    live_details = video.get("liveStreamingDetails", {})
+                    self.live_chat_id = live_details.get("activeLiveChatId")
+                    
+                    if self.live_chat_id:
+                        log_message(f"YouTube Live Chat gefunden", "INFO", "YOUTUBE")
+                        
+        except Exception as e:
+            log_message(f"Fehler beim Holen der Chat-ID: {e}", "ERROR", "YOUTUBE")
+    
+    def _read_messages(self):
+        """Lese Chat-Nachrichten"""
+        try:
+            params = {
+                "liveChatId": self.live_chat_id,
+                "part": "id,snippet,authorDetails",
+                "key": YOUTUBE_API_KEY,
+                "maxResults": 50
+            }
+            
+            if self.next_page_token:
+                params["pageToken"] = self.next_page_token
+            
+            response = requests.get(
+                "https://www.googleapis.com/youtube/v3/liveChat/messages",
+                params=params,
+                timeout=10
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                self.next_page_token = data.get("nextPageToken")
+                
+                for item in data.get("items", []):
+                    self._process_message(item)
+                    
+            elif response.status_code == 404:
+                log_message("Live Chat nicht mehr aktiv", "WARNING", "YOUTUBE")
+                self.live_chat_id = None
+                
+        except Exception as e:
+            log_message(f"Fehler beim Lesen der YouTube-Nachrichten: {e}", "ERROR", "YOUTUBE")
+    
+    def _process_message(self, item):
+        """Verarbeite einzelne Nachricht"""
+        try:
+            message_id = item.get("id", "")
+            if message_id in self.seen_message_ids:
+                return
+            
+            self.seen_message_ids.add(message_id)
+            
+            # Cache-Management
+            if len(self.seen_message_ids) > 1000:
+                self.seen_message_ids = set(list(self.seen_message_ids)[-500:])
+            
+            snippet = item.get("snippet", {})
+            author_details = item.get("authorDetails", {})
+            
+            username = author_details.get("displayName", "Unknown")
+            message = snippet.get("displayMessage", "")
+            
+            # Filtere Bot-Nachrichten
+            if username.lower() == YOUTUBE_BOT_NAME.lower():
+                return
+            
+            # Filtere leere Nachrichten
+            if not message.strip():
+                return
+            
+            log_message(f"{username}: {message}", "INFO", "YOUTUBE")
+            
+            # Callback aufrufen
+            if self.message_callback:
+                self.message_callback("youtube", username, message)
+                
+        except Exception as e:
+            log_message(f"Fehler beim Verarbeiten der YouTube-Nachricht: {e}", "ERROR", "YOUTUBE")
+    
+    def send_message(self, message):
+        """Sende Nachricht (Simulation)"""
+        # YouTube API benötigt OAuth2 für das Senden von Nachrichten
+        # Hier nur Simulation
+        log_message(f"YouTube Nachricht (simuliert): {message}", "INFO", "YOUTUBE")
+        return True
+    
+    def stop(self):
+        """Stoppe YouTube-Client"""
+        self.running = False
+
+# === OLLAMA CLIENT ===
+class OllamaClient:
+    def __init__(self):
+        self.base_url = OLLAMA_BASE_URL
+        self.model = OLLAMA_MODEL
+    
+    def generate_response(self, prompt):
+        """Generiere Antwort mit Ollama"""
+        try:
+            payload = {
+                "model": self.model,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.7,
+                    "max_tokens": 200
+                }
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/api/generate",
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result.get("response", "").strip()
+            else:
+                log_message(f"Ollama-Fehler: Status {response.status_code}", "ERROR", "MAIN")
+                return None
+                
+        except Exception as e:
+            log_message(f"Fehler bei Ollama-Anfrage: {e}", "ERROR", "MAIN")
+            return None
+    
+    def generate_joke(self):
+        """Generiere Witz"""
+        prompt = "Erzähle einen kurzen, lustigen Witz. Maximal 2 Sätze."
+        return self.generate_response(prompt)
+    
+    def answer_question(self, question):
+        """Beantworte Frage"""
+        prompt = f"Beantworte diese Frage kurz und hilfreich: {question}"
+        return self.generate_response(prompt)
+
+# === HAUPTBOT ===
+class ZephyrMultiBot:
+    def __init__(self):
+        self.running = False
+        self.twitch_client = None
+        self.youtube_client = None
+        self.llava_analyzer = LLaVAAnalyzer()
+        self.game_state = GameStateManager()
+        self.ollama_client = OllamaClient()
+        
+        # Fallback-Witze
+        self.fallback_jokes = [
+            "Warum können Skelette so schlecht lügen? Man sieht ihnen durch die Rippen!",
+            "Was ist rot und schlecht für die Zähne? Ein Ziegelstein.",
+            "Wie nennt man einen Cowboy ohne Pferd? Sattelschlepper.",
+            "Warum sollte man nie Poker mit einem Zauberer spielen? Weil er Asse im Ärmel hat!"
+        ]
+        
+        # Timers
+        self.last_joke_time = 0
+        self.last_screenshot_time = 0
+        
+        # Setup
+        setup_logging()
+        self.create_pid_file()
+        self.setup_signal_handlers()
+        
+        log_message("Zephyr Multi-Bot initialisiert", "INFO", "MAIN")
+    
+    def create_pid_file(self):
+        """Erstelle PID-Datei"""
+        try:
+            with open(PID_FILE, 'w') as f:
+                f.write(str(os.getpid()))
+            log_message(f"PID-Datei erstellt: {os.getpid()}", "INFO", "MAIN")
+        except Exception as e:
+            log_message(f"Fehler beim Erstellen der PID-Datei: {e}", "ERROR", "MAIN")
+    
+    def remove_pid_file(self):
+        """Entferne PID-Datei"""
+        try:
+            if os.path.exists(PID_FILE):
+                os.remove(PID_FILE)
+                log_message("PID-Datei entfernt", "INFO", "MAIN")
+        except Exception as e:
+            log_message(f"Fehler beim Entfernen der PID-Datei: {e}", "ERROR", "MAIN")
+    
+    def setup_signal_handlers(self):
+        """Setup Signal-Handler"""
+        def signal_handler(signum, frame):
+            log_message(f"Signal {signum} empfangen, beende Bot...", "INFO", "MAIN")
+            self.stop()
+            sys.exit(0)
+        
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+    
+    def message_handler(self, platform, username, message):
+        """Zentrale Nachrichtenverarbeitung"""
+        try:
+            # Befehle verarbeiten
+            if message.lower() == "!witz":
+                self.send_joke(platform)
+            elif message.lower() == "!bild":
+                self.send_image_analysis(platform)
+            elif message.lower() == "!info":
+                self.send_info(platform)
+            elif message.lower().startswith("!frag "):
+                question = message[6:].strip()
+                self.answer_question(platform, username, question)
+            elif BOT_NAME.lower() in message.lower():
+                self.respond_to_mention(platform, username, message)
+                
+        except Exception as e:
+            log_message(f"Fehler bei Nachrichtenverarbeitung: {e}", "ERROR", "MAIN")
+    
+    def send_joke(self, platform):
+        """Sende Witz"""
+        try:
+            joke = self.ollama_client.generate_joke()
+            if not joke:
+                joke = random.choice(self.fallback_jokes)
+            
+            message = f"🎭 {joke}"
+            self.send_to_platform(platform, message)
+            
+        except Exception as e:
+            log_message(f"Fehler beim Senden des Witzes: {e}", "ERROR", "MAIN")
+    
+    def send_image_analysis(self, platform):
+        """Sende Bildanalyse"""
+        try:
+            screenshot = self.llava_analyzer.get_latest_screenshot()
+            if not screenshot:
+                self.send_to_platform(platform, "👁️ Kein Screenshot zum Analysieren gefunden.")
+                return
+            
+            description = self.llava_analyzer.analyze_image(screenshot)
+            if description:
+                summary = self.llava_analyzer.summarize_llava_response(description)
+                context = self.game_state.get_context_string()
+                message = f"{summary} {context}"
+                self.send_to_platform(platform, message)
+            else:
+                self.send_to_platform(platform, "👁️ Bildanalyse fehlgeschlagen.")
+                
+        except Exception as e:
+            log_message(f"Fehler bei Bildanalyse: {e}", "ERROR", "MAIN")
+    
+    def send_info(self, platform):
+        """Sende Info"""
+        try:
+            context = self.game_state.get_context_string()
+            message = f"ℹ️ Status: {context}"
+            self.send_to_platform(platform, message)
+        except Exception as e:
+            log_message(f"Fehler beim Senden der Info: {e}", "ERROR", "MAIN")
+    
+    def answer_question(self, platform, username, question):
+        """Beantworte Frage"""
+        try:
+            answer = self.ollama_client.answer_question(question)
+            if answer:
+                message = f"@{username} {answer}"
+                self.send_to_platform(platform, message)
+            else:
+                message = f"@{username} Entschuldige, ich konnte keine Antwort finden."
+                self.send_to_platform(platform, message)
+        except Exception as e:
+            log_message(f"Fehler beim Beantworten der Frage: {e}", "ERROR", "MAIN")
+    
+    def respond_to_mention(self, platform, username, message):
+        """Reagiere auf Erwähnung"""
+        try:
+            if "?" in message:
+                question = message.replace(BOT_NAME, "").strip()
+                self.answer_question(platform, username, question)
+            else:
+                greetings = [
+                    f"Hi @{username}! 👋",
+                    f"Hallo @{username}! Was kann ich für dich tun?",
+                    f"Hey @{username}! Befehle: !witz, !bild, !info"
+                ]
+                message = random.choice(greetings)
+                self.send_to_platform(platform, message)
+        except Exception as e:
+            log_message(f"Fehler bei Erwähnung: {e}", "ERROR", "MAIN")
+    
+    def send_to_platform(self, platform, message):
+        """Sende Nachricht an Platform"""
+        try:
+            if platform == "twitch" and self.twitch_client:
+                self.twitch_client.send_message(message)
+            elif platform == "youtube" and self.youtube_client:
+                self.youtube_client.send_message(message)
+        except Exception as e:
+            log_message(f"Fehler beim Senden an {platform}: {e}", "ERROR", "MAIN")
+    
+    def auto_screenshot_analysis(self):
+        """Automatische Screenshot-Analyse"""
+        while self.running:
+            try:
+                current_time = time.time()
+                
+                if current_time - self.last_screenshot_time >= SCREENSHOT_ANALYSIS_INTERVAL:
+                    screenshot = self.llava_analyzer.check_for_new_screenshot()
+                    
+                    if screenshot:
+                        log_message(f"Neuer Screenshot gefunden: {screenshot}", "INFO", "VISION")
+                        
+                        description = self.llava_analyzer.analyze_image(screenshot)
+                        if description:
+                            summary = self.llava_analyzer.summarize_llava_response(description)
+                            context = self.game_state.get_context_string()
+                            message = f"{summary} {context}"
+                            
+                            # Sende an alle aktiven Platformen
+                            if self.twitch_client:
+                                self.twitch_client.send_message(message)
+                            if self.youtube_client:
+                                self.youtube_client.send_message(message)
+                    
+                    self.last_screenshot_time = current_time
+                
+                time.sleep(5)  # Kurze Pause zwischen Checks
+                
+            except Exception as e:
+                log_message(f"Fehler bei automatischer Screenshot-Analyse: {e}", "ERROR", "VISION")
+                time.sleep(10)
+    
+    def auto_jokes(self):
+        """Automatische Witze"""
+        while self.running:
+            try:
+                current_time = time.time()
+                
+                if current_time - self.last_joke_time >= JOKE_INTERVAL:
+                    joke = self.ollama_client.generate_joke()
+                    if not joke:
+                        joke = random.choice(self.fallback_jokes)
+                    
+                    message = f"🎭 {joke}"
+                    
+                    # Sende an alle aktiven Platformen
+                    if self.twitch_client:
+                        self.twitch_client.send_message(message)
+                    if self.youtube_client:
+                        self.youtube_client.send_message(message)
+                    
+                    self.last_joke_time = current_time
+                
+                time.sleep(30)  # Check alle 30 Sekunden
+                
+            except Exception as e:
+                log_message(f"Fehler bei automatischen Witzen: {e}", "ERROR", "MAIN")
+                time.sleep(30)
+    
+    def start(self):
+        """Starte Bot"""
+        try:
+            log_message("Starte Zephyr Multi-Bot...", "INFO", "MAIN")
+            self.running = True
+            
+            # Starte Clients
+            if ENABLE_TWITCH:
+                self.twitch_client = TwitchClient(self.message_handler)
+                self.twitch_client.start()
+                log_message("Twitch-Client gestartet", "INFO", "MAIN")
+            
+            if ENABLE_YOUTUBE:
+                self.youtube_client = YouTubeClient(self.message_handler)
+                self.youtube_client.start()
+                log_message("YouTube-Client gestartet", "INFO", "MAIN")
+            
+            # Starte Background-Threads
+            if ENABLE_VISION:
+                screenshot_thread = threading.Thread(target=self.auto_screenshot_analysis)
+                screenshot_thread.daemon = True
+                screenshot_thread.start()
+                log_message("Screenshot-Analyse gestartet", "INFO", "VISION")
+            
+            joke_thread = threading.Thread(target=self.auto_jokes)
+            joke_thread.daemon = True
+            joke_thread.start()
+            log_message("Automatische Witze gestartet", "INFO", "MAIN")
+            
+            log_message("Bot erfolgreich gestartet", "INFO", "MAIN")
+            return True
+            
+        except Exception as e:
+            log_message(f"Fehler beim Starten: {e}", "ERROR", "MAIN")
+            return False
+    
+    def stop(self):
+        """Stoppe Bot"""
+        try:
+            log_message("Stoppe Zephyr Multi-Bot...", "INFO", "MAIN")
+            self.running = False
+            
+            if self.twitch_client:
+                self.twitch_client.stop()
+            if self.youtube_client:
+                self.youtube_client.stop()
+            
+            self.remove_pid_file()
+            log_message("Bot gestoppt", "INFO", "MAIN")
+            
+        except Exception as e:
+            log_message(f"Fehler beim Stoppen: {e}", "ERROR", "MAIN")
+    
+    def run(self):
+        """Hauptschleife"""
+        if not self.start():
+            log_message("Bot konnte nicht gestartet werden", "ERROR", "MAIN")
+            return
+        
+        try:
+            while self.running:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            log_message("Bot durch Benutzer beendet", "INFO", "MAIN")
+        finally:
+            self.stop()
+
+# === MAIN ===
 def main():
     """Hauptfunktion"""
     print("🤖 Zephyr Multi-Platform Bot v2.0")
-    print("=" * 40)
-    print("🎮 Twitch + 🎥 YouTube + 👁️ Vision AI")
     print("=" * 40)
     
     bot = ZephyrMultiBot()

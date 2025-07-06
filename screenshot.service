@@ -1,0 +1,23 @@
+[Unit]
+Description=Screenshot Sync Service
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/home/zombie/zephyr/screenshot.sh
+Restart=always
+RestartSec=10
+User=zombie
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/%i/.Xauthority
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+# Arbeitsverzeichnis auf Script-Ordner setzen
+WorkingDirectory=/home/zombie/zephyr
+
+[Install]
+WantedBy=default.target
