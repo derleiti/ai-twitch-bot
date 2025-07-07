@@ -1,23 +1,21 @@
+# /etc/systemd/system/screenshot.service
 [Unit]
 Description=Screenshot Sync Service
-After=graphical-session.target
-Wants=graphical-session.target
+After=graphical.target
 
 [Service]
 Type=simple
+User=zombie
+# Setze hier Deine DISPLAY/XAUTHORITY (für X11) bzw. Wayland‐Infos:
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/zombie/.Xauthority
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+# Bei Wayland könntest Du statt DISPLAY noch setzen:
+# Environment=XDG_SESSION_TYPE=wayland
+# Environment=WAYLAND_DISPLAY=wayland-0
+
 ExecStart=/home/zombie/zephyr/screenshot.sh
 Restart=always
-RestartSec=10
-User=zombie
-Environment=DISPLAY=:0
-Environment=XAUTHORITY=/home/%i/.Xauthority
-
-# Logging
-StandardOutput=journal
-StandardError=journal
-
-# Arbeitsverzeichnis auf Script-Ordner setzen
-WorkingDirectory=/home/zombie/zephyr
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
