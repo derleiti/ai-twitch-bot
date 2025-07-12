@@ -10,14 +10,14 @@ REMOTE_FILE="$REMOTE_PATH/current_screenshot.jpg"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; BLUE='\033[0;34m'; NC='\033[0m'
 
-echo -e "${BLUE}=== Screenshot Sync gestartet (Wayland/X11 Auto) ===${NC}"
+echo -e "${BLUE}=== Screenshot Sync gestartet (Wayland/X11 Auto, Hauptmonitor) ===${NC}"
 echo "Datei: $LOCAL_FILE"
 echo "Server: $REMOTE_FILE"
 echo
 
-# Alte Screenshots löschen, damit nur eine Datei existiert
+# Alte Screenshots löschen
 echo "Bereinige alte Screenshots…"
-rm -f "$SCRIPT_DIR"/current_screenshot.* 
+rm -f "$SCRIPT_DIR"/current_screenshot.*
 
 # Funktion zur Tool-Installation
 install_tool() {
@@ -28,10 +28,9 @@ install_tool() {
     fi
 }
 
-# Screenshot-Tool erkennen (Wayland oder X11)
+# Screenshot-Tool erkennen
 SCREENSHOT_CMD=""
 if [ "$XDG_SESSION_TYPE" == "wayland" ]; then
-    # 1) grim probieren
     install_tool grim
     if command -v grim &> /dev/null && \
        ! grim "$SCRIPT_DIR/test_grim.png" 2>&1 | grep -q "doesn't support wlr-screencopy"; then
@@ -43,7 +42,6 @@ if [ "$XDG_SESSION_TYPE" == "wayland" ]; then
         echo -e "${RED}→ grim nicht kompatibel oder fehlend${NC}"
     fi
 
-    # 2) Fallback: spectacle CLI
     if [ -z "$SCREENSHOT_CMD" ]; then
         install_tool spectacle
         if command -v spectacle &> /dev/null; then
@@ -52,7 +50,6 @@ if [ "$XDG_SESSION_TYPE" == "wayland" ]; then
         fi
     fi
 
-    # 3) Abbruch wenn nichts gefunden
     if [ -z "$SCREENSHOT_CMD" ]; then
         echo -e "${RED}❌ Kein Screenshot-Tool für Wayland gefunden!${NC}"
         exit 1
@@ -60,14 +57,12 @@ if [ "$XDG_SESSION_TYPE" == "wayland" ]; then
 
 else
     # X11
-    # 1) maim
     install_tool maim
     if command -v maim &> /dev/null; then
         SCREENSHOT_CMD="maim"
         echo -e "${GREEN}→ X11 erkannt, verwende maim${NC}"
     fi
 
-    # 2) Fallback: scrot
     if [ -z "$SCREENSHOT_CMD" ]; then
         install_tool scrot
         if command -v scrot &> /dev/null; then
@@ -99,9 +94,11 @@ while true; do
 
     case "$SCREENSHOT_CMD" in
         grim)
-            grim "$LOCAL_FILE" ;;
+            OUTPUT=$(grim -l | grep primary | awk '{print $1}')
+            grim -o "$OUTPUT" "$LOCAL_FILE" ;;
         maim)
-            maim "$LOCAL_FILE" ;;
+            GEOM=$(xrandr | awk '/ primary/{print $4}')
+            maim -g "$GEOM" "$LOCAL_FILE" ;;
         scrot)
             scrot -o "$LOCAL_FILE" ;;
         spectacle)

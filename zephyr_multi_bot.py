@@ -62,6 +62,7 @@ VISION_MODEL = os.getenv("VISION_MODEL", "llava")
 SCREENSHOT_ANALYSIS_INTERVAL = int(os.getenv("SCREENSHOT_ANALYSIS_INTERVAL", "30"))
 JOKE_INTERVAL = int(os.getenv("JOKE_INTERVAL", "300"))
 YOUTUBE_POLLING_INTERVAL = int(os.getenv("YOUTUBE_POLLING_INTERVAL", "10"))
+TWITCH_RECONNECT_DELAY = int(os.getenv("TWITCH_RECONNECT_DELAY", "30"))
 
 # === LOGGING ===
 def setup_logging():
@@ -103,9 +104,10 @@ def log_message(message, level="INFO", category="MAIN"):
 
 # === LLAVA BILDANALYSE ===
 class LLaVAAnalyzer:
-    def __init__(self):
+    def __init__(self, game_state_manager):
         self.seen_files = set()
         self.max_cache_size = 100
+        self.game_state_manager = game_state_manager
     
     def get_file_hash(self, file_path):
         """Erstelle Hash für Datei"""
@@ -137,22 +139,44 @@ class LLaVAAnalyzer:
             return None
     
     def analyze_image(self, image_path):
-        """Analysiere Bild mit LLaVA"""
+        """Analysiere Bild mit LLaVA - detaillierte Beschreibung"""
         try:
             with open(image_path, "rb") as f:
                 img_b64 = base64.b64encode(f.read()).decode("utf-8")
             
+            # Hole aktuellen Spielstand für Kontext
+            game_state = self.game_state_manager.state
+            game_name = game_state.get("game", "Unbekannt")
+            mood = game_state.get("mood", "Neutral")
+            
+            # Detaillierter Prompt für genaue Bildbeschreibung
+            prompt = f"""Beschreibe GENAU was auf diesem Bildschirm zu sehen ist. 
+Konzentriere dich auf:
+- Was ist der Hauptinhalt (Spiel, Programm, Website)?
+- Welche UI-Elemente sind sichtbar (Menüs, Buttons, HUD)?
+- Welche Texte oder Zahlen sind erkennbar?
+- Was passiert gerade in der Szene?
+- Welche Farben dominieren?
+
+Kontext: Es wird gerade "{game_name}" gespielt, Stimmung: {mood}.
+
+Beschreibe in 3-4 Sätzen präzise was zu sehen ist, NICHT was es bedeutet."""
+            
             payload = {
                 "model": VISION_MODEL,
-                "prompt": "Beschreibe kurz und prägnant, was auf diesem Bild zu sehen ist. Maximal 2 Sätze.",
+                "prompt": prompt,
                 "images": [img_b64],
-                "stream": False
+                "stream": False,
+                "options": {
+                    "temperature": 0.3,  # Niedrigere Temperatur für präzisere Beschreibungen
+                    "num_predict": 250
+                }
             }
             
             response = requests.post(
                 f"{OLLAMA_BASE_URL}/api/generate",
                 json=payload,
-                timeout=30
+                timeout=60
             )
             
             if response.status_code == 200:
@@ -175,29 +199,55 @@ class LLaVAAnalyzer:
             return None
     
     def summarize_llava_response(self, description):
-        """Fasse LLaVA-Response zusammen"""
+        """Fasse LLaVA-Response zusammen mit Fokus auf Details"""
         if not description:
             return "Keine Bildbeschreibung verfügbar"
         
-        # Kürze auf 2 Sätze
-        sentences = re.split(r'[.!?]+', description.strip())
-        summary = '. '.join(sentences[:2]).strip()
+        # Hole Spielstand für Kontext
+        game_state = self.game_state_manager.state
+        game_name = game_state.get("game", "Unbekannt")
         
+        # Extrahiere die wichtigsten Details
+        sentences = re.split(r'[.!?]+', description.strip())
+        
+        # Priorisiere Sätze mit konkreten Details
+        detail_keywords = ['zeigt', 'sichtbar', 'erkennt', 'sieht', 'befindet', 'steht', 'läuft', 'öffnet']
+        detailed_sentences = []
+        
+        for sentence in sentences:
+            if any(keyword in sentence.lower() for keyword in detail_keywords):
+                detailed_sentences.append(sentence.strip())
+        
+        # Nehme die ersten 2 detaillierten Sätze oder normale Sätze
+        if detailed_sentences:
+            summary = '. '.join(detailed_sentences[:2])
+        else:
+            summary = '. '.join(sentences[:2])
+        
+        summary = summary.strip()
         if not summary.endswith('.'):
             summary += '.'
         
-        # Füge Kontext-Tag hinzu
+        # Füge spezifischen Tag basierend auf erkanntem Inhalt hinzu
         tags = {
-            "spiel": "🎮",
-            "game": "🎮",
-            "menu": "📋",
-            "code": "💻",
-            "browser": "🌐",
-            "terminal": "⌨️",
-            "desktop": "🖥️"
+            "spiel": f"🎮 {game_name}",
+            "game": f"🎮 {game_name}", 
+            "menu": "📋 Menü",
+            "menü": "📋 Menü",
+            "code": "💻 Code",
+            "browser": "🌐 Browser",
+            "terminal": "⌨️ Terminal",
+            "desktop": "🖥️ Desktop",
+            "kampf": "⚔️ Kampf",
+            "battle": "⚔️ Kampf",
+            "inventory": "🎒 Inventar",
+            "inventar": "🎒 Inventar",
+            "dialog": "💬 Dialog",
+            "karte": "🗺️ Karte",
+            "map": "🗺️ Karte"
         }
         
-        tag = "📸"
+        tag = "📸 Screenshot"
         description_lower = description.lower()
         for keyword, emoji in tags.items():
             if keyword in description_lower:
@@ -258,6 +308,18 @@ class GameStateManager:
         except Exception as e:
             log_message(f"Fehler beim Speichern des Spielstands: {e}", "ERROR", "MAIN")
     
+    def update_game(self, game_name):
+        """Update Spielname"""
+        self.state["game"] = game_name
+        self.save_game_state(self.state)
+        log_message(f"Spiel geändert zu: {game_name}", "INFO", "MAIN")
+    
+    def update_mood(self, mood):
+        """Update Stimmung"""
+        self.state["mood"] = mood
+        self.save_game_state(self.state)
+        log_message(f"Stimmung geändert zu: {mood}", "INFO", "MAIN")
+    
     def get_context_string(self):
         """Hole Kontext-String für Chat"""
         return f"[{self.state.get('game', 'Unbekannt')} | {self.state.get('mood', 'Neutral')}]"
@@ -270,6 +332,9 @@ class TwitchClient:
         self.running = False
         self.connected = False
         self.thread = None
+        self.last_ping_time = 0
+        self.reconnect_attempts = 0
+        self.max_reconnect_attempts = 10
     
     def start(self):
         """Starte Twitch-Client"""
@@ -284,65 +349,168 @@ class TwitchClient:
         return True
     
     def _run(self):
-        """Hauptloop für Twitch"""
+        """Hauptloop für Twitch mit verbessertem Reconnect"""
         while self.running:
             try:
-                self._connect()
-                self._listen()
+                if self._connect():
+                    self.reconnect_attempts = 0  # Reset bei erfolgreicher Verbindung
+                    self._listen()
+                else:
+                    self.reconnect_attempts += 1
+                    if self.reconnect_attempts >= self.max_reconnect_attempts:
+                        log_message("Max Reconnect-Versuche erreicht, gebe auf", "ERROR", "TWITCH")
+                        self.running = False
+                        break
+                    
+                    wait_time = min(TWITCH_RECONNECT_DELAY * self.reconnect_attempts, 300)  # Max 5 Minuten
+                    log_message(f"Warte {wait_time}s vor Reconnect-Versuch {self.reconnect_attempts}", "INFO", "TWITCH")
+                    time.sleep(wait_time)
+                    
             except Exception as e:
                 log_message(f"Twitch-Verbindungsfehler: {e}", "ERROR", "TWITCH")
-                time.sleep(30)
+                self.connected = False
+                time.sleep(TWITCH_RECONNECT_DELAY)
     
     def _connect(self):
-        """Verbinde zu Twitch IRC"""
+        """Verbinde zu Twitch IRC mit besserem Error Handling"""
         try:
+            # Schließe alte Verbindung falls vorhanden
+            if self.sock:
+                try:
+                    self.sock.close()
+                except:
+                    pass
+                self.sock = None
+            
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.settimeout(10)
+            
+            log_message(f"Verbinde zu Twitch IRC ({TWITCH_SERVER}:{TWITCH_PORT})...", "INFO", "TWITCH")
             self.sock.connect((TWITCH_SERVER, TWITCH_PORT))
             
             # Authentifizierung
             self.sock.send(f"PASS {TWITCH_TOKEN}\r\n".encode('utf-8'))
             self.sock.send(f"NICK {TWITCH_NICKNAME}\r\n".encode('utf-8'))
-            self.sock.send(f"JOIN {TWITCH_CHANNEL}\r\n".encode('utf-8'))
+            
+            # Warte auf Willkommensnachricht
+            auth_success = False
+            start_time = time.time()
+            
+            while time.time() - start_time < 15:  # 15 Sekunden Timeout
+                try:
+                    response = self.sock.recv(2048).decode('utf-8', errors='ignore')
+                    log_message(f"Auth Response: {response.strip()}", "DEBUG", "TWITCH")
+                    
+                    if "Welcome, GLHF!" in response or ":tmi.twitch.tv 001" in response:
+                        auth_success = True
+                        break
+                    elif "Login authentication failed" in response:
+                        log_message("Twitch Login fehlgeschlagen - prüfe OAuth Token", "ERROR", "TWITCH")
+                        return False
+                except socket.timeout:
+                    continue
+            
+            if not auth_success:
+                log_message("Twitch Authentifizierung Timeout", "ERROR", "TWITCH")
+                return False
             
             # Capabilities
             self.sock.send("CAP REQ :twitch.tv/membership\r\n".encode('utf-8'))
             self.sock.send("CAP REQ :twitch.tv/tags\r\n".encode('utf-8'))
             self.sock.send("CAP REQ :twitch.tv/commands\r\n".encode('utf-8'))
             
-            self.connected = True
-            log_message(f"Twitch verbunden: {TWITCH_CHANNEL}", "INFO", "TWITCH")
+            # Channel beitreten
+            time.sleep(1)  # Kurze Pause vor Join
+            self.sock.send(f"JOIN {TWITCH_CHANNEL}\r\n".encode('utf-8'))
             
-            # Begrüßung
-            self.send_message(f"👋 {BOT_NAME} ist online! Befehle: !witz, !bild, !info")
+            # Warte auf Join-Bestätigung
+            join_success = False
+            start_time = time.time()
             
-        except Exception as e:
-            log_message(f"Twitch-Verbindungsfehler: {e}", "ERROR", "TWITCH")
+            while time.time() - start_time < 10:
+                try:
+                    response = self.sock.recv(2048).decode('utf-8', errors='ignore')
+                    if f":{TWITCH_NICKNAME}!{TWITCH_NICKNAME}@{TWITCH_NICKNAME}.tmi.twitch.tv JOIN {TWITCH_CHANNEL}" in response:
+                        join_success = True
+                        break
+                    elif "msg_channel_suspended" in response:
+                        log_message(f"Channel {TWITCH_CHANNEL} ist suspended", "ERROR", "TWITCH")
+                        return False
+                except socket.timeout:
+                    continue
+            
+            if join_success:
+                self.connected = True
+                self.last_ping_time = time.time()
+                log_message(f"Erfolgreich mit Twitch verbunden: {TWITCH_CHANNEL}", "INFO", "TWITCH")
+                
+                # Begrüßung
+                time.sleep(2)  # Warte kurz vor erster Nachricht
+                self.send_message(f"👋 {BOT_NAME} ist online! Befehle: !witz, !bild, !info, !spiel NAME, !stimmung MOOD")
+                return True
+            else:
+                log_message("Channel-Join fehlgeschlagen", "ERROR", "TWITCH")
+                return False
+                
+        except socket.error as e:
+            log_message(f"Socket-Fehler bei Twitch-Verbindung: {e}", "ERROR", "TWITCH")
             self.connected = False
+            return False
+        except Exception as e:
+            log_message(f"Unerwarteter Fehler bei Twitch-Verbindung: {e}", "ERROR", "TWITCH")
+            self.connected = False
+            return False
     
     def _listen(self):
-        """Höre auf Nachrichten"""
+        """Höre auf Nachrichten mit verbessertem Error Handling"""
+        buffer = ""
+        
         while self.running and self.connected:
             try:
-                response = self.sock.recv(2048).decode('utf-8', errors='ignore')
+                # Socket Timeout für regelmäßige Ping-Checks
+                self.sock.settimeout(1.0)
                 
-                for line in response.split('\r\n'):
-                    if not line:
-                        continue
+                try:
+                    data = self.sock.recv(2048).decode('utf-8', errors='ignore')
+                    if not data:
+                        log_message("Twitch-Verbindung geschlossen (keine Daten)", "WARNING", "TWITCH")
+                        self.connected = False
+                        break
                     
-                    # PING/PONG
-                    if line.startswith('PING'):
-                        self.sock.send(f"PONG{line[4:]}\r\n".encode('utf-8'))
-                        continue
+                    buffer += data
+                    lines = buffer.split('\r\n')
+                    buffer = lines[-1]  # Behalte unvollständige Zeile
                     
-                    # Chat-Nachrichten
-                    if 'PRIVMSG' in line:
-                        self._handle_message(line)
+                    for line in lines[:-1]:
+                        if not line:
+                            continue
                         
-            except socket.timeout:
-                continue
+                        # PING/PONG
+                        if line.startswith('PING'):
+                            self.sock.send(f"PONG{line[4:]}\r\n".encode('utf-8'))
+                            log_message("PING beantwortet", "DEBUG", "TWITCH")
+                            continue
+                        
+                        # Chat-Nachrichten
+                        if 'PRIVMSG' in line:
+                            self._handle_message(line)
+                    
+                    # Update Ping-Zeit bei erfolgreicher Kommunikation
+                    self.last_ping_time = time.time()
+                    
+                except socket.timeout:
+                    # Prüfe ob wir einen PING senden sollten
+                    if time.time() - self.last_ping_time > 30:
+                        self.sock.send("PING :tmi.twitch.tv\r\n".encode('utf-8'))
+                        self.last_ping_time = time.time()
+                    continue
+                    
+            except (socket.error, ConnectionResetError, BrokenPipeError) as e:
+                log_message(f"Twitch-Verbindung verloren: {e}", "ERROR", "TWITCH")
+                self.connected = False
+                break
             except Exception as e:
-                log_message(f"Twitch-Listen-Fehler: {e}", "ERROR", "TWITCH")
+                log_message(f"Unerwarteter Fehler beim Twitch-Listen: {e}", "ERROR", "TWITCH")
                 self.connected = False
                 break
     
@@ -374,16 +542,25 @@ class TwitchClient:
             log_message(f"Fehler beim Verarbeiten der Twitch-Nachricht: {e}", "ERROR", "TWITCH")
     
     def send_message(self, message):
-        """Sende Nachricht"""
+        """Sende Nachricht mit Error Handling"""
         if not self.connected or not self.sock:
+            log_message("Kann nicht senden - nicht verbunden", "WARNING", "TWITCH")
             return False
         
         try:
+            # Begrenze Nachrichtenlänge (Twitch IRC Limit)
+            if len(message) > 450:
+                message = message[:447] + "..."
+            
             self.sock.send(f"PRIVMSG {TWITCH_CHANNEL} :{message}\r\n".encode('utf-8'))
             log_message(f"Gesendet: {message}", "INFO", "TWITCH")
             return True
+        except (socket.error, BrokenPipeError) as e:
+            log_message(f"Fehler beim Senden (Verbindung verloren): {e}", "ERROR", "TWITCH")
+            self.connected = False
+            return False
         except Exception as e:
-            log_message(f"Fehler beim Senden: {e}", "ERROR", "TWITCH")
+            log_message(f"Unerwarteter Fehler beim Senden: {e}", "ERROR", "TWITCH")
             return False
     
     def stop(self):
@@ -395,6 +572,7 @@ class TwitchClient:
                 self.sock.close()
             except:
                 pass
+        log_message("Twitch-Client gestoppt", "INFO", "TWITCH")
 
 # === YOUTUBE CLIENT ===
 class YouTubeClient:
@@ -588,7 +766,7 @@ class OllamaClient:
                 "stream": False,
                 "options": {
                     "temperature": 0.7,
-                    "max_tokens": 200
+                    "num_predict": 200
                 }
             }
             
@@ -611,7 +789,7 @@ class OllamaClient:
     
     def generate_joke(self):
         """Generiere Witz"""
-        prompt = "Erzähle einen kurzen, lustigen Witz. Maximal 2 Sätze."
+        prompt = "Erzähle einen kurzen, lustigen Gaming-Witz. Maximal 2 Sätze."
         return self.generate_response(prompt)
     
     def answer_question(self, question):
@@ -625,8 +803,8 @@ class ZephyrMultiBot:
         self.running = False
         self.twitch_client = None
         self.youtube_client = None
-        self.llava_analyzer = LLaVAAnalyzer()
         self.game_state = GameStateManager()
+        self.llava_analyzer = LLaVAAnalyzer(self.game_state)
         self.ollama_client = OllamaClient()
         
         # Fallback-Witze
@@ -634,7 +812,8 @@ class ZephyrMultiBot:
             "Warum können Skelette so schlecht lügen? Man sieht ihnen durch die Rippen!",
             "Was ist rot und schlecht für die Zähne? Ein Ziegelstein.",
             "Wie nennt man einen Cowboy ohne Pferd? Sattelschlepper.",
-            "Warum sollte man nie Poker mit einem Zauberer spielen? Weil er Asse im Ärmel hat!"
+            "Warum ging der Gamer zum Arzt? Er hatte einen Bug!",
+            "Was sagt ein großer Stift zum kleinen Stift? Wachs-mal-stift!"
         ]
         
         # Timers
@@ -646,7 +825,7 @@ class ZephyrMultiBot:
         self.create_pid_file()
         self.setup_signal_handlers()
         
-        log_message("Zephyr Multi-Bot initialisiert", "INFO", "MAIN")
+        log_message("Zephyr Multi-Bot v2.0 initialisiert", "INFO", "MAIN")
     
     def create_pid_file(self):
         """Erstelle PID-Datei"""
@@ -686,6 +865,14 @@ class ZephyrMultiBot:
                 self.send_image_analysis(platform)
             elif message.lower() == "!info":
                 self.send_info(platform)
+            elif message.lower().startswith("!spiel "):
+                game_name = message[7:].strip()
+                self.game_state.update_game(game_name)
+                self.send_to_platform(platform, f"🎮 Spiel geändert zu: {game_name}")
+            elif message.lower().startswith("!stimmung "):
+                mood = message[10:].strip()
+                self.game_state.update_mood(mood)
+                self.send_to_platform(platform, f"🎭 Stimmung geändert zu: {mood}")
             elif message.lower().startswith("!frag "):
                 question = message[6:].strip()
                 self.answer_question(platform, username, question)
@@ -732,7 +919,7 @@ class ZephyrMultiBot:
         """Sende Info"""
         try:
             context = self.game_state.get_context_string()
-            message = f"ℹ️ Status: {context}"
+            message = f"ℹ️ Status: {context} | Befehle: !witz, !bild, !spiel NAME, !stimmung MOOD"
             self.send_to_platform(platform, message)
         except Exception as e:
             log_message(f"Fehler beim Senden der Info: {e}", "ERROR", "MAIN")
@@ -760,7 +947,7 @@ class ZephyrMultiBot:
                 greetings = [
                     f"Hi @{username}! 👋",
                     f"Hallo @{username}! Was kann ich für dich tun?",
-                    f"Hey @{username}! Befehle: !witz, !bild, !info"
+                    f"Hey @{username}! Befehle: !witz, !bild, !info, !spiel, !stimmung"
                 ]
                 message = random.choice(greetings)
                 self.send_to_platform(platform, message)
@@ -796,7 +983,7 @@ class ZephyrMultiBot:
                             message = f"{summary} {context}"
                             
                             # Sende an alle aktiven Platformen
-                            if self.twitch_client:
+                            if self.twitch_client and self.twitch_client.connected:
                                 self.twitch_client.send_message(message)
                             if self.youtube_client:
                                 self.youtube_client.send_message(message)
@@ -823,7 +1010,7 @@ class ZephyrMultiBot:
                     message = f"🎭 {joke}"
                     
                     # Sende an alle aktiven Platformen
-                    if self.twitch_client:
+                    if self.twitch_client and self.twitch_client.connected:
                         self.twitch_client.send_message(message)
                     if self.youtube_client:
                         self.youtube_client.send_message(message)
@@ -836,11 +1023,47 @@ class ZephyrMultiBot:
                 log_message(f"Fehler bei automatischen Witzen: {e}", "ERROR", "MAIN")
                 time.sleep(30)
     
+    def status_monitor(self):
+        """Überwacht Status der Komponenten"""
+        while self.running:
+            try:
+                # Status-Log alle 5 Minuten
+                status_parts = []
+                
+                if self.twitch_client:
+                    twitch_status = "✅ Verbunden" if self.twitch_client.connected else "❌ Getrennt"
+                    status_parts.append(f"Twitch: {twitch_status}")
+                
+                if self.youtube_client:
+                    youtube_status = "✅ Aktiv" if self.youtube_client.live_chat_id else "❌ Kein Stream"
+                    status_parts.append(f"YouTube: {youtube_status}")
+                
+                status_parts.append(f"Spiel: {self.game_state.state.get('game', 'Unbekannt')}")
+                status_parts.append(f"Stimmung: {self.game_state.state.get('mood', 'Neutral')}")
+                
+                log_message(" | ".join(status_parts), "INFO", "MAIN")
+                
+                time.sleep(300)  # 5 Minuten
+                
+            except Exception as e:
+                log_message(f"Fehler im Status-Monitor: {e}", "ERROR", "MAIN")
+                time.sleep(60)
+    
     def start(self):
         """Starte Bot"""
         try:
-            log_message("Starte Zephyr Multi-Bot...", "INFO", "MAIN")
+            log_message("Starte Zephyr Multi-Bot v2.0...", "INFO", "MAIN")
             self.running = True
+            
+            # Prüfe Ollama-Verfügbarkeit
+            try:
+                response = requests.get(f"{OLLAMA_BASE_URL}/api/version", timeout=5)
+                if response.status_code == 200:
+                    log_message("Ollama-Server erreichbar", "INFO", "MAIN")
+                else:
+                    log_message("Ollama-Server nicht erreichbar - einige Features deaktiviert", "WARNING", "MAIN")
+            except:
+                log_message("Ollama-Server nicht erreichbar - einige Features deaktiviert", "WARNING", "MAIN")
             
             # Starte Clients
             if ENABLE_TWITCH:
@@ -864,6 +1087,11 @@ class ZephyrMultiBot:
             joke_thread.daemon = True
             joke_thread.start()
             log_message("Automatische Witze gestartet", "INFO", "MAIN")
+            
+            status_thread = threading.Thread(target=self.status_monitor)
+            status_thread.daemon = True
+            status_thread.start()
+            log_message("Status-Monitor gestartet", "INFO", "MAIN")
             
             log_message("Bot erfolgreich gestartet", "INFO", "MAIN")
             return True
