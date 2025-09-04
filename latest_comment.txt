@@ -1,0 +1,4 @@
+{
+  "short_chat": "Alles läuft rund – 100 % HP, 50 % Mana. Zeit, die nächste Quest anzugehen!",
+  "long_call": "Du bist auf Level 10, HP voll, Mana halb. Keine Ressourcen, also keine Zauber. Risiko: Gegner könnten dich überraschen, wenn du zu lange ohne Bewegung bleibst. Tipp: Suche dir einen sicheren Ort, sammle Ressourcen und starte die nächste Quest."
+}
