@@ -1,0 +1,56 @@
+def _safe_run_analyze(bot):
+    """Starte analyze_and_comment.py und poste short_chat, wenn neu, nicht zu häufig und Screenshot wirklich geändert."""
+    if not os.path.exists(ANALYZE_SCRIPT):
+        log_message("analyze_and_comment.py fehlt – Vision-Kommentare deaktiviert", "WARNING", "VISION")
+        return False
+    try:
+        proc = subprocess.run([sys.executable, ANALYZE_SCRIPT], cwd=BASE_DIR, timeout=150)
+        if proc.returncode != 0:
+            log_message(f"analyze_and_comment.py RC {proc.returncode}", "ERROR", "VISION")
+            return False
+
+        data = _read_json_file(LATEST_COMMENT_FILE)
+        if not isinstance(data, dict):
+            log_message("latest_comment.txt leer/kein JSON – nichts zu posten", "WARNING", "VISION")
+            return False
+
+        short_chat = (data.get("short_chat") or "").strip()
+        if not short_chat:
+            log_message("short_chat fehlt in latest_comment.txt – überspringe", "WARNING", "VISION")
+            return False
+
+        # Aktuellster Screenshot (für Hash)
+        sc_path = LLaVAAnalyzer(GameStateManager()).get_latest_screenshot()
+        sc_h = _sc_hash(sc_path) if sc_path else ""
+
+        # Dedup + Rate Limit auf short_chat + Screenshot-Änderung
+        global _last_short_chat_hash, _last_short_chat_ts, _last_posted_sc_hash
+        now = time.time()
+        short_h = hashlib.md5(short_chat.encode("utf-8")).hexdigest()
+
+        if short_h == _last_short_chat_hash:
+            log_message("short_chat unverändert – kein Post (Dedup/short_chat)", "INFO", "VISION")
+            return True
+
+        if now - _last_short_chat_ts < SHORT_CHAT_MIN_INTERVAL:
+            wait_left = int(SHORT_CHAT_MIN_INTERVAL - (now - _last_short_chat_ts))
+            log_message(f"short_chat Rate-Limit – poste nicht (noch {wait_left}s)", "INFO", "VISION")
+            return True
+
+        if sc_h and sc_h == _last_posted_sc_hash:
+            log_message("Screenshot unverändert – kein Post (Dedup/screenshot)", "INFO", "VISION")
+            return True
+
+        _post_short_chat_to_all(bot, short_chat)
+        _last_short_chat_hash = short_h
+        _last_short_chat_ts = now
+        _last_posted_sc_hash = sc_h
+        log_message("short_chat gepostet (latest_comment.txt)", "INFO", "VISION")
+        return True
+
+    except subprocess.TimeoutExpired:
+        log_message("analyze_and_comment.py Timeout", "ERROR", "VISION")
+        return False
+    except Exception as e:
+        log_message(f"Analyze-Run Fehler: {e}", "ERROR", "VISION")
+        return False
