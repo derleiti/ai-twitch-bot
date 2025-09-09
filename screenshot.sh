@@ -1,123 +1,92 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Screenshot Sync Script – nur eine Datei, ressourcenschonend für X11 & Wayland
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# --------- Einstellungen ---------
 SERVER="root@ailinux.me"
-REMOTE_PATH="/root/zephyr/screenshots"
-LOCAL_FILE="$SCRIPT_DIR/current_screenshot.jpg"
-REMOTE_FILE="$REMOTE_PATH/current_screenshot.jpg"
+REMOTE_DIR="/root/zephyr/screenshots"
+LOCAL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/screenshots"
+TARGET_FILE="$LOCAL_DIR/current_screenshot.jpg"
+INTERVAL_SEC=10           # <- ALLE 10 SEKUNDEN
+QUALITY=90
+MIN_SIZE_BYTES=10240
+SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=3 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+LOG_PREFIX="[screenshot.sh]"
+# ---------------------------------
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; BLUE='\033[0;34m'; NC='\033[0m'
+mkdir -p "$LOCAL_DIR"
 
-echo -e "${BLUE}=== Screenshot Sync gestartet (Wayland/X11 Auto, Hauptmonitor) ===${NC}"
-echo "Datei: $LOCAL_FILE"
-echo "Server: $REMOTE_FILE"
-echo
+log(){ echo "[$(date '+%F %T')] $LOG_PREFIX $*"; }
 
-# Alte Screenshots löschen
-echo "Bereinige alte Screenshots…"
-rm -f "$SCRIPT_DIR"/current_screenshot.*
+# Remote-Verzeichnis vorbereiten (best effort)
+ssh $SSH_OPTS "$SERVER" "mkdir -p '$REMOTE_DIR'" >/dev/null 2>&1 || true
 
-# Funktion zur Tool-Installation
-install_tool() {
-    TOOL=$1
-    if ! command -v "$TOOL" &> /dev/null; then
-        echo -e "${BLUE}→ Installiere fehlendes Tool: $TOOL${NC}"
-        sudo apt update && sudo apt install -y "$TOOL"
-    fi
-}
-
-# Screenshot-Tool erkennen
-SCREENSHOT_CMD=""
-if [ "$XDG_SESSION_TYPE" == "wayland" ]; then
-    install_tool grim
-    if command -v grim &> /dev/null && \
-       ! grim "$SCRIPT_DIR/test_grim.png" 2>&1 | grep -q "doesn't support wlr-screencopy"; then
-        rm -f "$SCRIPT_DIR/test_grim.png"
-        SCREENSHOT_CMD="grim"
-        echo -e "${GREEN}→ Wayland erkannt, verwende grim${NC}"
-    else
-        rm -f "$SCRIPT_DIR/test_grim.png"
-        echo -e "${RED}→ grim nicht kompatibel oder fehlend${NC}"
-    fi
-
-    if [ -z "$SCREENSHOT_CMD" ]; then
-        install_tool spectacle
-        if command -v spectacle &> /dev/null; then
-            SCREENSHOT_CMD="spectacle"
-            echo -e "${GREEN}→ Fallback auf spectacle CLI (KDE/Wayland)${NC}"
-        fi
-    fi
-
-    if [ -z "$SCREENSHOT_CMD" ]; then
-        echo -e "${RED}❌ Kein Screenshot-Tool für Wayland gefunden!${NC}"
-        exit 1
-    fi
-
-else
-    # X11
-    install_tool maim
-    if command -v maim &> /dev/null; then
-        SCREENSHOT_CMD="maim"
-        echo -e "${GREEN}→ X11 erkannt, verwende maim${NC}"
-    fi
-
-    if [ -z "$SCREENSHOT_CMD" ]; then
-        install_tool scrot
-        if command -v scrot &> /dev/null; then
-            SCREENSHOT_CMD="scrot"
-            echo -e "${GREEN}→ Fallback auf scrot unter X11${NC}"
-        fi
-    fi
-
-    if [ -z "$SCREENSHOT_CMD" ]; then
-        echo -e "${RED}❌ Kein Screenshot-Tool für X11 gefunden!${NC}"
-        exit 1
-    fi
+# Screenshot-Tool ermitteln
+MODE="unknown"; TOOL="unknown"
+if [[ "${XDG_SESSION_TYPE:-}" == "wayland" && -n "${WAYLAND_DISPLAY:-}" ]] && command -v grim >/dev/null 2>&1; then
+  MODE="wayland"; TOOL="grim"
+elif [[ -n "${DISPLAY:-}" ]]; then
+  if command -v maim >/dev/null 2>&1; then MODE="x11"; TOOL="maim"
+  elif command -v import >/dev/null 2>&1; then MODE="x11"; TOOL="import"; fi
 fi
 
-# Remote-Verzeichnis anlegen
-echo "Prüfe SSH-Verbindung…"
-ssh -o ConnectTimeout=5 $SERVER "mkdir -p $REMOTE_PATH" 2>/dev/null
-if [ $? -ne 0 ]; then
-    echo -e "${RED}SSH-Verbindung fehlgeschlagen.${NC}"
-    exit 1
+if [[ "$MODE" == "unknown" ]]; then
+  log "Kein Screenshot-Tool gefunden (DISPLAY='${DISPLAY:-}', WAYLAND='${WAYLAND_DISPLAY:-}')."
+  exit 1
 fi
-echo -e "${GREEN}Verbindung OK${NC}"
-echo
+log "Modus: $MODE, Tool: $TOOL, Intervall: ${INTERVAL_SEC}s"
 
-# Screenshot-Loop
-counter=1
+trap 'log "Beende (Signal gefangen)."; exit 0' INT TERM
+
+i=0
 while true; do
-    echo -e "${BLUE}[$(date '+%H:%M:%S')] Screenshot #$counter${NC}"
+  i=$((i+1))
+  ts="$(date '+%Y-%m-%d %H:%M:%S')"
+  tmp_local="${LOCAL_DIR}/.current_screenshot.jpg.tmp"
+  remote_tmp="${REMOTE_DIR}/.current_screenshot.jpg.tmp"
+  remote_final="${REMOTE_DIR}/current_screenshot.jpg"
 
-    case "$SCREENSHOT_CMD" in
-        grim)
-            OUTPUT=$(grim -l | grep primary | awk '{print $1}')
-            grim -o "$OUTPUT" "$LOCAL_FILE" ;;
-        maim)
-            GEOM=$(xrandr | awk '/ primary/{print $4}')
-            maim -g "$GEOM" "$LOCAL_FILE" ;;
-        scrot)
-            scrot -o "$LOCAL_FILE" ;;
-        spectacle)
-            spectacle -b -n -o "$LOCAL_FILE" ;;
-    esac
-
-    if [ -f "$LOCAL_FILE" ]; then
-        size=$(du -h "$LOCAL_FILE" | cut -f1)
-        echo "  📸 Screenshot erstellt ($size)"
-        if scp "$LOCAL_FILE" "$SERVER:$REMOTE_FILE" 2>/dev/null; then
-            echo -e "  ✅ ${GREEN}Erfolgreich übertragen${NC}"
-        else
-            echo -e "  ❌ ${RED}Upload fehlgeschlagen${NC}"
-        fi
-    else
-        echo -e "  ❌ ${RED}Screenshot fehlgeschlagen${NC}"
+  # --- Aufnahme ---
+  if [[ "$TOOL" == "maim" ]]; then
+    # WICHTIG: Format explizit auf JPG setzen (Fix für „Unknown format type: tmp“)
+    if ! maim -u -m 10 -f jpg "$tmp_local"; then
+      log "$ts Aufnahme fehlgeschlagen (maim)"
+      rm -f "$tmp_local" 2>/dev/null || true
+      sleep "$INTERVAL_SEC"; continue
     fi
+    command -v jpegoptim >/dev/null 2>&1 && jpegoptim --max="$QUALITY" --strip-all -q "$tmp_local" || true
+  elif [[ "$TOOL" == "grim" ]]; then
+    if ! grim -t jpeg -q "$QUALITY" "$tmp_local"; then
+      log "$ts Aufnahme fehlgeschlagen (grim)"
+      rm -f "$tmp_local" 2>/dev/null || true
+      sleep "$INTERVAL_SEC"; continue
+    fi
+  else
+    # ImageMagick-Import
+    if ! import -window root jpg:- > "$tmp_local"; then
+      log "$ts Aufnahme fehlgeschlagen (import)"
+      rm -f "$tmp_local" 2>/dev/null || true
+      sleep "$INTERVAL_SEC"; continue
+    fi
+  fi
 
-    echo
-    ((counter++))
-    sleep 5
+  # --- Plausibilitätscheck ---
+  sz=$(stat -c %s "$tmp_local" 2>/dev/null || echo 0)
+  if (( sz < MIN_SIZE_BYTES )); then
+    log "$ts -> Bild zu klein (${sz} B), verwerfe."
+    rm -f "$tmp_local"
+    sleep "$INTERVAL_SEC"; continue
+  fi
+
+  # --- lokal „current“ aktualisieren ---
+  mv -f "$tmp_local" "$TARGET_FILE"
+
+  # --- Upload & atomar umbenennen ---
+  if scp $SSH_OPTS "$TARGET_FILE" "$SERVER:$remote_tmp" >/dev/null 2>&1; then
+    ssh $SSH_OPTS "$SERVER" "mv -f '$remote_tmp' '$remote_final'" || log "$ts -> Upload ok, Remote-rename FEHLER"
+    log "$ts -> Erfolgreich übertragen (#$i)"
+  else
+    log "$ts -> Upload fehlgeschlagen (SSH/Netz?)"
+  fi
+
+  sleep "$INTERVAL_SEC"
 done

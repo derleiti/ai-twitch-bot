@@ -1,0 +1,20 @@
+# Stabile Basis für Transformer-Modelle
+torch
+transformers
+accelerate
+einops
+timm
+
+# FastAPI Server
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# Hilfsbibliotheken
+requests==2.32.3
+pillow
+python-dotenv==1.0.1
+sentencepiece
+
+# Auth / JWT
+authlib==1.3.1
+python-jose[cryptography]==3.3.0

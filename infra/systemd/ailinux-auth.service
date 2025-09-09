@@ -1,0 +1,20 @@
+[Unit]
+Description=AILinux Auth Service (FastAPI)
+After=network.target
+
+[Service]
+User=%i
+WorkingDirectory=/root/zephyr
+EnvironmentFile=/root/zephyr/.env
+ExecStart=/usr/bin/python3 /root/zephyr/auth_service.py
+Restart=always
+RestartSec=3
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/root/zephyr /var/lib /var/log
+
+[Install]
+WantedBy=multi-user.target
+

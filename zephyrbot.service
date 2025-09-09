@@ -1,0 +1,35 @@
+[Unit]
+Description=Zephyr Multi-Platform Bot
+After=network-online.target ollama.service
+Wants=network-online.target
+Requires=ollama.service
+
+[Service]
+Type=simple
+User=root
+Environment=QWEN_SEND_BASE64=true
+
+
+# Arbeitsverzeichnis des Bots
+WorkingDirectory=/root/zephyr
+
+# .env automatisch laden (alle key=value)
+EnvironmentFile=-/root/zephyr/.env
+
+# Python-Umgebungen
+Environment=PYTHONPATH=/root/zephyr
+Environment=PATH=/root/server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Startscript
+ExecStart=/root/zephyr/start-zephyr.sh service
+
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+Nice=5
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

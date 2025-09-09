@@ -1,0 +1,42 @@
+# /etc/systemd/system/zephyr-screenshot.service
+[Unit]
+Description=Zephyr Screenshot Sync (System, root)
+Wants=network-online.target display-manager.service
+After=network-online.target display-manager.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/zombie/zephyr
+
+# Umgebung so nah wie möglich an deine laufende User-Session (UID 1000)
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=DISPLAY=:0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+
+# kleine Verzögerung, damit X-Socket & Bus wirklich stehen
+ExecStartPre=/bin/sleep 8
+
+# WICHTIG: Bash explizit; -l sorgt für login-artige Env, -c für Command
+# Wir lassen den Wrapper selbst die perfekte Session finden (inkl. XAUTHORITY aus /tmp/xauth_*)
+ExecStart=/bin/bash -lc '/home/zombie/zephyr/screenshot-wrapper.sh'
+
+# Logs sauber ins Journald
+StandardOutput=journal
+StandardError=journal
+
+Restart=on-failure
+RestartSec=10s
+TimeoutStartSec=180
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# Härten: PrivateTmp NICHT setzen (wir brauchen /tmp/.X11-unix)
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=false
+
+[Install]
+WantedBy=multi-user.target

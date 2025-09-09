@@ -1,4 +1,4 @@
 {
-  "short_chat": "Alles wirkt stabil. HUD gut lesbar, Orientierung klar, keine kritischen Ausschläge.",
-  "long_call": "Vision-Pipeline temporär nicht erreichbar; nutze Fallback-Kommentar."
+  "short_chat": "JSON sieht sauber aus – gute Struktur für die Datenübertragung.",
+  "long_call": "Du arbeitest gerade mit JSON, das ist eine solide Wahl für Datenformate. Es bleibt lesbar und lässt sich gut zwischen Systemen austauschen. Falls du Authentifizierung oder Validierung einbaust, wird es noch robuster. Brumo würde die Klarheit mögen."
 }

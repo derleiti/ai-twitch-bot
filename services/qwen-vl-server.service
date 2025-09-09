@@ -1,0 +1,23 @@
+[Unit]
+Description=Qwen VL FastAPI Server for Zephyr
+After=network-online.target
+
+[Service]
+# Benutzer, unter dem der Dienst laufen soll (root bei dir)
+User=root
+# Arbeitsverzeichnis ist das Hauptverzeichnis deines Projekts
+WorkingDirectory=/root/zephyr
+
+# Der Befehl zum Starten des Dienstes über unser Skript
+ExecStart=/root/zephyr/start-qwen-server.sh
+
+# Neustart-Richtlinien für Stabilität
+Restart=on-failure
+RestartSec=15s
+
+# Logging sauber ins System-Journal umleiten
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+[Unit]
+Description=Zephyr Screenshot Sync (System, zombie)
+After=network-online.target graphical.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=zombie
+WorkingDirectory=/home/zombie/zephyr
+ExecStart=/usr/bin/env bash /home/zombie/zephyr/screenshot-wrapper.sh
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target
