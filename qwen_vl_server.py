@@ -145,7 +145,9 @@ def _extract_image_and_text(msgs: List[dict]) -> Tuple[Optional[List[Any]], str]
                     local_path = parsed.path
                     if not local_path:
                         return None
-                    # Sicherheit: keine Directory-Traversal-Prüfung nötig, da Pfad absolut sein sollte
+                    # Sicherheit: Prüfung auf Directory Traversal
+                    if '../' in local_path or '..\\' in local_path:
+                        raise Exception('Invalid file path')
                     with open(local_path, 'rb') as f:
                         raw = f.read()
                     img = Image.open(BytesIO(raw))
