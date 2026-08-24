@@ -137,16 +137,28 @@ def _extract_image_and_text(msgs: List[dict]) -> Tuple[Optional[List[Any]], str]
                     return None
 
             if u.startswith("file://"):
-                # Lokaler Dateipfad (nur lesen)
+                # Local image reads are restricted to the configured screenshot root.
                 try:
-                    from urllib.parse import urlparse
+                    from pathlib import Path
+                    from urllib.parse import unquote, urlparse
                     parsed = urlparse(u)
-                    # Bei file-URLs ist der Pfad in .path
-                    local_path = parsed.path
+                    if parsed.netloc not in ("", "localhost"):
+                        return None
+                    local_path = unquote(parsed.path or "")
                     if not local_path:
                         return None
-                    # Sicherheit: keine Directory-Traversal-Prüfung nötig, da Pfad absolut sein sollte
-                    with open(local_path, 'rb') as f:
+                    screenshot_root = Path(
+                        os.getenv("SCREENSHOT_DIR", "/root/zephyr/screenshots")
+                    ).expanduser().resolve()
+                    candidate = Path(local_path).expanduser().resolve(strict=True)
+                    try:
+                        candidate.relative_to(screenshot_root)
+                    except ValueError:
+                        if dbg: print(f"[qwen-vl] blocked file path outside screenshot root: {candidate}", flush=True)
+                        return None
+                    if not candidate.is_file():
+                        return None
+                    with candidate.open('rb') as f:
                         raw = f.read()
                     img = Image.open(BytesIO(raw))
                     img.load()
