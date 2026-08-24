@@ -1,0 +1,1 @@
+"""Screenshot ring-buffer helpers."""

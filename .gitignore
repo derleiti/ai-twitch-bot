@@ -1,7 +1,12 @@
 backup_2025-09-09/
 .env.backup_2025-09-09_0541
 .env.backup
-screenshots/
+screenshots/*.png
+screenshots/*.jpg
+screenshots/*.jpeg
+screenshots/*.webp
+screenshots/.index.json
+screenshots/.index.tmp
 .env.backup
 .env
 auth.db
