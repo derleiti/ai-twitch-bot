@@ -6,3 +6,6 @@ screenshots/
 .env
 auth.db
 
+
+__pycache__/
+*.py[cod]
