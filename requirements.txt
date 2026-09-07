@@ -16,5 +16,5 @@ python-dotenv==1.2.3
 sentencepiece
 
 # Auth / JWT
-authlib==1.7.2
+authlib==1.8.0
 python-jose[cryptography]==3.5.0
