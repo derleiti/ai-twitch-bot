@@ -39,7 +39,7 @@ jobs:
           func main(){if len(os.Args)>1&&os.Args[1]=="--version"{fmt.Printf("%s %s\n",project,version);return};out:=project+"-source";if len(os.Args)>2&&os.Args[1]=="--extract"{out=os.Args[2]};if err:=extract(out);err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(1)};fmt.Println("Extracted",project,"source to",out)}
           func extract(out string)error{f,e:=payload.Open("payload.tar.gz");if e!=nil{return e};defer f.Close();gz,e:=gzip.NewReader(f);if e!=nil{return e};defer gz.Close();tr:=tar.NewReader(gz);for{h,e:=tr.Next();if e==io.EOF{break};if e!=nil{return e};n:=filepath.Clean(h.Name);if n=="."||n==""{continue};if filepath.IsAbs(n)||n==".."||(len(n)>3&&n[:3]=="../"){return fmt.Errorf("unsafe archive path %q",h.Name)};p:=filepath.Join(out,n);if h.FileInfo().IsDir(){if e=os.MkdirAll(p,0755);e!=nil{return e};continue};if e=os.MkdirAll(filepath.Dir(p),0755);e!=nil{return e};d,e:=os.OpenFile(p,os.O_CREATE|os.O_TRUNC|os.O_WRONLY,fs.FileMode(h.Mode)&0777);if e!=nil{return e};if _,e=io.Copy(d,tr);e!=nil{d.Close();return e};if e=d.Close();e!=nil{return e}};return nil}
           GO
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-linux-x86_64" ./.platform-capsule
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-linux-x86_64" .platform-capsule/main.go
           chmod +x "dist/$repo-$version-linux-x86_64"
           "dist/$repo-$version-linux-x86_64" --version
           printf '%s\n' "$repo" > dist/PROJECT
@@ -130,7 +130,7 @@ jobs:
           func main(){if len(os.Args)>1&&os.Args[1]=="--version"{fmt.Printf("%s %s\n",project,version);return};out:=project+"-source";if len(os.Args)>2&&os.Args[1]=="--extract"{out=os.Args[2]};if e:=extract(out);e!=nil{fmt.Fprintln(os.Stderr,e);os.Exit(1)};fmt.Println("Extracted",project,"source to",out)}
           func extract(out string)error{f,e:=payload.Open("payload.tar.gz");if e!=nil{return e};defer f.Close();gz,e:=gzip.NewReader(f);if e!=nil{return e};defer gz.Close();tr:=tar.NewReader(gz);for{h,e:=tr.Next();if e==io.EOF{break};if e!=nil{return e};n:=filepath.Clean(h.Name);if n=="."||n==""{continue};if filepath.IsAbs(n)||n==".."||(len(n)>3&&n[:3]=="../"){return fmt.Errorf("unsafe archive path %q",h.Name)};p:=filepath.Join(out,n);if h.FileInfo().IsDir(){if e=os.MkdirAll(p,0755);e!=nil{return e};continue};if e=os.MkdirAll(filepath.Dir(p),0755);e!=nil{return e};d,e:=os.OpenFile(p,os.O_CREATE|os.O_TRUNC|os.O_WRONLY,fs.FileMode(h.Mode)&0777);if e!=nil{return e};if _,e=io.Copy(d,tr);e!=nil{d.Close();return e};if e=d.Close();e!=nil{return e}};return nil}
           GO
-          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-windows-x86_64.exe" ./.platform-capsule
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-windows-x86_64.exe" .platform-capsule/main.go
       - name: Verify PE and checksum
         shell: pwsh
         run: |
@@ -167,7 +167,7 @@ jobs:
           func main(){if len(os.Args)>1&&os.Args[1]=="--version"{fmt.Printf("%s %s\n",project,version);return};out:=project+"-source";if len(os.Args)>2&&os.Args[1]=="--extract"{out=os.Args[2]};if e:=extract(out);e!=nil{fmt.Fprintln(os.Stderr,e);os.Exit(1)};fmt.Println("Extracted",project,"source to",out)}
           func extract(out string)error{f,e:=payload.Open("payload.tar.gz");if e!=nil{return e};defer f.Close();gz,e:=gzip.NewReader(f);if e!=nil{return e};defer gz.Close();tr:=tar.NewReader(gz);for{h,e:=tr.Next();if e==io.EOF{break};if e!=nil{return e};n:=filepath.Clean(h.Name);if n=="."||n==""{continue};if filepath.IsAbs(n)||n==".."||(len(n)>3&&n[:3]=="../"){return fmt.Errorf("unsafe archive path %q",h.Name)};p:=filepath.Join(out,n);if h.FileInfo().IsDir(){if e=os.MkdirAll(p,0755);e!=nil{return e};continue};if e=os.MkdirAll(filepath.Dir(p),0755);e!=nil{return e};d,e:=os.OpenFile(p,os.O_CREATE|os.O_TRUNC|os.O_WRONLY,fs.FileMode(h.Mode)&0777);if e!=nil{return e};if _,e=io.Copy(d,tr);e!=nil{d.Close();return e};if e=d.Close();e!=nil{return e}};return nil}
           GO
-          for arch in amd64 arm64; do CGO_ENABLED=0 GOOS=darwin GOARCH=$arch go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-macos-$arch" ./.platform-capsule; done
+          for arch in amd64 arm64; do CGO_ENABLED=0 GOOS=darwin GOARCH=$arch go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-macos-$arch" .platform-capsule/main.go; done
           lipo -create -output "dist/$repo-$version-macos-universal" "dist/$repo-$version-macos-amd64" "dist/$repo-$version-macos-arm64"
           chmod +x "dist/$repo-$version-macos-universal"
           "dist/$repo-$version-macos-universal" --version
@@ -207,7 +207,7 @@ jobs:
           var payload embed.FS; var project="project"; var version="dev"
           func main(){fmt.Printf("%s %s portable source capsule\n",project,version);if len(os.Args)>1{fmt.Println("Use the release-specific native capsule for extraction.")}}
           GO
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "$repo-capsule" ./.platform-capsule
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "$repo-capsule" .platform-capsule/main.go
           sha=$(sha256sum "$repo-capsule"|awk '{print $1}')
           cat > PKGBUILD <<EOF
           pkgname=$pkgbase
@@ -256,7 +256,7 @@ jobs:
           func main(){if len(os.Args)>1&&os.Args[1]=="--version"{fmt.Printf("%s %s\n",project,version);return};out:=project+"-source";if len(os.Args)>2&&os.Args[1]=="--extract"{out=os.Args[2]};if e:=extract(out);e!=nil{fmt.Fprintln(os.Stderr,e);os.Exit(1)};fmt.Println("Extracted",project,"source to",out)}
           func extract(out string)error{f,e:=payload.Open("payload.tar.gz");if e!=nil{return e};defer f.Close();gz,e:=gzip.NewReader(f);if e!=nil{return e};defer gz.Close();tr:=tar.NewReader(gz);for{h,e:=tr.Next();if e==io.EOF{break};if e!=nil{return e};n:=filepath.Clean(h.Name);if n=="."||n==""{continue};if filepath.IsAbs(n)||n==".."||(len(n)>3&&n[:3]=="../"){return fmt.Errorf("unsafe archive path %q",h.Name)};p:=filepath.Join(out,n);if h.FileInfo().IsDir(){if e=os.MkdirAll(p,0755);e!=nil{return e};continue};if e=os.MkdirAll(filepath.Dir(p),0755);e!=nil{return e};d,e:=os.OpenFile(p,os.O_CREATE|os.O_TRUNC|os.O_WRONLY,fs.FileMode(h.Mode)&0777);if e!=nil{return e};if _,e=io.Copy(d,tr);e!=nil{d.Close();return e};if e=d.Close();e!=nil{return e}};return nil}
           GO
-          for os in freebsd openbsd; do CGO_ENABLED=0 GOOS=$os GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$os/$repo-$version-$os-x86_64" ./.platform-capsule; done
+          for os in freebsd openbsd; do CGO_ENABLED=0 GOOS=$os GOARCH=amd64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$os/$repo-$version-$os-x86_64" .platform-capsule/main.go; done
           file dist/freebsd/* | grep -q FreeBSD
           file dist/openbsd/* | grep -q OpenBSD
           (cd dist/freebsd && sha256sum * > SHA256SUMS-freebsd.txt)
@@ -304,7 +304,7 @@ jobs:
           var payload embed.FS; var project="project"; var version="dev"
           func main(){fmt.Printf("%s %s Android/Termux capsule\n",project,version)}
           GO
-          CGO_ENABLED=0 GOOS=android GOARCH=arm64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-android-arm64" ./.platform-capsule
+          CGO_ENABLED=0 GOOS=android GOARCH=arm64 go build -trimpath -ldflags "-s -w -X main.project=$repo -X main.version=$version" -o "dist/$repo-$version-android-arm64" .platform-capsule/main.go
           cat > android-capsule/settings.gradle <<EOF
           pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
           dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
