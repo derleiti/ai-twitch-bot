@@ -6,13 +6,13 @@ einops
 timm
 
 # FastAPI Server
-fastapi==0.141.1
-uvicorn[standard]==0.52.4
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
 
 # Hilfsbibliotheken
 requests==2.34.2
 pillow
-python-dotenv==1.2.3
+python-dotenv==1.2.4
 sentencepiece
 
 # Auth / JWT
