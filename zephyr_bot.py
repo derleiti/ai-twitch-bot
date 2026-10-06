@@ -482,6 +482,8 @@ def handle_chat_message(user, is_mod, text):
 # Haupt-Loop
 # -----------------------------------------
 def main():
+    from bug_reporter import install as install_bug_reporter
+    install_bug_reporter(app="Zephyr Twitch Bot", repo="ai-twitch-bot", version=os.getenv("ZEPHYR_VERSION", "unknown"), channel="service")
     logger.info("========================================")
     logger.info("🤖 Zephyr Bot - Final Edition")
     logger.info("▶  PID: %s", os.getpid())

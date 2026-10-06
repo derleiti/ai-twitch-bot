@@ -24,6 +24,12 @@ _dtype = torch.bfloat16 if _device == "cuda" else torch.float32
 
 _app = app = FastAPI()
 
+async def _install_bug_reporting() -> None:
+    from bug_reporter import install as install_bug_reporter
+    install_bug_reporter(app="Zephyr Qwen Vision Service", repo="ai-twitch-bot", version=os.getenv("ZEPHYR_VERSION", "unknown"), channel="service")
+
+app.add_event_handler("startup", _install_bug_reporting)
+
 _model = None
 _processor = None
 

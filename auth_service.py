@@ -11,6 +11,12 @@ from auth.db import init_db, upsert_user, get_user, create_link_code, consume_li
 
 load_dotenv(); init_db()
 app = FastAPI(title="AILinux Auth Service")
+
+async def _install_bug_reporting() -> None:
+    from bug_reporter import install as install_bug_reporter
+    install_bug_reporter(app="AILinux Twitch Auth Service", repo="ai-twitch-bot", version=os.getenv("ZEPHYR_VERSION", "unknown"), channel="service")
+
+app.add_event_handler("startup", _install_bug_reporting)
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("JWT_SECRET","insecure"))
 
 oauth = OAuth()

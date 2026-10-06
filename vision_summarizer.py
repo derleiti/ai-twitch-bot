@@ -422,5 +422,7 @@ def ask_image_question(image_path: str, question: str) -> Optional[str]:
 # -----------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    from bug_reporter import install as install_bug_reporter
+    install_bug_reporter(app="Zephyr Vision Summarizer", repo="ai-twitch-bot", version=os.getenv("ZEPHYR_VERSION", "unknown"), channel="cli")
     res = get_vision_comment()
     print(json.dumps(res, ensure_ascii=False, indent=2))
