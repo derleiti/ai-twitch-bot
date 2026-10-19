@@ -6,7 +6,7 @@ einops
 timm
 
 # FastAPI Server
-fastapi==0.142.2
+fastapi==0.143.2
 uvicorn[standard]==0.54.0
 
 # Hilfsbibliotheken
@@ -16,5 +16,5 @@ python-dotenv==1.2.4
 sentencepiece
 
 # Auth / JWT
-authlib==1.8.0
+authlib==1.9.1
 python-jose[cryptography]==3.5.0
