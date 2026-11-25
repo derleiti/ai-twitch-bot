@@ -27,7 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           grep -Ei '^(fastapi|requests|python-dotenv|authlib|pyjwt|httpx|itsdangerous)(\[crypto\])?==' requirements.txt > /tmp/zephyr-ci-requirements.txt
-          python -m pip install pytest ruff -r /tmp/zephyr-ci-requirements.txt
+          python -m pip install pytest ruff -r /tmp/zephyr-ci-requirements.txt -r capture/requirements.txt
       - name: Compile Python sources
         run: python -m compileall -q *.py auth tests zephyr
       - name: Critical Ruff checks

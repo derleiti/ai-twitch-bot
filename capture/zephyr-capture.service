@@ -1,0 +1,16 @@
+[Unit]
+Description=Zephyr OBS stream screenshot uploader
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/share/zephyr-capture/venv/bin/python %h/.local/share/zephyr-capture/obs_capture.py
+Environment=ZEPHYR_CAPTURE_INTERVAL=30
+EnvironmentFile=-%h/.config/zephyr-capture/capture.env
+Restart=on-failure
+RestartSec=15
+NoNewPrivileges=true
+UMask=0077
+
+[Install]
+WantedBy=default.target
