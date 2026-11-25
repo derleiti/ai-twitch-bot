@@ -6,6 +6,7 @@ import time
 import ssl
 import socket
 import threading
+import queue
 from collections import deque
 import logging
 import re
@@ -58,7 +59,7 @@ class TwitchClient:
 
         self.channel = self._normalize_channel(chan)
         self.username = user
-        self.oauth = oauth
+        self.oauth = (oauth if oauth.startswith("oauth:") else "oauth:" + oauth) if oauth else ""
         self.host = os.getenv("TWITCH_IRC_HOST", "irc.chat.twitch.tv")
         self.port = int(os.getenv("TWITCH_IRC_PORT", "6697"))
         self.max_len = int(os.getenv("TWITCH_MAX_MESSAGE_LEN", "500"))
@@ -83,6 +84,8 @@ class TwitchClient:
         self._rx_thread: threading.Thread | None = None
         self._lock = threading.Lock()
         self._hello_sent = False
+        self._messages = queue.Queue(maxsize=16)
+        threading.Thread(target=self._dispatch_messages, daemon=True, name='twitch-handler').start()
         self.on_message = None  # callback(user:str, is_mod:bool, text:str)
         self.on_ready = None    # callback() once when JOIN complete (366/376)
         # --- Health metrics ---
@@ -139,6 +142,17 @@ class TwitchClient:
         if not self.channel:
             raise RuntimeError("TWITCH_CHANNEL fehlt in .env")
 
+    def _dispatch_messages(self):
+        while True:
+            args = self._messages.get()
+            try:
+                if callable(self.on_message):
+                    self.on_message(*args)
+            except Exception:
+                log.warning('Chat handler failed')
+            finally:
+                self._messages.task_done()
+
     def _reader_loop(self):
         try:
             while self._connected and self._file:
@@ -156,7 +170,7 @@ class TwitchClient:
                 except Exception:
                     pass
                 if line.startswith("PING"):
-                    self._raw_send("PONG :tmi.twitch.tv")
+                    self._raw_send("PONG" + line[4:])
                     log.debug("PONG gesendet")
                 # If measuring RTT, any server traffic after PING counts
                 if self._waiting_ping and self._ping_sent_ts is not None:
@@ -170,6 +184,8 @@ class TwitchClient:
                         self._ping_event.set()
                     except Exception:
                         pass
+                if line.startswith(":tmi.twitch.tv RECONNECT"):
+                    break
                 # READY-Signal (Ende MOTD oder End of NAMES) → einmalige Begrüßung
                 if (" 366 " in line or " 376 " in line):
                     # Fire on_ready exactly once
@@ -213,7 +229,7 @@ class TwitchClient:
                                 is_mod = True
                             if callable(self.on_message):
                                 try:
-                                    self.on_message(user, is_mod, text)
+                                    self._messages.put_nowait((user, is_mod, text))
                                 except Exception as e:
                                     log.debug("on_message handler error: %s", e)
                 except Exception:
@@ -286,7 +302,7 @@ class TwitchClient:
         log.info("Twitch IRC verbunden.")
 
     def _clamp(self, text: str) -> str:
-        s = (text or "").replace("\n", " ").strip()
+        s = (text or "").replace("\n", " ").replace("\r", " ").strip()
         if len(s) <= self.max_len:
             return s
         # Kürzen auf Wortgrenze <= max_len, ggf. mit …
@@ -380,7 +396,7 @@ class TwitchClient:
         self.enqueue(text)
 
     def send_chunked(self, text: str, pause_sec: float = 1.8):
-        s = (text or "").replace("\n", " ").strip()
+        s = (text or "").replace("\n", " ").replace("\r", " ").strip()
         limit = self.max_len
         while s:
             part = s[:limit]

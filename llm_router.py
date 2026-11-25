@@ -86,6 +86,11 @@ def _ollama(prompt: str) -> str | None:
         log.warning("Ollama failover: %s", e)
         return None
 
+def _triforce(prompt):
+    from triforce_client import chat
+    return chat([{'role':'user','content':prompt}])
+
+
 def run_llm_chain(prompt: str) -> str:
     """
     Kaskade basierend auf AI_ORDER (oder BACKEND_ORDER):
@@ -98,6 +103,7 @@ def run_llm_chain(prompt: str) -> str:
     seq: List[str] = [x.strip().lower() for x in order.split(",") if x.strip()]
     # Map provider keys to callables
     mapping: dict[str, Callable[[str], str | None]] = {
+        "triforce": _triforce,
         "gemini": _gemini,
         "mistral": _mistral,
         "gpt-oss": _ollama,
@@ -124,4 +130,4 @@ def run_llm_chain(prompt: str) -> str:
         return max(results, key=lambda s: len(s))
 
     # letzter Notanker:
-    return _shorten(prompt)
+    return ""

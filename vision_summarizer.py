@@ -363,6 +363,9 @@ def ask_image_question(image_path: str, question: str) -> Optional[str]:
     Ask a free-form question about an image via the local Qwen-VL bridge.
     Returns the assistant content as a string, or None on error.
     """
+    if os.getenv("VISION_PROVIDER") == "triforce":
+        from triforce_client import vision
+        return vision(image_path, "Beantworte die Frage nur anhand sichtbarer Gameplay-Fakten, keine privaten Daten: " + (question or "")[:400])
     try:
         if not os.path.exists(image_path):
             logger.error("[vision_summarizer] Bild nicht gefunden: %s", image_path)
@@ -406,7 +409,7 @@ def ask_image_question(image_path: str, question: str) -> Optional[str]:
         req = _ur.Request(
             f"{getattr(qwen_client, 'QWEN_BASE', 'http://127.0.0.1:8010/v1')}/chat/completions",
             data=_json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
+            headers=qwen_client.request_headers(),
         )
         with _ur.urlopen(req, timeout=getattr(qwen_client, "QWEN_TIMEOUT", 30.0)) as r:
             body = r.read().decode("utf-8")
