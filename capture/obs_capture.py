@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 """Capture only the OBS program scene while streaming; atomic SSH upload."""
 import base64
-import hashlib
 import json
 import logging
 import os
 from pathlib import Path
 import subprocess
 import time
-import uuid
-import websocket
+import obsws_python
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 LOG = logging.getLogger('zephyr-capture')
+# obsws-python 1.8.1 logs connection parameters, including its password.
+# Keep SDK diagnostics silent; only our redacted exception categories are logged.
+for name in ('obsws_python', 'obsws_python.baseclient', 'obsws_python.reqs'):
+    sdk_log = logging.getLogger(name)
+    sdk_log.setLevel(logging.CRITICAL + 1)
+    sdk_log.propagate = False
+    sdk_log.addHandler(logging.NullHandler())
 REMOTE = os.getenv('ZEPHYR_SSH_TARGET', '').strip()
 INTERVAL = max(15, int(os.getenv('ZEPHYR_CAPTURE_INTERVAL', '30')))
 SSH = ['ssh','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=5']
@@ -22,33 +27,21 @@ def connect():
     home = Path.home()
     paths = [home/'.var/app/com.obsproject.Studio/config/obs-studio/plugin_config/obs-websocket/config.json', home/'.config/obs-studio/plugin_config/obs-websocket/config.json']
     cfg = next((json.loads(p.read_text()) for p in paths if p.is_file()), {})
-    ws = websocket.create_connection('ws://127.0.0.1:'+str(cfg.get('server_port',4455)), timeout=8, suppress_origin=True)
-    try:
-        hello = json.loads(ws.recv())['d']
-        identify = {'rpcVersion':1,'eventSubscriptions':0}
-        if 'authentication' in hello:
-            auth = hello['authentication']
-            secret = base64.b64encode(hashlib.sha256((cfg['server_password']+auth['salt']).encode()).digest()).decode()
-            identify['authentication'] = base64.b64encode(hashlib.sha256((secret+auth['challenge']).encode()).digest()).decode()
-        ws.send(json.dumps({'op':1,'d':identify}))
-        if json.loads(ws.recv()).get('op') != 2:
-            raise RuntimeError('OBS authentication failed')
-        return ws
-    except Exception:
-        ws.close()
-        raise
+    password = cfg.get('server_password')
+    if not isinstance(password, str) or not password:
+        raise RuntimeError('Authenticated OBS WebSocket configuration required')
+    client = obsws_python.ReqClient(
+        host='127.0.0.1', port=int(cfg.get('server_port', 4455)),
+        password=password, timeout=8,
+    )
+    if 'authentication' not in client.base_client.server_hello.get('d', {}):
+        client.disconnect()
+        raise RuntimeError('OBS WebSocket authentication is disabled')
+    return client
 
 
-def request(ws, name, data=None):
-    rid = uuid.uuid4().hex
-    ws.send(json.dumps({'op':6,'d':{'requestType':name,'requestId':rid,'requestData':data or {}}}))
-    while True:
-        msg = json.loads(ws.recv())
-        d = msg.get('d',{})
-        if msg.get('op') == 7 and d.get('requestId') == rid:
-            if not d['requestStatus']['result']:
-                raise RuntimeError(name+' failed: '+str(d['requestStatus'].get('code')))
-            return d.get('responseData',{})
+def request(client, name, data=None):
+    return client.send(name, data or {}, raw=True)
 
 
 def upload(data):
@@ -81,7 +74,7 @@ def main():
         except Exception as exc:
             LOG.warning('Capture unavailable: %s',type(exc).__name__)
             if ws is not None:
-                ws.close()
+                ws.disconnect()
                 ws = None
             time.sleep(INTERVAL)
 

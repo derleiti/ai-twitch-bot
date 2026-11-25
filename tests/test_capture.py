@@ -38,3 +38,34 @@ def test_upload_uses_strict_ssh_and_atomic_private_file(monkeypatch):
     assert 'mktemp' in command[-1] and 'mv -f' in command[-1]
     assert kwargs["input"] == frame
     assert kwargs["check"] is True
+
+
+def test_obs_requires_server_authentication(monkeypatch, tmp_path):
+    import json
+    from pathlib import Path
+    from types import SimpleNamespace
+
+    cfg = tmp_path / ".config/obs-studio/plugin_config/obs-websocket/config.json"
+    cfg.parent.mkdir(parents=True)
+    cfg.write_text(json.dumps({"server_password": "test-password", "server_port": 4455}))
+    monkeypatch.setattr(Path, "home", staticmethod(lambda: tmp_path))
+    client = Mock()
+    client.base_client.server_hello = {"d": {}}
+    factory = Mock(return_value=client)
+    monkeypatch.setattr(obs_capture.obsws_python, "ReqClient", factory)
+    with pytest.raises(RuntimeError, match="authentication is disabled"):
+        obs_capture.connect()
+    client.disconnect.assert_called_once()
+    assert factory.call_args.kwargs["host"] == "127.0.0.1"
+    client.base_client.server_hello = {"d": {"authentication": {}}}
+    assert obs_capture.connect() is client
+    client.send.return_value = {"outputActive": True}
+    assert obs_capture.request(client, "GetStreamStatus") == {"outputActive": True}
+
+
+def test_sdk_password_logging_is_disabled():
+    import logging
+    for name in ("obsws_python", "obsws_python.baseclient", "obsws_python.reqs"):
+        logger = logging.getLogger(name)
+        assert not logger.isEnabledFor(logging.INFO)
+        assert not logger.propagate
