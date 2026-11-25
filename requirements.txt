@@ -17,4 +17,6 @@ sentencepiece
 
 # Auth / JWT
 authlib==1.9.1
-python-jose[cryptography]==3.5.0
+PyJWT[crypto]==2.15.1
+httpx==0.28.1
+itsdangerous==2.2.0
