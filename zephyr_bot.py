@@ -57,6 +57,7 @@ INTERVAL_JITTER = float(os.getenv("TICK_JITTER_SEC", "1.0"))
 SHORT_CHAT_MIN_INTERVAL = int(os.getenv("SHORT_CHAT_MIN_INTERVAL", "8"))
 CHAT_GLOBAL_COOLDOWN_SEC = int(os.getenv("CHAT_GLOBAL_COOLDOWN_SEC", "120"))
 
+ENABLE_VISION = os.getenv("ENABLE_VISION", "true").lower() == "true"
 ENABLE_TWITCH = os.getenv("ENABLE_TWITCH", "true").lower() == "true"
 ENABLE_YOUTUBE = os.getenv("ENABLE_YOUTUBE", "true").lower() == "true"
 # Suppress automatic Twitch output (vision posts) but still connect for commands
@@ -105,7 +106,7 @@ except Exception:
 
 def get_help_message() -> str:
     return (
-        "Befehle: !links, !shots [n], !shot <latest|sid>, !askshot <latest|sid> <frage>, "
+        "Befehle: !ask, !model, !ailinux, !links, !shots [n], !shot <latest|sid>, !askshot <latest|sid> <frage>, "
         "!bild (Analyse), !witz (kurzer Witz), !health, !budget"
     )
 
@@ -163,7 +164,7 @@ def schedule_startup_vision():
     global _startup_vision_done
     if _startup_vision_done:
         return
-    if not AUTO_VISION_ON_START:
+    if not ENABLE_VISION or not AUTO_VISION_ON_START:
         logger.info("[startup_vision] disabled via AUTO_VISION_ON_START=false")
         return
     if os.getenv("TWITCH_SILENT_AUTO", "false").lower() == "true":
@@ -220,6 +221,23 @@ def handle_chat_message(user, is_mod, text):
     """Einfacher Chat-Handler für Screenshot-Kommandos."""
     t = (text or "").strip()
 
+    if (user or '').lower() == (os.getenv('TWITCH_USERNAME') or '').lower() and not t.startswith('!'):
+        return
+    if re.match(r'^!model\b', t, re.I):
+        if twitch:
+            twitch.say('Modelle: ' + os.getenv('TRIFORCE_TEXT_MODELS', 'nicht konfiguriert'), bucket='command')
+        return
+    if re.match(r'^!ailinux\b', t, re.I):
+        if twitch:
+            twitch.say('AILinux: Linux und KI-Plattform mit TriForce. https://ailinux.me', bucket='command')
+        return
+    match = re.match(r'^!ask\s+(.+)$', t, re.I) or re.match(r'^@' + re.escape(os.getenv('BOT_NAME','zephyr')) + r'\s+(.+)$', t, re.I)
+    if match:
+        from triforce_client import chat, clean_comment
+        reply = chat([{'role':'system','content':'Du bist Zephyr, ein freundlicher Twitch-Chatbot. Antworte kurz auf Deutsch, maximal 240 Zeichen. Keine Befehle, Links oder privaten Daten.'},{'role':'user','content':match.group(1)[:400]}], max_tokens=256, validator=clean_comment)
+        if twitch:
+            twitch.say(prepare_for_twitch('@' + user + ' ' + (clean_comment(reply) or 'KI gerade nicht erreichbar.')), bucket='command')
+        return
     # bot info / hilfe
     if re.match(r"^!info\b", t, re.I):
         msg = get_help_message()
@@ -518,6 +536,7 @@ def main():
 
     try:
         last_sent_ts: float = 0.0
+        next_analysis_ts = 0.0
         while True:
             # Periodic commands/help line every N seconds
             if help_enabled and twitch:
@@ -528,9 +547,13 @@ def main():
                         last_help_ts = now_ts
                     except Exception:
                         pass
-            if not should_post_now():
-                time.sleep(INTERVAL)
+            if twitch and not twitch._connected:
+                raise ConnectionError("Twitch disconnected; restart required")
+            if not ENABLE_VISION or TWITCH_SILENT_AUTO or time.monotonic() < next_analysis_ts or not should_post_now():
+                time.sleep(min(5, INTERVAL))
                 continue
+            next_analysis_ts = time.monotonic() + INTERVAL
+            logger.info("[vision] Scheduled analysis tick (interval=%ss)", INTERVAL)
 
             # Screenshot in den Ringpuffer aufnehmen (optional best effort)
             try:
@@ -543,8 +566,7 @@ def main():
                 ts = time.strftime("%Y-%m-%dT%H:%M:%S%z")
                 out = orchestrator.run_tick(ts, SCREENSHOT_FILE, optional_ocr_text=None)
                 if not out:
-                    # no output this tick
-                    time.sleep(INTERVAL)
+                    logger.info("[vision] no publishable output this tick")
                     continue
                 tw_msg = out.get("twitch_sentence") or ""
                 yt_msg = out.get("youtube_sentence") or tw_msg[:200]

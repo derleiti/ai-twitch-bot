@@ -153,7 +153,7 @@ def _call_vision(image_path: str, ocr_text: Optional[str]) -> Optional[Dict[str,
         req = _ur.Request(
             f"{getattr(qwen_client, 'QWEN_BASE', os.getenv('QWEN_BASE','http://127.0.0.1:8010/v1'))}/chat/completions",
             data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
+            headers=qwen_client.request_headers(),
         )
         with _ur.urlopen(req, timeout=getattr(qwen_client, "QWEN_TIMEOUT", 30.0)) as r:
             body = r.read().decode("utf-8")
@@ -338,7 +338,50 @@ def _format_and_keywords(long_s: str, short_s: str, ents: List[str], notes: List
     return {"twitch_sentence": tw, "youtube_sentence": yt, "keywords": kws[:6]}
 
 
+_last_frame = None
+_recent_comments = []
+
+def _triforce_tick(screenshot_path):
+    import hashlib
+    from pathlib import Path
+    from triforce_client import vision, chat, clean_comment
+    from zephyr_prompts import VISION, WRITER
+    global _last_frame
+    try:
+        p = Path(screenshot_path)
+        if p.stat().st_size > 8*1024*1024 or time.time()-p.stat().st_mtime > float(os.getenv('VISION_MAX_FRAME_AGE_SEC','120')):
+            return None
+        digest = hashlib.sha256(p.read_bytes()).digest()
+    except OSError:
+        return None
+    if digest == _last_frame:
+        return None
+    scene = vision(p, VISION)
+    if not scene:
+        log.info("[vision] no valid model response; frame remains retryable")
+        return None
+    if scene.strip().upper().startswith('SKIP'):
+        _last_frame = digest
+        log.info("[vision] skipped non-game scene")
+        return None
+    context = json.dumps({'scene': scene[:1200], 'recent_comments': _recent_comments[-5:]}, ensure_ascii=False)
+    reply = chat([{'role':'system','content':WRITER},{'role':'user','content':context}], max_tokens=768, validator=lambda value: clean_comment(value, min_chars=20))
+    text = clean_comment(reply, min_chars=20)
+    if not text:
+        log.info("[writer] no complete comment; frame remains retryable")
+        return None
+    _last_frame = digest
+    if text.casefold() in {c.casefold() for c in _recent_comments}:
+        log.info("[writer] duplicate comment suppressed")
+        return None
+    _recent_comments.append(text)
+    del _recent_comments[:-5]
+    return {'twitch_sentence':text,'youtube_sentence':text if len(text) <= 200 else '','keywords':[]}
+
+
 def run_tick(timestamp: str, screenshot_path: str, optional_ocr_text: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    if os.getenv("VISION_PROVIDER") == "triforce":
+        return _triforce_tick(screenshot_path)
     vis = _call_vision(screenshot_path, optional_ocr_text)
     if not vis:
         return None
