@@ -39,7 +39,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ## Auth / SSO (Google + WordPress) Quickstart
 1. `pip install -r requirements.txt`
-2. Set in `.env`: `SITE_URL`, `AUTH_BASE_URL=http://localhost:8088`, `JWT_SECRET` (32+), `JWT_ISS`, `JWT_AUD`.
+2. Set in `.env`: `SITE_URL`, `AUTH_BASE_URL=http://localhost:8088`, `JWT_SECRET` (private random secret, at least 32 bytes; generate with `openssl rand -hex 32`), `JWT_ISS`, `JWT_AUD`.
    - Google: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
    - WordPress (optional): `WP_WELL_KNOWN` (+ `WP_CLIENT_ID`, `WP_CLIENT_SECRET`)
    - Local HTTP: set `COOKIE_SECURE=false` (or use HTTPS)

@@ -1,8 +1,10 @@
 import os, time
 from typing import Optional
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse, JSONResponse, HTMLResponse
-from jose import jwt, JWTError
+import jwt
+from jwt import InvalidTokenError
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import Response
@@ -10,19 +12,28 @@ from dotenv import load_dotenv
 from auth.db import init_db, upsert_user, get_user, create_link_code, consume_link_code, link_identity
 
 load_dotenv(); init_db()
-app = FastAPI(title="AILinux Auth Service")
 
-async def _install_bug_reporting() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     from bug_reporter import install as install_bug_reporter
     install_bug_reporter(app="AILinux Twitch Auth Service", repo="ai-twitch-bot", version=os.getenv("ZEPHYR_VERSION", "unknown"), channel="service")
 
-app.add_event_handler("startup", _install_bug_reporting)
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("JWT_SECRET","insecure"))
+    yield
+
+app = FastAPI(title="AILinux Auth Service", lifespan=lifespan)
 
 oauth = OAuth()
 SITE_URL = os.getenv("SITE_URL","http://localhost:3000")
 AUTH_BASE_URL = os.getenv("AUTH_BASE_URL","http://localhost:8088")
-JWT_SECRET = os.getenv("JWT_SECRET","CHANGE_ME")
+def _load_jwt_secret() -> str:
+    secret = os.getenv("JWT_SECRET", "")
+    if len(secret.encode("utf-8")) < 32 or secret.startswith("CHANGE_ME"):
+        raise RuntimeError("JWT_SECRET must be a private random secret of at least 32 bytes")
+    return secret
+
+
+JWT_SECRET = _load_jwt_secret()
+app.add_middleware(SessionMiddleware, secret_key=JWT_SECRET)
 JWT_ISS = os.getenv("JWT_ISS","https://auth.ailinux.local")
 JWT_AUD = os.getenv("JWT_AUD","ailinux")
 JWT_TTL = int(os.getenv("JWT_TTL_SECONDS","3600"))
@@ -34,7 +45,14 @@ def issue_jwt(sub: str, email: str, roles: list) -> str:
                       JWT_SECRET, algorithm="HS256")
 
 def verify_jwt(token: str):
-    return jwt.decode(token, JWT_SECRET, audience=JWT_AUD, algorithms=["HS256"])
+    return jwt.decode(
+        token,
+        JWT_SECRET,
+        algorithms=["HS256"],
+        issuer=JWT_ISS,
+        audience=JWT_AUD,
+        options={"require": ["iss", "aud", "iat", "exp", "sub"]},
+    )
 
 oauth.register("google",
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
@@ -79,7 +97,7 @@ def current_user(request: Request) -> dict:
     if not tok: tok = request.cookies.get("session")
     if not tok: raise HTTPException(401, "login required")
     try: return verify_jwt(tok)
-    except JWTError: raise HTTPException(401, "invalid token")
+    except InvalidTokenError: raise HTTPException(401, "invalid token")
 
 @app.get("/auth/login/google")
 async def login_google(request: Request):
